@@ -1,0 +1,26 @@
+.header-row {
+  font-weight: bold;
+  background-color: #f4f4f4;
+  border-bottom: 2px solid #ddd;
+  color: #333;
+}
+
+.tagliando {
+  color: #d4ac0d;
+  font-style: italic;
+}
+
+.gomme {
+  color: #cb4335;
+  font-weight: bold;
+}
+
+.revisione {
+  color: #5dade2;
+  text-decoration: underline;
+}
+
+ion-col {
+  text-align: center;
+  padding: 10px;
+}
