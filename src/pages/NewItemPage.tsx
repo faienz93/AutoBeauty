@@ -48,7 +48,7 @@ function NewItemPage() {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Gestione Manutenzione</IonTitle>
+          <IonTitle>Maintenance</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
@@ -70,11 +70,20 @@ function NewItemPage() {
         </IonItem>
         <IonItem>
           <IonLabel position="floating">Tipo</IonLabel>
-          <IonSelect onIonChange={e => setForm({ ...form, type: e.detail.value })}>
+          {/* <IonSelect onIonChange={e => setForm({ ...form, type: e.detail.value })}>
             <IonSelectOption value="Tagliando">Tagliando</IonSelectOption>
             <IonSelectOption value="Gomme">Gomme</IonSelectOption>
             <IonSelectOption value="Revisione">Revisione</IonSelectOption>
-          </IonSelect>
+          </IonSelect> */}
+          <IonList>
+            <IonItem>
+              <IonSelect aria-label="Maintenance" interface="action-sheet" placeholder="Select Maintenance">
+                <IonSelectOption value="Tagliando">Tagliando</IonSelectOption>
+                <IonSelectOption value="Gomme">Gomme</IonSelectOption>
+                <IonSelectOption value="Revisione">Revisione</IonSelectOption>
+              </IonSelect>
+            </IonItem>
+          </IonList>
         </IonItem>
         <IonItem>
           <IonLabel position="floating">Costo (€)</IonLabel>
