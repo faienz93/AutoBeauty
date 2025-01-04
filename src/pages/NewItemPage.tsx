@@ -62,7 +62,7 @@ function NewItemPage() {
       console.error('Errore nel salvataggio:', error);
     }
 
-    history.push('/');
+    history.push('/home');
   }
 
   return (
