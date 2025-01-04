@@ -7,7 +7,6 @@ import { Maintenance, MaintenanceType } from '../types/Maintenance';
 const maintenance: Maintenance[] = maintenanceData as Maintenance[];
 
 
-import { homeOutline, addCircleOutline, car } from 'ionicons/icons';
 function HomePage() {
 
   const getMaintenanceIcon = (type: MaintenanceType): string => {
@@ -40,12 +39,12 @@ function HomePage() {
               <IonAvatar slot="start">
               {/* <IonIcon icon={car} size="large"/>                */}
               {/* <IonIcon src="/public/tire.svg" size="large"/>  */}
-              <IonIcon src={getMaintenanceIcon(item.type)} size="large"/> 
+              <IonIcon src={getMaintenanceIcon(item.tipo)} size="large"/> 
               </IonAvatar>              
               <IonLabel>{item.data}</IonLabel>
               <IonLabel>{item.km}</IonLabel>
-              <IonLabel>{item.type}</IonLabel>
-              <IonLabel>{item.expense}</IonLabel>
+              <IonLabel>{item.tipo}</IonLabel>
+              <IonLabel>{item.costo}</IonLabel>
               <IonLabel>{item.note || '—'}</IonLabel>
             </IonItem>
           ))}
