@@ -1,5 +1,6 @@
 import React from 'react';
-import { IonGrid, IonRow, IonCol, IonCard, IonCardHeader, IonCardTitle, IonCardContent } from '@ionic/react';
+import { IonContent, IonItem, IonLabel, IonList } from '@ionic/react';
+
 // import './homepage.css';
 const manutenzioneData = [
   { data: '21/08/19', km: 62000, tipo: 'Tagliando', costo: '€ 50,00', note: 'Cambio gomme + convergenza' },
@@ -8,7 +9,7 @@ const manutenzioneData = [
   { data: '10/08/21', km: 81000, tipo: 'Tagliando', costo: '€ 50,00', note: '' },
   { data: '06/01/22', km: 83938, tipo: 'Gomme', costo: '€ 30,00', note: 'Inversione gomme' }
 ];
-import { IonContent, IonItem, IonLabel, IonList } from '@ionic/react';
+
 
 function HomePage() {
 
