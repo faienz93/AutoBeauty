@@ -1,4 +1,4 @@
-import NewItem from './pages/NewItem';
+import NewItemPage from './pages/NewItemPage';
 import React from 'react';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -11,7 +11,7 @@ import { Route, Redirect } from 'react-router';
 
 import { playCircle, radio, library, search } from 'ionicons/icons';
 import './tab.css';
-import HomePage from './pages/Home';
+import HomePage from './pages/HomePage';
 
 function App() {
   return (
@@ -21,7 +21,7 @@ function App() {
           <Redirect exact path="/" to="/home" />
           
           <Route path="/home" render={() => <HomePage />} exact={true} />
-          <Route path="/radio" render={() => <NewItem />} exact={true} />
+          <Route path="/radio" render={() => <NewItemPage />} exact={true} />
           {/* <Route path="/radio" render={() => <RadioPage />} exact={true} />
           <Route path="/library" render={() => <LibraryPage />} exact={true} />
           <Route path="/search" render={() => <SearchPage />} exact={true} /> */}

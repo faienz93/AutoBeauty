@@ -23,7 +23,7 @@ interface Maintenance {
   note: string;
 }
 
-function NewItem() {
+function NewItemPage() {
   console.log('Rendering NewItem component');
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [form, setForm] = useState<Partial<Maintenance>>({});
@@ -93,4 +93,4 @@ function NewItem() {
   );
 };
 
-export default NewItem;
+export default NewItemPage;
