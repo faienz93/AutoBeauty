@@ -10,15 +10,8 @@ setupIonicReact();
 import { Route, Redirect } from 'react-router';
 
 import { playCircle, radio, library, search } from 'ionicons/icons';
-
-
-
-
-
-// import RadioPage from './pages/RadioPage';
-// import LibraryPage from './pages/LibraryPage';
-// import SearchPage from './pages/SearchPage';
 import './tab.css';
+import HomePage from './pages/Home';
 
 function App() {
   return (
@@ -27,7 +20,7 @@ function App() {
         <IonRouterOutlet>
           <Redirect exact path="/" to="/home" />
           
-          <Route path="/home" render={() => <NewItem />} exact={true} />
+          <Route path="/home" render={() => <HomePage />} exact={true} />
           <Route path="/radio" render={() => <NewItem />} exact={true} />
           {/* <Route path="/radio" render={() => <RadioPage />} exact={true} />
           <Route path="/library" render={() => <LibraryPage />} exact={true} />
