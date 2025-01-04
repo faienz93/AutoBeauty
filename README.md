@@ -4,3 +4,7 @@
 https://ionicframework.com/docs/react/adding-ionic-react-to-an-existing-react-project
 
 npm run dev
+
+
+# Icons
+https://www.svgrepo.com/
