@@ -75,15 +75,13 @@ function NewItemPage() {
             <IonSelectOption value="Gomme">Gomme</IonSelectOption>
             <IonSelectOption value="Revisione">Revisione</IonSelectOption>
           </IonSelect> */}
-          <IonList>
-            <IonItem>
+         
               <IonSelect aria-label="Maintenance" interface="action-sheet" placeholder="Select Maintenance">
                 <IonSelectOption value="Tagliando">Tagliando</IonSelectOption>
                 <IonSelectOption value="Gomme">Gomme</IonSelectOption>
                 <IonSelectOption value="Revisione">Revisione</IonSelectOption>
               </IonSelect>
-            </IonItem>
-          </IonList>
+            
         </IonItem>
         <IonItem>
           <IonLabel position="floating">Costo (€)</IonLabel>

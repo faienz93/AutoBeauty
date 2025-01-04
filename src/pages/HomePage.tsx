@@ -35,10 +35,8 @@ function HomePage() {
       <IonContent color="light" fullscreen={true}>
         <IonList inset={true}>
           {maintenance.map((item, index) => (
-            <IonItem>
+            <IonItem key={index}>
               <IonAvatar slot="start">
-              {/* <IonIcon icon={car} size="large"/>                */}
-              {/* <IonIcon src="/public/tire.svg" size="large"/>  */}
               <IonIcon src={getMaintenanceIcon(item.tipo)} size="large"/> 
               </IonAvatar>              
               <IonLabel>{item.data}</IonLabel>
