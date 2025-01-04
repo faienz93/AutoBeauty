@@ -14,6 +14,7 @@ import {
   IonSelectOption
 } from '@ionic/react';
 
+
 interface Maintenance {
   date: string;
   km: number;
@@ -43,6 +44,7 @@ function Home() {
   };
 
   return (
+    <> 
     <IonPage>
       <IonHeader>
         <IonToolbar>
@@ -86,6 +88,8 @@ function Home() {
         </IonItem>
       </IonContent>
     </IonPage>
+    
+    </>
   );
 };
 
