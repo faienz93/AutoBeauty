@@ -1,4 +1,4 @@
-import Home from './Home';
+import NewItem from './pages/NewItem';
 import React from 'react';
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -27,7 +27,8 @@ function App() {
         <IonRouterOutlet>
           <Redirect exact path="/" to="/home" />
           
-          <Route path="/home" render={() => <Home />} exact={true} />
+          <Route path="/home" render={() => <NewItem />} exact={true} />
+          <Route path="/radio" render={() => <NewItem />} exact={true} />
           {/* <Route path="/radio" render={() => <RadioPage />} exact={true} />
           <Route path="/library" render={() => <LibraryPage />} exact={true} />
           <Route path="/search" render={() => <SearchPage />} exact={true} /> */}

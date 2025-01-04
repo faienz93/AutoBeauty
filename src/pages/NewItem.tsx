@@ -23,8 +23,8 @@ interface Maintenance {
   note: string;
 }
 
-function Home() {
-  console.log('Rendering Home component');
+function NewItem() {
+  console.log('Rendering NewItem component');
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [form, setForm] = useState<Partial<Maintenance>>({});
 
@@ -93,4 +93,4 @@ function Home() {
   );
 };
 
-export default Home;
+export default NewItem;
