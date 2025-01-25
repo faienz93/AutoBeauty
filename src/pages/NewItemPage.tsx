@@ -13,7 +13,8 @@ import {
   IonSelect,
   IonSelectOption
 } from '@ionic/react';
-
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
 import maintenanceData from '../data/data.json';
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
 const maintenance: Maintenance[] = maintenanceData as Maintenance[];
@@ -24,6 +25,7 @@ function NewItemPage() {
   console.log('Rendering NewItem component');
   const history = useHistory();
 
+  
   const [formData, setFormData] = useState({
     data: '',
     km: 0,
@@ -41,13 +43,12 @@ function NewItemPage() {
   };
 
   const handleSubmit = async () => { 
-    alert("submit")
+    
     console.log(formData)
 
     try {
-
       const newMaintenance: Maintenance = {
-        // id: Date.now(),
+        // id: new Date(),
         data: formData.data,
         km: formData.km,
         tipo: formData.tipo,
@@ -57,8 +58,25 @@ function NewItemPage() {
       
 
       maintenance.push(newMaintenance);
+      await addDoc(collection(db, 'maintenances'), newMaintenance);
+      // await addDoc(collection(db, 'users'), {
+      //   first: "Ada",
+      //   last: "Lovelace",
+      //   born: 1815
+      // });
+
+      setFormData({
+        data: '',
+        km: 0,
+        tipo: 'Tagliando',
+        costo: '',
+        note: ''
+      });
+
+      alert("Manutenzione aggiunta con successo!");
 
     }catch (error) {
+      alert("ERRORE, guarda la console per ulteriori dettagli")
       console.error('Errore nel salvataggio:', error);
     }
 

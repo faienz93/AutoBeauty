@@ -1,13 +1,37 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IonContent, IonHeader, IonItem, IonLabel, IonList, IonToolbar, IonTitle, IonButtons, IonBackButton, IonAvatar, IonIcon } from '@ionic/react';
 
 // import './homepage.css';
 import maintenanceData from '../data/data.json';
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
-const maintenance: Maintenance[] = maintenanceData as Maintenance[];
+
+
+
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+
+
 
 
 function HomePage() {
+
+  // All'interno del tuo componente:
+const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
+
+const fetchMaintenances = async () => {
+  const querySnapshot = await getDocs(collection(db, 'maintenances'));
+  const data = querySnapshot.docs.map(doc => ({
+    id: doc.id,
+    ...(doc.data() as Maintenance)
+  }));
+  setMaintenances(data);
+};
+
+useEffect(() => {
+  fetchMaintenances();
+
+  console.log(maintenances)
+}, []);
 
   const getMaintenanceIcon = (type: MaintenanceType): string => {
     switch (type) {
@@ -34,7 +58,7 @@ function HomePage() {
       </IonHeader>
       <IonContent color="light" fullscreen={true}>
         <IonList inset={true}>
-          {maintenance.map((item, index) => (
+          {maintenances.map((item, index) => (
             <IonItem key={index}>
               <IonAvatar slot="start">
               <IonIcon src={getMaintenanceIcon(item.tipo)} size="large"/> 
