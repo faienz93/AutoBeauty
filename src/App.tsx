@@ -8,11 +8,12 @@ import { setupIonicReact } from '@ionic/react';
 setupIonicReact();
 import { Route, Redirect } from 'react-router';
 
-import { homeOutline, addCircleOutline, listOutline } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, add } from 'ionicons/icons';
 import './tab.css';
 import HomePage from './pages/HomePage';
 import ListPage from './pages/ListPage';
 import NewItemPage from './pages/NewItemPage';
+import ImportItem from './pages/ImportItem';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/home" render={() => <HomePage />} exact={true} />
           <Route path="/newItem" render={() => <NewItemPage />} exact={true} />          
           <Route path="/list" render={() => <ListPage />} exact={true} />
+          <Route path="/import" render={() => <ImportItem />} exact={true} />
         </IonRouterOutlet>
 
         <IonTabBar slot="bottom">
@@ -40,6 +42,10 @@ function App() {
           <IonTabButton tab="list" href="/list">
             <IonIcon icon={listOutline} />
             <IonLabel>List</IonLabel>
+          </IonTabButton>
+          <IonTabButton tab="import" href="/import">
+            <IonIcon icon={add} />
+            <IonLabel>Import</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>
