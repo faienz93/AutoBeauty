@@ -59,11 +59,6 @@ function NewItemPage() {
 
       maintenance.push(newMaintenance);
       await addDoc(collection(db, 'maintenances'), newMaintenance);
-      // await addDoc(collection(db, 'users'), {
-      //   first: "Ada",
-      //   last: "Lovelace",
-      //   born: 1815
-      // });
 
       setFormData({
         data: '',
