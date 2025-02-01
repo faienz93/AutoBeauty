@@ -11,6 +11,8 @@ import {
   IonLabel,
   IonInput,
   IonSelect,
+  IonTextarea,
+  IonNote,
   IonSelectOption
 } from '@ionic/react';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
@@ -85,20 +87,22 @@ function NewItemPage() {
             <IonTitle>Maintenance</IonTitle>
           </IonToolbar>
         </IonHeader>
-        <IonContent fullscreen class="component-content">
+        <IonContent color="light">
         <IonList inset={true}>
           <IonItem lines="inset" slot="header">
-            <IonLabel position="floating">Data</IonLabel>
             <IonInput 
+              labelPlacement='floating'
+              label="Data"
               type="date"
               name="date"
               value={formData.data}
               onIonChange={e => handleInputChange(e)}
             />
           </IonItem>
-          <IonItem lines="inset" slot="header">
-            <IonLabel position="floating">Km</IonLabel>
-            <IonInput 
+          <IonItem>
+            <IonInput
+              labelPlacement='floating'
+              label='KM'
               type="number"
               name="km"
               value={formData.km}
@@ -106,9 +110,22 @@ function NewItemPage() {
               min={0}
             />
           </IonItem>
+          <IonItem>
+            <IonInput
+              labelPlacement='floating'
+              label='Costo (€)'
+              type="number"
+              name="costo"
+              value={formData.costo}
+              onIonChange={e => handleInputChange(e)}
+              min={0}
+            />
+          </IonItem>
           <IonItem lines="inset" slot="header">
-            <IonLabel position="floating">Tipo</IonLabel>
+            
             <IonSelect 
+              labelPlacement='floating'
+              label='Tipo'
               aria-label="Maintenance"
               interface="action-sheet"
               placeholder="Select Maintenance"
@@ -121,21 +138,35 @@ function NewItemPage() {
               <IonSelectOption value="Revisione">Revisione</IonSelectOption>
             </IonSelect>
           </IonItem>
+          
+        </IonList>
+
+        
+        
+        <IonList inset={true}>
           <IonItem>
-            <IonLabel position="floating">Costo (€)</IonLabel>
-            <IonInput 
-              type="number"
-              name="cost"
-              value={formData.costo}
-              onIonChange={e => handleInputChange(e)}
-              min={0}
-            />
+            <IonTextarea label="Comments" label-placement="floating" rows={5}></IonTextarea>
           </IonItem>
-          <IonButton expand="full" onClick={handleSubmit}>
+          
+        
+        </IonList>
+
+        <IonNote color="medium" class="ion-margin-horizontal">
+          Aggiungi eventuali note o informazioni aggiuntive.
+        </IonNote>
+
+        
+
+          
+          
+          
+        <IonButton expand="full" onClick={handleSubmit}>
             Aggiungi Manutenzione
           </IonButton>
-        </IonList>
+        
         </IonContent>
+
+        
     </>
   );
 };
