@@ -89,6 +89,7 @@ function NewItemPage() {
         </IonHeader>
         <IonContent color="light">
         <IonList inset={true}>
+          {/* https://www.damirscorner.com/blog/posts/20220107-DatePickerPopupInIonic6.html */}
           <IonItem lines="inset" slot="header">
             <IonInput 
               labelPlacement='floating'
@@ -98,6 +99,11 @@ function NewItemPage() {
               value={formData.data}
               onIonChange={e => handleInputChange(e)}
             />
+            <IonLabel>Pick date</IonLabel>
+            <IonInput
+              value={formData.data}
+              className="ion-text-end"
+            ></IonInput>
           </IonItem>
           <IonItem>
             <IonInput
