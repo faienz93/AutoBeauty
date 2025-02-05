@@ -22,6 +22,7 @@ import { Maintenance, MaintenanceType } from '../types/Maintenance';
 const maintenance: Maintenance[] = maintenanceData as Maintenance[];
 
 import { useHistory } from 'react-router-dom';
+import DataPickerPopup from '../components/DataPickerPopup';
 
 function NewItemPage() {
   console.log('Rendering NewItem component');
@@ -89,21 +90,8 @@ function NewItemPage() {
         </IonHeader>
         <IonContent color="light">
         <IonList inset={true}>
-          {/* https://www.damirscorner.com/blog/posts/20220107-DatePickerPopupInIonic6.html */}
           <IonItem lines="inset" slot="header">
-            <IonInput 
-              labelPlacement='floating'
-              label="Data"
-              type="date"
-              name="date"
-              value={formData.data}
-              onIonChange={e => handleInputChange(e)}
-            />
-            <IonLabel>Pick date</IonLabel>
-            <IonInput
-              value={formData.data}
-              className="ion-text-end"
-            ></IonInput>
+            <DataPickerPopup title="Scegli data" />
           </IonItem>
           <IonItem>
             <IonInput
