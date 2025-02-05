@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   IonContent,
   IonHeader,
@@ -13,41 +13,38 @@ import {
   IonSelect,
   IonTextarea,
   IonNote,
-  IonSelectOption
-} from '@ionic/react';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
-import maintenanceData from '../data/data.json';
-import { Maintenance, MaintenanceType } from '../types/Maintenance';
+  IonSelectOption,
+} from "@ionic/react";
+import { collection, addDoc, getDocs } from "firebase/firestore";
+import { db } from "../firebase";
+import maintenanceData from "../data/data.json";
+import { Maintenance, MaintenanceType } from "../types/Maintenance";
 const maintenance: Maintenance[] = maintenanceData as Maintenance[];
 
-import { useHistory } from 'react-router-dom';
-import DataPickerPopup from '../components/DataPickerPopup';
+import { useHistory } from "react-router-dom";
+import DataPickerPopup from "../components/DataPickerPopup";
 
 function NewItemPage() {
-  console.log('Rendering NewItem component');
+  console.log("Rendering NewItem component");
   const history = useHistory();
 
-  
   const [formData, setFormData] = useState({
-    data: '',
+    data: "",
     km: 0,
-    tipo: 'Tagliando' as MaintenanceType,
-    costo: '',
-    note: ''
+    tipo: "Tagliando" as MaintenanceType,
+    costo: "",
+    note: "",
   });
 
-  const handleInputChange = (e: any) => {
-    const { name, value } = e.target;
-    setFormData(prevState => ({
+  const handleInputChange = (inputIdentifier: any, newValue: any) => {
+    setFormData((prevState) => ({
       ...prevState,
-      [name]: value
+      [inputIdentifier]: newValue,
     }));
   };
 
-  const handleSubmit = async () => { 
-    
-    console.log(formData)
+  const handleSubmit = async () => {
+    console.log(formData);
 
     try {
       const newMaintenance: Maintenance = {
@@ -56,113 +53,93 @@ function NewItemPage() {
         km: formData.km,
         tipo: formData.tipo,
         costo: formData.costo,
-        note: formData.note
+        note: formData.note,
       };
-      
 
       maintenance.push(newMaintenance);
       await addDoc(collection(db, 'maintenances'), newMaintenance);
 
       setFormData({
-        data: '',
+        data: "",
         km: 0,
-        tipo: 'Tagliando',
-        costo: '',
-        note: ''
+        tipo: "Tagliando",
+        costo: "",
+        note: "",
       });
 
       alert("Manutenzione aggiunta con successo!");
-
-    }catch (error) {
-      alert("ERRORE, guarda la console per ulteriori dettagli")
-      console.error('Errore nel salvataggio:', error);
+    } catch (error) {
+      alert("ERRORE, guarda la console per ulteriori dettagli");
+      console.error("Errore nel salvataggio:", error);
     }
 
     history.push('/home');
-  }
+  };
 
   return (
-    <>    
-        <IonHeader>
-          <IonToolbar>
-            <IonTitle>Maintenance</IonTitle>
-          </IonToolbar>
-        </IonHeader>
-        <IonContent color="light">
+    <>
+      <IonHeader>
+        <IonToolbar>
+          <IonTitle>Maintenance</IonTitle>
+        </IonToolbar>
+      </IonHeader>
+      <IonContent color="light">
         <IonList inset={true}>
           <IonItem lines="inset" slot="header">
             <DataPickerPopup title="Scegli data" />
           </IonItem>
           <IonItem>
             <IonInput
-              labelPlacement='floating'
-              label='KM'
+              labelPlacement="floating"
+              label="KM"
               type="number"
               name="km"
               value={formData.km}
-              onIonChange={e => handleInputChange(e)}
+              onIonChange={(e) => handleInputChange("km", e.detail.value)}
               min={0}
             />
           </IonItem>
           <IonItem>
             <IonInput
-              labelPlacement='floating'
-              label='Costo (€)'
+              labelPlacement="floating"
+              label="Costo (€)"
               type="number"
               name="costo"
               value={formData.costo}
-              onIonChange={e => handleInputChange(e)}
+              onIonChange={(e) => handleInputChange("costo", e.detail.value)}
               min={0}
             />
           </IonItem>
           <IonItem lines="inset" slot="header">
-            
-            <IonSelect 
-              labelPlacement='floating'
-              label='Tipo'
+            <IonSelect
+              labelPlacement="floating"
+              label="Tipo"
               aria-label="Maintenance"
               interface="action-sheet"
               placeholder="Select Maintenance"
               name="type"
               value={formData.tipo}
-              onIonChange={e => handleInputChange(e)}
-            >
+              onIonChange={(e) => handleInputChange("tipo", e.detail.value)}>
               <IonSelectOption value="Tagliando">Tagliando</IonSelectOption>
               <IonSelectOption value="Gomme">Gomme</IonSelectOption>
               <IonSelectOption value="Revisione">Revisione</IonSelectOption>
             </IonSelect>
           </IonItem>
-          
         </IonList>
-
-        
-        
-        <IonList inset={true}>
-          <IonItem>
-            <IonTextarea label="Comments" label-placement="floating" rows={5}></IonTextarea>
-          </IonItem>
-          
-        
-        </IonList>
-
         <IonNote color="medium" class="ion-margin-horizontal">
           Aggiungi eventuali note o informazioni aggiuntive.
         </IonNote>
-
-        
-
-          
-          
-          
+        <IonList inset={true}>
+          <IonItem>
+            <IonTextarea label="Comments" label-placement="floating" rows={5} onIonChange={e => handleInputChange('note', e.detail.value)}></IonTextarea>
+          </IonItem>
+        </IonList>        
         <IonButton expand="full" onClick={handleSubmit}>
-            Aggiungi Manutenzione
-          </IonButton>
-        
-        </IonContent>
-
-        
+          Aggiungi Manutenzione
+        </IonButton>
+      </IonContent>
     </>
   );
-};
+}
 
 export default NewItemPage;
