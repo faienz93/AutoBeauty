@@ -71,7 +71,7 @@ function NewItemPage() {
       };
 
       maintenance.push(newMaintenance);
-      // await addDoc(collection(db, 'maintenances'), newMaintenance);
+      await addDoc(collection(db, 'maintenances'), newMaintenance);
 
       setFormData({
         data: '',
@@ -87,7 +87,7 @@ function NewItemPage() {
       console.error('Errore nel salvataggio:', error);
     }
 
-    // history.push('/home');
+    history.push('/home');
   };
 
   return (
@@ -141,7 +141,7 @@ function NewItemPage() {
           </IonItem>
         </IonList>
         <IonNote color="medium" class="ion-margin-horizontal">
-          Aggiungi eventuali note o informazioni aggiuntive.
+          Aggiungi eventuali note.
         </IonNote>
         <IonList inset={true}>
           <IonItem>
