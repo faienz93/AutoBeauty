@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   IonContent,
   IonHeader,
@@ -14,26 +14,26 @@ import {
   IonTextarea,
   IonNote,
   IonSelectOption,
-} from "@ionic/react";
-import { collection, addDoc, getDocs } from "firebase/firestore";
-import { db } from "../firebase";
-import maintenanceData from "../data/data.json";
-import { Maintenance, MaintenanceType } from "../types/Maintenance";
+} from '@ionic/react';
+import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { db } from '../firebase';
+import maintenanceData from '../data/data.json';
+import { Maintenance, MaintenanceType } from '../types/Maintenance';
 const maintenance: Maintenance[] = maintenanceData as Maintenance[];
 
-import { useHistory } from "react-router-dom";
-import DataPickerPopup from "../components/DataPickerPopup";
+import { useHistory } from 'react-router-dom';
+import DataPickerPopup from '../components/DataPickerPopup';
 
 function NewItemPage() {
-  console.log("Rendering NewItem component");
+  console.log('Rendering NewItem component');
   const history = useHistory();
 
   const [formData, setFormData] = useState({
-    data: "",
+    data: '',
     km: 0,
-    tipo: "Tagliando" as MaintenanceType,
-    costo: "",
-    note: "",
+    tipo: 'Tagliando' as MaintenanceType,
+    costo: '',
+    note: '',
   });
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
@@ -60,17 +60,17 @@ function NewItemPage() {
       await addDoc(collection(db, 'maintenances'), newMaintenance);
 
       setFormData({
-        data: "",
+        data: '',
         km: 0,
-        tipo: "Tagliando",
-        costo: "",
-        note: "",
+        tipo: 'Tagliando',
+        costo: '',
+        note: '',
       });
 
-      alert("Manutenzione aggiunta con successo!");
+      alert('Manutenzione aggiunta con successo!');
     } catch (error) {
-      alert("ERRORE, guarda la console per ulteriori dettagli");
-      console.error("Errore nel salvataggio:", error);
+      alert('ERRORE, guarda la console per ulteriori dettagli');
+      console.error('Errore nel salvataggio:', error);
     }
 
     history.push('/home');
@@ -95,7 +95,7 @@ function NewItemPage() {
               type="number"
               name="km"
               value={formData.km}
-              onIonChange={(e) => handleInputChange("km", e.detail.value)}
+              onIonChange={(e) => handleInputChange('km', e.detail.value)}
               min={0}
             />
           </IonItem>
@@ -106,7 +106,7 @@ function NewItemPage() {
               type="number"
               name="costo"
               value={formData.costo}
-              onIonChange={(e) => handleInputChange("costo", e.detail.value)}
+              onIonChange={(e) => handleInputChange('costo', e.detail.value)}
               min={0}
             />
           </IonItem>
@@ -119,7 +119,7 @@ function NewItemPage() {
               placeholder="Select Maintenance"
               name="type"
               value={formData.tipo}
-              onIonChange={(e) => handleInputChange("tipo", e.detail.value)}>
+              onIonChange={(e) => handleInputChange('tipo', e.detail.value)}>
               <IonSelectOption value="Tagliando">Tagliando</IonSelectOption>
               <IonSelectOption value="Gomme">Gomme</IonSelectOption>
               <IonSelectOption value="Revisione">Revisione</IonSelectOption>
@@ -131,9 +131,9 @@ function NewItemPage() {
         </IonNote>
         <IonList inset={true}>
           <IonItem>
-            <IonTextarea label="Comments" label-placement="floating" rows={5} onIonChange={e => handleInputChange('note', e.detail.value)}></IonTextarea>
+            <IonTextarea label="Comments" label-placement="floating" rows={5} onIonChange={(e) => handleInputChange('note', e.detail.value)}></IonTextarea>
           </IonItem>
-        </IonList>        
+        </IonList>
         <IonButton expand="full" onClick={handleSubmit}>
           Aggiungi Manutenzione
         </IonButton>
