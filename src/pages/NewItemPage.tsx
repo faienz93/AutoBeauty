@@ -29,7 +29,11 @@ function NewItemPage() {
   const history = useHistory();
 
   const [formData, setFormData] = useState({
-    data: '',
+    data: new Date().toLocaleDateString("it-IT", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+    }),
     km: 0,
     tipo: 'Tagliando' as MaintenanceType,
     costo: '',
@@ -37,6 +41,16 @@ function NewItemPage() {
   });
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
+    if(inputIdentifier === 'data'){
+      const selectedDate = new Date(newValue).toLocaleDateString("it-IT", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+      });
+      newValue = selectedDate;
+    }
+    
+
     setFormData((prevState) => ({
       ...prevState,
       [inputIdentifier]: newValue,
@@ -57,7 +71,7 @@ function NewItemPage() {
       };
 
       maintenance.push(newMaintenance);
-      await addDoc(collection(db, 'maintenances'), newMaintenance);
+      // await addDoc(collection(db, 'maintenances'), newMaintenance);
 
       setFormData({
         data: '',
@@ -73,7 +87,7 @@ function NewItemPage() {
       console.error('Errore nel salvataggio:', error);
     }
 
-    history.push('/home');
+    // history.push('/home');
   };
 
   return (
@@ -86,7 +100,7 @@ function NewItemPage() {
       <IonContent color="light">
         <IonList inset={true}>
           <IonItem lines="inset" slot="header">
-            <DataPickerPopup title="Scegli data" />
+            <DataPickerPopup title="Scegli data" currentDate={formData.data} onChange={handleInputChange}/>
           </IonItem>
           <IonItem>
             <IonInput
