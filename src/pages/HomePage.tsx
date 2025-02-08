@@ -2,7 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { IonContent, IonHeader, IonItem, IonLabel, IonList, IonToolbar, IonTitle, IonButtons, IonBackButton, IonAvatar, IonIcon } from '@ionic/react';
 
 // import './homepage.css';
-import maintenanceData from '../data/data.json';
+import tagliandoImg from '../assets/maintenance.svg';
+import tireImg from '../assets/tire.svg';
+import repairImg from '../assets/car-repair.svg';
+import carImg from '../assets/car.svg';
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
 
 
@@ -36,13 +39,13 @@ useEffect(() => {
   const getMaintenanceIcon = (type: MaintenanceType): string => {
     switch (type) {
       case 'Tagliando':
-        return '/public/maintenance.svg';
+        return tagliandoImg;
       case 'Gomme':
-        return '/public/tire.svg';
+        return tireImg;
       case 'Revisione':
-        return '/public/car-repair.svg';
+        return repairImg;
       default:
-        return '/public/car.svg';
+        return carImg;
     }
   };
 

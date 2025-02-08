@@ -45,6 +45,7 @@ import HomePage from './pages/HomePage';
 import ListPage from './pages/ListPage';
 import NewItemPage from './pages/NewItemPage';
 import ImportItem from './pages/ImportItem';
+import ProductList from './pages/ProductItem';
 
 setupIonicReact({ mode: 'md' });
 

@@ -17,9 +17,9 @@ import {
 } from '@ionic/react';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import maintenanceData from '../data/data.json';
+
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
-const maintenance: Maintenance[] = maintenanceData as Maintenance[];
+const maintenance: Maintenance[] = [];
 
 import { useHistory } from 'react-router-dom';
 import DataPickerPopup from '../components/DataPickerPopup';
