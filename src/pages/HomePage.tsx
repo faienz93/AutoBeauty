@@ -74,14 +74,6 @@ function HomePage() {
         <IonList inset={true}>
           {maintenances.map((item, index) => (
             <IonItem key={index}>
-              {/* <IonAvatar slot="start">
-              <IonIcon src={getMaintenanceIcon(item.tipo)} size="large"/> 
-              </IonAvatar>              
-              <IonLabel>{item.data}</IonLabel>
-              <IonLabel>{item.km}</IonLabel>
-              <IonLabel>{item.tipo}</IonLabel>
-              <IonLabel>{item.costo}</IonLabel>
-              <IonLabel>{item.note || '—'}</IonLabel> */}
               <IonThumbnail slot="start">
                 {/* <img src={`/assets/${item.image}`} alt={item.name} /> */}
                 <img src={getMaintenanceIcon(item.tipo)} alt={item.tipo} />
@@ -96,17 +88,17 @@ function HomePage() {
                 </IonText>
 
                 {/* Rating (★ Star icons) */}
-                <p>
+                {/* <p>
                   {Array.from({ length: 5 }, (_, i) => (
                     <IonIcon key={i} icon={i < 3 ? star : starOutline} color="warning" />
                   ))}
-                </p>
+                </p> */}
 
                 {/* Stock Badge */}
                 {/* <IonBadge color={item.stock === "INSTOCK" ? "success" : "warning"}>
                             {item.stock}
                           </IonBadge> */}
-                <IonBadge color="success">{item.note}</IonBadge>
+                <p>{item.note}</p>
               </IonLabel>
 
               {/* Price & Cart Button */}

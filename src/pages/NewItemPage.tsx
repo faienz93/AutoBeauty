@@ -15,9 +15,10 @@ import {
   IonNote,
   IonSelectOption,
 } from '@ionic/react';
+import './NewItemPage.css'
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-
+import './NewItemPage.css'
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
 const maintenance: Maintenance[] = [];
 
@@ -148,7 +149,7 @@ function NewItemPage() {
             <IonTextarea label="Comments" label-placement="floating" rows={5} onIonChange={(e) => handleInputChange('note', e.detail.value)}></IonTextarea>
           </IonItem>
         </IonList>
-        <IonButton expand="full" onClick={handleSubmit}>
+        <IonButton expand="full" className="buttonAddList" onClick={handleSubmit}>
           Aggiungi Manutenzione
         </IonButton>
       </IonContent>
