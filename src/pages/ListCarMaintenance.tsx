@@ -23,7 +23,7 @@ import tireImg from '../assets/tire.svg';
 import repairImg from '../assets/car-repair.svg';
 import carImg from '../assets/car.svg';
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
-import { calendarOutline, cartOutline, pencil, star, starOutline } from 'ionicons/icons';
+import { calendarOutline, pencil, trashOutline} from 'ionicons/icons';
 
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
@@ -108,6 +108,9 @@ function ListCarMaintenance() {
 
               <IonButton fill="clear" slot="end" onClick={() => alert('Edit')}>
                 <IonIcon icon={pencil} />
+              </IonButton>
+              <IonButton fill="clear" slot="end" onClick={() => alert('Delete')}>
+                <IonIcon icon={trashOutline} color='danger'/>
               </IonButton>
             </IonItem>
           ))}
