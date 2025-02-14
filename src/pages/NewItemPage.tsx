@@ -9,16 +9,17 @@ import {
   IonList,
   IonItem,
   IonLabel,
+  IonToast,
   IonInput,
   IonSelect,
   IonTextarea,
   IonNote,
   IonSelectOption,
 } from '@ionic/react';
-import './NewItemPage.css'
+import './NewItemPage.css';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
-import './NewItemPage.css'
+import './NewItemPage.css';
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
 const maintenance: Maintenance[] = [];
 
@@ -27,13 +28,14 @@ import DataPickerPopup from '../components/DataPickerPopup';
 
 function NewItemPage() {
   console.log('Rendering NewItem component');
+  const [isSuccess, setIsSuccess] = useState(false);
   const history = useHistory();
 
   const [formData, setFormData] = useState({
-    data: new Date().toLocaleDateString("it-IT", {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
+    data: new Date().toLocaleDateString('it-IT', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
     }),
     km: 0,
     tipo: 'Tagliando' as MaintenanceType,
@@ -42,15 +44,14 @@ function NewItemPage() {
   });
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
-    if(inputIdentifier === 'data'){
-      const selectedDate = new Date(newValue).toLocaleDateString("it-IT", {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
+    if (inputIdentifier === 'data') {
+      const selectedDate = new Date(newValue).toLocaleDateString('it-IT', {
+        year: 'numeric',
+        month: 'short',
+        day: 'numeric',
       });
       newValue = selectedDate;
     }
-    
 
     setFormData((prevState) => ({
       ...prevState,
@@ -81,14 +82,11 @@ function NewItemPage() {
         costo: '',
         note: '',
       });
-
-      alert('Manutenzione aggiunta con successo!');
+      setIsSuccess(true);
     } catch (error) {
-      alert('ERRORE, guarda la console per ulteriori dettagli');
+      setIsSuccess(false);
       console.error('Errore nel salvataggio:', error);
     }
-
-    history.push('/home');
   };
 
   return (
@@ -101,7 +99,7 @@ function NewItemPage() {
       <IonContent color="light">
         <IonList inset={true}>
           <IonItem lines="inset" slot="header">
-            <DataPickerPopup title="Scegli data" currentDate={formData.data} onChange={handleInputChange}/>
+            <DataPickerPopup title="Scegli data" currentDate={formData.data} onChange={handleInputChange} />
           </IonItem>
           <IonItem>
             <IonInput
@@ -149,9 +147,15 @@ function NewItemPage() {
             <IonTextarea label="Comments" label-placement="floating" rows={5} onIonChange={(e) => handleInputChange('note', e.detail.value)}></IonTextarea>
           </IonItem>
         </IonList>
-        <IonButton expand="full" className="buttonAddList" onClick={handleSubmit}>
+        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
           Aggiungi Manutenzione
         </IonButton>
+
+        {isSuccess ? (
+          <IonToast trigger="open-toast" color="success" message="Manutenzione aggiunta con successo!" duration={5000} onDidDismiss={() => {history.push('/home');}}></IonToast>
+        ) : (
+          <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta della manutenzione" duration={5000}></IonToast>
+        )}
       </IonContent>
     </>
   );
