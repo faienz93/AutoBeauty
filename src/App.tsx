@@ -41,8 +41,8 @@ import '@ionic/react/css/core.css';
 
 import { homeOutline, addCircleOutline, listOutline, add } from 'ionicons/icons';
 import './tab.css';
+import ListCarMaintenance from './pages/ListCarMaintenance';
 import HomePage from './pages/HomePage';
-import ListPage from './pages/ListPage';
 import NewItemPage from './pages/NewItemPage';
 import ImportItem from './pages/ImportItem';
 import ProductList from './pages/ProductItem';
@@ -57,7 +57,7 @@ function App() {
           <Redirect exact path="/" to="/home" />          
           <Route path="/home" render={() => <HomePage />} exact={true} />
           <Route path="/newItem" render={() => <NewItemPage />} exact={true} />          
-          <Route path="/list" render={() => <ListPage />} exact={true} />
+          <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
           <Route path="/import" render={() => <ImportItem />} exact={true} />
         </IonRouterOutlet>
 
