@@ -15,6 +15,8 @@ import {
   IonTextarea,
   IonNote,
   IonSelectOption,
+  IonButtons,
+  IonBackButton,
 } from '@ionic/react';
 import './NewItemPage.css';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
@@ -93,6 +95,9 @@ function NewItemPage() {
     <>
       <IonHeader>
         <IonToolbar>
+          <IonButtons slot="start">
+            <IonBackButton defaultHref="/home"></IonBackButton>
+          </IonButtons>
           <IonTitle>Maintenance</IonTitle>
         </IonToolbar>
       </IonHeader>
@@ -152,7 +157,14 @@ function NewItemPage() {
         </IonButton>
 
         {isSuccess ? (
-          <IonToast trigger="open-toast" color="success" message="Manutenzione aggiunta con successo!" duration={5000} onDidDismiss={() => {history.push('/home');}}></IonToast>
+          <IonToast
+            trigger="open-toast"
+            color="success"
+            message="Manutenzione aggiunta con successo!"
+            duration={5000}
+            onDidDismiss={() => {
+              history.push('/home');
+            }}></IonToast>
         ) : (
           <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta della manutenzione" duration={5000}></IonToast>
         )}
