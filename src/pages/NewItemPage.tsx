@@ -15,18 +15,20 @@ import './NewItemPage.css';
 import { collection, addDoc, getDocs, setDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import './NewItemPage.css';
-import { Maintenance, MaintenanceType } from '../types/Maintenance';
-const maintenance: Maintenance[] = [];
+import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/Maintenance';
+
 
 import { useHistory } from 'react-router-dom';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { getEnv } from '../services/env';
 import { Header } from './Header';
+import { text } from 'ionicons/icons';
 
 const envVar = getEnv()
 
 function NewItemPage() {
   console.log('Rendering NewItem component');
+  const maintenance: Maintenance[] = [];
   const [isSuccess, setIsSuccess] = useState(false);
   const history = useHistory();
 
@@ -38,7 +40,7 @@ function NewItemPage() {
     }),
     km: 0,
     tipo: 'Tagliando' as MaintenanceType,
-    costo: '',
+    costo: 0,
     note: '',
   });
 
@@ -80,7 +82,7 @@ function NewItemPage() {
         data: '',
         km: 0,
         tipo: 'Tagliando',
-        costo: '',
+        costo: 0,
         note: '',
       });
       setIsSuccess(true);
@@ -130,9 +132,11 @@ function NewItemPage() {
               name="type"
               value={formData.tipo}
               onIonChange={(e) => handleInputChange('tipo', e.detail.value)}>
-              <IonSelectOption value="Tagliando">Tagliando</IonSelectOption>
-              <IonSelectOption value="Gomme">Gomme</IonSelectOption>
-              <IonSelectOption value="Revisione">Revisione</IonSelectOption>
+              {maintenanceTypes.map((type) => (
+                <IonSelectOption key={type} value={type}>
+                  {type}
+                </IonSelectOption>
+              ))}
             </IonSelect>
           </IonItem>
         </IonList>
@@ -152,6 +156,7 @@ function NewItemPage() {
           <IonToast
             trigger="open-toast"
             color="success"
+            style={{text: 'white'}}
             message="Manutenzione aggiunta con successo!"
             duration={5000}
             onDidDismiss={() => {

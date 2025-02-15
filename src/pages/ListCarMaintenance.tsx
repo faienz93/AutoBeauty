@@ -76,13 +76,11 @@ function ListCarMaintenance() {
 
   return (
     <>
-      <Header title='List Maintenance' />
+      <Header title="List Maintenance" />
       <IonContent color="light" fullscreen={true}>
         {maintenances.length == 0 ? (
           <IonText color="secondary">
-            <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-              Non ci sono Manutenzioni. Aggiungine una 😉
-            </p>
+            <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
         ) : (
           <IonList inset={true}>
@@ -108,10 +106,8 @@ function ListCarMaintenance() {
                   ))}
                 </p> */}
 
-                  {/* Stock Badge */}
-                  {/* <IonBadge color={item.stock === "INSTOCK" ? "success" : "warning"}>
-                            {item.stock}
-                          </IonBadge> */}
+                  {/* KM */}
+                  <IonBadge color={'primary'}>KM {item.km}</IonBadge>
                   <p>{item.note}</p>
                 </IonLabel>
 
