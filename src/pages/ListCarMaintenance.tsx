@@ -30,6 +30,7 @@ import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AlertConfirmation } from './AlertConfirmation';
 import { getEnv } from '../services/env';
+import { Header } from './Header';
 
 const envVar = getEnv();
 
@@ -75,14 +76,7 @@ function ListCarMaintenance() {
 
   return (
     <>
-      <IonHeader translucent={true}>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/home"></IonBackButton>
-          </IonButtons>
-          <IonTitle>List Maintenance</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title='List Maintenance' />
       <IonContent color="light" fullscreen={true}>
         {maintenances.length == 0 ? (
           <IonText color="secondary">

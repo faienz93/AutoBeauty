@@ -1,16 +1,10 @@
 import React from 'react';
 import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton } from '@ionic/react';
+import { Header } from './Header';
 
 const HomePage = () => (
     <>
-        <IonHeader>
-            <IonToolbar>
-                <IonButtons slot="start">
-                    <IonBackButton defaultHref="/home"></IonBackButton>
-                </IonButtons>
-                <IonTitle>List Maintenance</IonTitle>
-            </IonToolbar>
-        </IonHeader>
+        <Header title='Home' showBackButton={false}/>
         <IonContent>
             <div
                 style={{

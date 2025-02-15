@@ -1,22 +1,15 @@
 import React, { useState } from 'react';
 import {
   IonContent,
-  IonHeader,
-  IonPage,
-  IonTitle,
-  IonToolbar,
   IonButton,
   IonList,
   IonItem,
-  IonLabel,
   IonToast,
   IonInput,
   IonSelect,
   IonTextarea,
   IonNote,
   IonSelectOption,
-  IonButtons,
-  IonBackButton,
 } from '@ionic/react';
 import './NewItemPage.css';
 import { collection, addDoc, getDocs, setDoc, doc } from 'firebase/firestore';
@@ -28,6 +21,7 @@ const maintenance: Maintenance[] = [];
 import { useHistory } from 'react-router-dom';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { getEnv } from '../services/env';
+import { Header } from './Header';
 
 const envVar = getEnv()
 
@@ -98,14 +92,7 @@ function NewItemPage() {
 
   return (
     <>
-      <IonHeader>
-        <IonToolbar>
-          <IonButtons slot="start">
-            <IonBackButton defaultHref="/home"></IonBackButton>
-          </IonButtons>
-          <IonTitle>Maintenance</IonTitle>
-        </IonToolbar>
-      </IonHeader>
+      <Header title='Maintenance' />
       <IonContent color="light">
         <IonList inset={true}>
           <IonItem lines="inset" slot="header">
