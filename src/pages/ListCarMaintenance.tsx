@@ -15,6 +15,7 @@ import {
   IonText,
   IonButton,
   IonBadge,
+  IonAlert,
 } from '@ionic/react';
 
 // import './homepage.css';
@@ -23,14 +24,44 @@ import tireImg from '../assets/tire.svg';
 import repairImg from '../assets/car-repair.svg';
 import carImg from '../assets/car.svg';
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
-import { calendarOutline, pencil, trashOutline} from 'ionicons/icons';
+import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
+const AlertConfirmation = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
+  console.log("Confirmation")
+  return (
+    <IonAlert
+      isOpen={isOpen} 
+      header="Alert!"
+      trigger="present-alert"
+      backdropDismiss={false}
+      buttons={[
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: () => {
+            console.log('Alert canceled');
+          },
+        },
+        {
+          text: 'OK',
+          role: 'confirm',
+          handler: () => {
+            console.log('Alert confirmed');
+            onClose();
+          },
+        },
+      ]}
+      onDidDismiss={({ detail }) => console.log(`Dismissed with role: ${detail.role}`)}></IonAlert>
+  );
+};
+
 function ListCarMaintenance() {
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
+  const [confirmDelete,setConfirmDelete] = useState(false);
 
   const fetchMaintenances = async () => {
     const querySnapshot = await getDocs(collection(db, 'maintenances'));
@@ -81,7 +112,7 @@ function ListCarMaintenance() {
               <IonLabel>
                 <h2>{item.tipo}</h2>
                 <IonText>
-                  <p>                 
+                  <p>
                     <IonIcon icon={calendarOutline} />
                     {item.data}
                   </p>
@@ -109,12 +140,13 @@ function ListCarMaintenance() {
               <IonButton fill="clear" slot="end" onClick={() => alert('Edit')}>
                 <IonIcon icon={pencil} />
               </IonButton>
-              <IonButton fill="clear" slot="end" onClick={() => alert('Delete')}>
-                <IonIcon icon={trashOutline} color='danger'/>
-              </IonButton>
+              <IonButton fill="clear" id="present-alert" slot="end" onClick={() => setConfirmDelete(true)}>
+                <IonIcon icon={trashOutline} color="danger" />
+              </IonButton>              
             </IonItem>
           ))}
         </IonList>
+        <AlertConfirmation isOpen={confirmDelete} onClose={() => setConfirmDelete(false)} />
       </IonContent>
     </>
   );
