@@ -28,35 +28,9 @@ import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
+import { AlertConfirmation } from './AlertConfirmation';
 
-const AlertConfirmation = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => {
-  console.log("Confirmation")
-  return (
-    <IonAlert
-      isOpen={isOpen} 
-      header="Alert!"
-      trigger="present-alert"
-      backdropDismiss={false}
-      buttons={[
-        {
-          text: 'Cancel',
-          role: 'cancel',
-          handler: () => {
-            console.log('Alert canceled');
-          },
-        },
-        {
-          text: 'OK',
-          role: 'confirm',
-          handler: () => {
-            console.log('Alert confirmed');
-            onClose();
-          },
-        },
-      ]}
-      onDidDismiss={({ detail }) => console.log(`Dismissed with role: ${detail.role}`)}></IonAlert>
-  );
-};
+
 
 function ListCarMaintenance() {
   // All'interno del tuo componente:
@@ -146,7 +120,7 @@ function ListCarMaintenance() {
             </IonItem>
           ))}
         </IonList>
-        <AlertConfirmation isOpen={confirmDelete} onClose={() => setConfirmDelete(false)} />
+        <AlertConfirmation trigger="resent-alert" isOpen={confirmDelete} onClose={() => setConfirmDelete(false)} />
       </IonContent>
     </>
   );
