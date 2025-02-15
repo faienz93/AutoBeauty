@@ -27,6 +27,9 @@ const maintenance: Maintenance[] = [];
 
 import { useHistory } from 'react-router-dom';
 import DataPickerPopup from '../components/DataPickerPopup';
+import { getEnv } from '../services/env';
+
+const envVar = getEnv()
 
 function NewItemPage() {
   console.log('Rendering NewItem component');
@@ -76,7 +79,7 @@ function NewItemPage() {
       };
 
       maintenance.push(newMaintenance);
-      await setDoc(doc(db, 'maintenances', customId), newMaintenance);
+      await setDoc(doc(db, envVar?.collection, customId), newMaintenance);
       
 
       setFormData({

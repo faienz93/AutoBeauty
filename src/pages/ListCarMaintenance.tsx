@@ -29,8 +29,9 @@ import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AlertConfirmation } from './AlertConfirmation';
+import { getEnv } from '../services/env';
 
-
+const envVar = getEnv();
 
 function ListCarMaintenance() {
   // All'interno del tuo componente:
@@ -38,7 +39,7 @@ function ListCarMaintenance() {
   const [confirmDelete,setConfirmDelete] = useState(false);
 
   const fetchMaintenances = async () => {
-    const querySnapshot = await getDocs(collection(db, 'maintenances'));
+    const querySnapshot = await getDocs(collection(db, envVar?.collection));
     const data = querySnapshot.docs.map((doc) => ({
       ...(doc.data() as Maintenance),
     }));
@@ -48,7 +49,7 @@ function ListCarMaintenance() {
   };
 
   const deleteDocumente = async (id: string) => {
-    await deleteDoc(doc(db, 'maintenances', id));
+    await deleteDoc(doc(db, envVar?.collection, id));
     console.log("COSA RESTA")
     console.log(maintenances)
   }

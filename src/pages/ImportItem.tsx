@@ -3,6 +3,8 @@ import { collection, writeBatch, doc } from 'firebase/firestore';
 import { getEnv } from '../services/env';
 import { db } from '../firebase';
 
+const envVar = getEnv();
+
 const ImportItem = () => {
     const [file, setFile] = useState<File | null>(null);
     const [data, setData] = useState<any[]>([]);
@@ -31,7 +33,7 @@ const ImportItem = () => {
         if (!env) return;
 
         const batch = writeBatch(db);
-        const collectionRef = collection(db, 'maintenances');
+        const collectionRef = collection(db, envVar?.collection);
 
         data.forEach(item => {
             const docRef = doc(collectionRef); // Create a new document reference
