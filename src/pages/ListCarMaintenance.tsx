@@ -1,15 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  IonContent,
-  IonThumbnail,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonIcon,
-  IonText,
-  IonButton,
-  IonBadge,
-} from '@ionic/react';
+import { IonContent, IonThumbnail, IonItem, IonLabel, IonList, IonIcon, IonText, IonButton, IonBadge } from '@ionic/react';
 
 // import './homepage.css';
 import tagliandoImg from '../assets/maintenance.svg';
@@ -37,15 +27,12 @@ function ListCarMaintenance() {
     const data = querySnapshot.docs.map((doc) => ({
       ...(doc.data() as Maintenance),
     }));
-
-    console.log(data);
     setMaintenances(data);
   };
 
   const deleteDocumente = async (id: string) => {
     await deleteDoc(doc(db, envVar?.collection, id));
-    console.log('COSA RESTA');
-    console.log(maintenances);
+    fetchMaintenances()
   };
 
   useEffect(() => {
@@ -106,7 +93,7 @@ function ListCarMaintenance() {
 
                 {/* Price & Cart Button */}
                 <IonText slot="end">
-                  <h2>€{item.costo}</h2>
+                  <h2>€ {item.costo}</h2>
                 </IonText>
 
                 <IonButton fill="clear" slot="end" onClick={() => alert('Edit')}>
@@ -115,14 +102,14 @@ function ListCarMaintenance() {
                 <IonButton fill="clear" id="present-alert" slot="end" onClick={() => setConfirmDelete(true)}>
                   <IonIcon icon={trashOutline} color="danger" />
                 </IonButton>
+                <AlertConfirmation
+                  trigger="resent-alert"
+                  isOpen={confirmDelete}
+                  onClose={() => setConfirmDelete(false)}
+                  onConfirm={() => deleteDocumente(item.id)}
+                />
               </IonItem>
             ))}
-            <AlertConfirmation
-              trigger="resent-alert"
-              isOpen={confirmDelete}
-              onClose={() => setConfirmDelete(false)}
-              onConfirm={() => deleteDocumente('"2025-02-15T10:38:52.100Z"')}
-            />
           </IonList>
         )}
       </IonContent>

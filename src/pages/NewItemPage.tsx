@@ -142,7 +142,7 @@ function NewItemPage() {
         {isSuccess ? (
           <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Manutenzione aggiunta con successo!" duration={5000}></IonToast>
         ) : (
-          <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta della manutenzione" duration={5000}></IonToast>
+          <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta della manutenzione" duration={1000}></IonToast>
         )}
       </IonContent>
     </>
