@@ -3,6 +3,7 @@ import { collection, writeBatch, doc } from 'firebase/firestore';
 import { getEnv } from '../services/env';
 import { db } from '../firebase';
 import { Header } from './Header';
+import { IonButton, IonContent } from '@ionic/react';
 
 const envVar = getEnv();
 
@@ -51,10 +52,14 @@ const ImportItem = () => {
   return (
     <>
       <Header title="Importa" />
+      <IonContent color="light">
       <div>
         <input type="file" accept=".json" onChange={handleFileChange} />
-        <button onClick={handleUpload}>Upload to Firebase</button>
+        
+        <IonButton onClick={handleUpload}>Upload to Firebase</IonButton>
       </div>
+      </IonContent>
+     
     </>
   );
 };
