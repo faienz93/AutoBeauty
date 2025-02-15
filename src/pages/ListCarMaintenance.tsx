@@ -2,20 +2,13 @@ import React, { useEffect, useState } from 'react';
 import {
   IonContent,
   IonThumbnail,
-  IonHeader,
   IonItem,
   IonLabel,
   IonList,
-  IonToolbar,
-  IonTitle,
-  IonButtons,
-  IonBackButton,
-  IonAvatar,
   IonIcon,
   IonText,
   IonButton,
   IonBadge,
-  IonAlert,
 } from '@ionic/react';
 
 // import './homepage.css';

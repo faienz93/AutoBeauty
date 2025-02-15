@@ -1,30 +1,18 @@
 import React, { useState } from 'react';
-import {
-  IonContent,
-  IonButton,
-  IonList,
-  IonItem,
-  IonToast,
-  IonInput,
-  IonSelect,
-  IonTextarea,
-  IonNote,
-  IonSelectOption,
-} from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption } from '@ionic/react';
 import './NewItemPage.css';
 import { collection, addDoc, getDocs, setDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import './NewItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/Maintenance';
 
-
 import { useHistory } from 'react-router-dom';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { getEnv } from '../services/env';
 import { Header } from './Header';
-import { text } from 'ionicons/icons';
+import {v4 as uuidv4} from 'uuid';
 
-const envVar = getEnv()
+const envVar = getEnv();
 
 function NewItemPage() {
   console.log('Rendering NewItem component');
@@ -64,7 +52,7 @@ function NewItemPage() {
     console.log(formData);
 
     try {
-      const customId = JSON.stringify(new Date())
+      const customId = uuidv4()
       const newMaintenance: Maintenance = {
         id: customId,
         data: formData.data,
@@ -76,7 +64,6 @@ function NewItemPage() {
 
       maintenance.push(newMaintenance);
       await setDoc(doc(db, envVar?.collection, customId), newMaintenance);
-      
 
       setFormData({
         data: '',
@@ -94,7 +81,7 @@ function NewItemPage() {
 
   return (
     <>
-      <Header title='Maintenance' />
+      <Header title="Maintenance" />
       <IonContent color="light">
         <IonList inset={true}>
           <IonItem lines="inset" slot="header">
@@ -153,15 +140,7 @@ function NewItemPage() {
         </IonButton>
 
         {isSuccess ? (
-          <IonToast
-            trigger="open-toast"
-            color="success"
-            style={{text: 'white'}}
-            message="Manutenzione aggiunta con successo!"
-            duration={5000}
-            onDidDismiss={() => {
-              history.push('/home');
-            }}></IonToast>
+          <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Manutenzione aggiunta con successo!" duration={5000}></IonToast>
         ) : (
           <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta della manutenzione" duration={5000}></IonToast>
         )}
