@@ -26,7 +26,7 @@ import carImg from '../assets/car.svg';
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 
-import { collection, getDocs } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { AlertConfirmation } from './AlertConfirmation';
 
@@ -40,11 +40,18 @@ function ListCarMaintenance() {
   const fetchMaintenances = async () => {
     const querySnapshot = await getDocs(collection(db, 'maintenances'));
     const data = querySnapshot.docs.map((doc) => ({
-      id: doc.id,
       ...(doc.data() as Maintenance),
     }));
+
+    console.log(data)
     setMaintenances(data);
   };
+
+  const deleteDocumente = async (id: string) => {
+    await deleteDoc(doc(db, 'maintenances', id));
+    console.log("COSA RESTA")
+    console.log(maintenances)
+  }
 
   useEffect(() => {
     fetchMaintenances();
@@ -119,8 +126,8 @@ function ListCarMaintenance() {
               </IonButton>              
             </IonItem>
           ))}
-        </IonList>
-        <AlertConfirmation trigger="resent-alert" isOpen={confirmDelete} onClose={() => setConfirmDelete(false)} />
+          <AlertConfirmation trigger="resent-alert" isOpen={confirmDelete} onClose={() => setConfirmDelete(false)} onConfirm={() => deleteDocumente('"2025-02-15T10:38:52.100Z"')}/>
+        </IonList>        
       </IonContent>
     </>
   );

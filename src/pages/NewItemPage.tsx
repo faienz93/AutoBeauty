@@ -19,7 +19,7 @@ import {
   IonBackButton,
 } from '@ionic/react';
 import './NewItemPage.css';
-import { collection, addDoc, getDocs } from 'firebase/firestore';
+import { collection, addDoc, getDocs, setDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
 import './NewItemPage.css';
 import { Maintenance, MaintenanceType } from '../types/Maintenance';
@@ -65,8 +65,9 @@ function NewItemPage() {
     console.log(formData);
 
     try {
+      const customId = JSON.stringify(new Date())
       const newMaintenance: Maintenance = {
-        // id: new Date(),
+        id: customId,
         data: formData.data,
         km: formData.km,
         tipo: formData.tipo,
@@ -75,7 +76,8 @@ function NewItemPage() {
       };
 
       maintenance.push(newMaintenance);
-      await addDoc(collection(db, 'maintenances'), newMaintenance);
+      await setDoc(doc(db, 'maintenances', customId), newMaintenance);
+      
 
       setFormData({
         data: '',
