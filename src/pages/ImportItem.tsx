@@ -27,7 +27,7 @@ const ImportItem = () => {
         reader.onload = handleFileRead;
         reader.readAsText(file);
 
-        const env = getEnv('TEST');
+        const env = getEnv();
         if (!env) return;
 
         const batch = writeBatch(db);
