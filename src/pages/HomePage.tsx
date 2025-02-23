@@ -30,45 +30,51 @@ const HomePage = () => {
       <IonContent>
         <div
           style={{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'center',
-            // flex: 1,
-            height: '100%',
+            display: 'flex',            
+            justifyContent: 'flex-start'
           }}>
-          
-          <IonCard>
+          <IonCard style={{ flexGrow: 1 }}>
             <IonCardHeader>
               <IonCardTitle>Data odierna</IonCardTitle>
               <IonCardSubtitle>{today}</IonCardSubtitle>
             </IonCardHeader>
-
-            
           </IonCard>
-          <IonCard>
+          <IonCard style={{ flexGrow: 1 }}>
             <IonCardHeader>
               <IonCardTitle>KM Attuali</IonCardTitle>
               <IonCardSubtitle>28/12/2024</IonCardSubtitle>
             </IonCardHeader>
-
-            <IonCardContent>Da Fare</IonCardContent>
           </IonCard>
-          <IonCard color="success">
+        </div>
+        
+        <div
+          style={{
+            display: 'flex',            
+            justifyContent: 'flex-start'
+          }}>
+          <IonCard color="success" style={{ flexGrow: 1 }}>
             <IonCardHeader>
-              <IonCardTitle>Ultimo tagliando</IonCardTitle>
+              <IonCardTitle>Tagliando</IonCardTitle>
               <IonCardSubtitle>27/12/2024</IonCardSubtitle>
             </IonCardHeader>
 
             <IonCardContent>Da non fare</IonCardContent>
-          </IonCard>
-          <IonCard color="danger">
+          </IonCard >
+          <IonCard color="danger" style={{ flexGrow: 1 }}>
             <IonCardHeader>
-              <IonCardTitle> Ultimo intervento Gomme</IonCardTitle>
+              <IonCardTitle> Gomme</IonCardTitle>
               <IonCardSubtitle>30/10/2024</IonCardSubtitle>
             </IonCardHeader>
 
-            <IonCardContent>Da non fare.</IonCardContent>
+            <IonCardContent>DA FARE</IonCardContent>
+          </IonCard>
+          <IonCard color="danger" style={{ flexGrow: 1 }}>
+            <IonCardHeader>
+              <IonCardTitle> Revisione</IonCardTitle>
+              <IonCardSubtitle>30/10/2024</IonCardSubtitle>
+            </IonCardHeader>
+
+            <IonCardContent>DA FARE</IonCardContent>
           </IonCard>
         </div>
       </IonContent>
