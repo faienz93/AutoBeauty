@@ -68,15 +68,17 @@ function App() {
             <IonLabel>Home</IonLabel>
           </IonTabButton>
 
+          <IonTabButton tab="list" href="/list">
+            <IonIcon icon={listOutline} />
+            <IonLabel>List</IonLabel>
+          </IonTabButton>
+          
           <IonTabButton tab="newItem" href="/newItem">
             <IonIcon icon={addCircleOutline} />
             <IonLabel>Add</IonLabel>
           </IonTabButton>
 
-          <IonTabButton tab="list" href="/list">
-            <IonIcon icon={listOutline} />
-            <IonLabel>List</IonLabel>
-          </IonTabButton>
+          
           <IonTabButton tab="import" href="/import">
             <IonIcon icon={add} />
             <IonLabel>Import</IonLabel>
