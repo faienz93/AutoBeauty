@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption } from '@ionic/react';
-import './NewItemPage.css';
+import './ItemPage.css';
 import { collection, addDoc, getDocs, setDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import './NewItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/Maintenance';
 
 import { useHistory } from 'react-router-dom';
@@ -14,7 +13,7 @@ import {v4 as uuidv4} from 'uuid';
 
 const envVar = getEnv();
 
-function NewItemPage() {
+function ItemPage() {
   console.log('Rendering NewItem component');
   const maintenance: Maintenance[] = [];
   const [isSuccess, setIsSuccess] = useState(false);
@@ -149,4 +148,4 @@ function NewItemPage() {
   );
 }
 
-export default NewItemPage;
+export default ItemPage;
