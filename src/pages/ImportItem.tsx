@@ -75,6 +75,7 @@ const ImportItem = () => {
     <>
       <Header title="Importa" />
       <IonContent color="light">
+        {/* REF: https://forum.ionicframework.com/t/ioninput-type-file/205203/2 */}
         <input style={{ display: 'none' }} ref={inputRef} type="file" accept=".json" onChange={handleFileChange} />
 
         <IonButton onClick={openFileDialog} expand="full" className="buttonAddList">
