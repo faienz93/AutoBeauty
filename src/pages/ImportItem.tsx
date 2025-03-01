@@ -56,7 +56,7 @@ const ImportItem = () => {
       const collectionRef = collection(db, env.collection);
 
       data.forEach((item) => {
-        const docRef = doc(collectionRef, uuidv4()); // Create a new document reference
+        const docRef = doc(collectionRef); // Create a new document reference
         batch.set(docRef, item);
       });
 
