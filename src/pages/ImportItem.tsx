@@ -5,7 +5,7 @@ import { db } from '../firebase';
 import { Header } from './Header';
 import { IonButton, IonContent } from '@ionic/react';
 
-const envVar = getEnv();
+// const envVar = getEnv();
 
 const ImportItem = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -35,7 +35,7 @@ const ImportItem = () => {
     if (!env) return;
 
     const batch = writeBatch(db);
-    const collectionRef = collection(db, envVar?.collection);
+    const collectionRef = collection(db, env.collection);
 
     data.forEach((item) => {
       const docRef = doc(collectionRef); // Create a new document reference

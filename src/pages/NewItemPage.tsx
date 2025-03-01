@@ -19,13 +19,13 @@ function NewItemPage() {
   const maintenance: Maintenance[] = [];
   const [isSuccess, setIsSuccess] = useState(false);
   const history = useHistory();
-
+  const currentDate = new Date().toLocaleDateString('it-IT', {
+    year: 'numeric',
+    month: 'short',
+    day: 'numeric',
+  });
   const [formData, setFormData] = useState({
-    data: new Date().toLocaleDateString('it-IT', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }),
+    data: currentDate,
     km: 0,
     tipo: 'Tagliando' as MaintenanceType,
     costo: 0,
@@ -66,7 +66,7 @@ function NewItemPage() {
       await setDoc(doc(db, envVar?.collection, customId), newMaintenance);
 
       setFormData({
-        data: '',
+        data: currentDate,
         km: 0,
         tipo: 'Tagliando',
         costo: 0,
