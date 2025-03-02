@@ -9,6 +9,8 @@ npm run dev
 # Icons
 https://www.svgrepo.com/
 
+# SQLite
+https://jepiqueau.github.io/2023/08/31/Ionic7React-SQLite-CRUD-App.html
 
 ## TODO
 
