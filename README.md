@@ -11,6 +11,7 @@ https://www.svgrepo.com/
 
 # SQLite
 https://jepiqueau.github.io/2023/08/31/Ionic7React-SQLite-CRUD-App.html
+Quando si dovrà deployare l'applicazione usare questo https://jepiqueau.github.io/2023/08/31/Ionic7React-SQLite-CRUD-App.html#install-native-required-packages
 
 ## TODO
 
