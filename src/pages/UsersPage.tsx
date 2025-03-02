@@ -10,6 +10,7 @@ import { useQuerySQLite } from '../hooks/UseQuerySQLite';
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { platform } from '../App';
 import { SqliteServiceContext, StorageServiceContext } from '../App';
+import { Header } from './Header';
 
 
 const UsersPage: React.FC = () => {
@@ -145,14 +146,7 @@ const UsersPage: React.FC = () => {
 
   return (
   <IonPage>
-    <IonHeader>
-      <IonToolbar>
-        <IonTitle>Managing Users</IonTitle>
-        <IonButtons slot="start">
-          <IonBackButton text="home" defaultHref="/home"></IonBackButton>
-        </IonButtons>
-      </IonToolbar>
-    </IonHeader>
+    <Header title="Users" />
     <IonContent>
       {ref.current && (
         <div>
