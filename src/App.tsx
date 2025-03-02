@@ -36,7 +36,7 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, add } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, add, arrowUpCircleSharp } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 import HomePage from './pages/HomePage';
@@ -49,6 +49,7 @@ import SqliteService from './services/sqliteService';
 import DbVersionService from './services/dbVersionService';
 import StorageService from './services/storageService';
 import AppInitializer from './components/AppInitializer/AppInitializer';
+import UsersPage from './pages/UsersPage';
 
 setupIonicReact({ mode: 'md' });
 
@@ -73,6 +74,7 @@ function App() {
                   <Route path="/newItem" render={() => <ItemPage />} exact={true} />
                   <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
                   <Route path="/import" render={() => <ImportItem />} exact={true} />
+                  <Route path="/user" render={() => <UsersPage />} exact={true} />
                 </IonRouterOutlet>
 
                 <IonTabBar slot="bottom">
@@ -95,7 +97,14 @@ function App() {
                     <IonIcon icon={add} />
                     <IonLabel>Import</IonLabel>
                   </IonTabButton>
+
+                  <IonTabButton tab="user" href="/user">
+                    <IonIcon icon={arrowUpCircleSharp} />
+                    <IonLabel>User</IonLabel>
+                  </IonTabButton>
                 </IonTabBar>
+
+                
               </IonTabs>
             </IonReactRouter>
           </AppInitializer>

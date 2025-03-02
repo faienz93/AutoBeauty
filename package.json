@@ -4,8 +4,10 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run copy:sql:wasm && vite",
     "build": "tsc -b && vite build",
+    "copy:sql:wasm": "copyfiles -u 3 node_modules/sql.js/dist/sql-wasm.wasm public/assets",
+    "ionic:serve:before": "npm run copy:sql:wasm",
     "lint": "eslint .",
     "preview": "vite preview"
   },
