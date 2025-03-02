@@ -8,9 +8,6 @@ import { setupIonicReact } from '@ionic/react';
 setupIonicReact();
 import { Route, Redirect } from 'react-router';
 
-
-
-
 /* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
@@ -47,45 +44,65 @@ import ItemPage from './pages/ItemPage';
 import ImportItem from './pages/ImportItem';
 import ProductList from './pages/ProductItem';
 
+import { Capacitor } from '@capacitor/core';
+import SqliteService from './services/sqliteService';
+import DbVersionService from './services/dbVersionService';
+import StorageService from './services/storageService';
+import AppInitializer from './components/AppInitializer/AppInitializer';
+
 setupIonicReact({ mode: 'md' });
+
+export const platform = Capacitor.getPlatform();
+
+// Singleton Services
+export const SqliteServiceContext = React.createContext(SqliteService);
+export const DbVersionServiceContext = React.createContext(DbVersionService);
+export const StorageServiceContext = React.createContext(new StorageService(SqliteService, DbVersionService));
 
 function App() {
   return (
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Redirect exact path="/" to="/home" />          
-          <Route path="/home" render={() => <HomePage />} exact={true} />
-          <Route path="/newItem" render={() => <ItemPage />} exact={true} />          
-          <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-          <Route path="/import" render={() => <ImportItem />} exact={true} />
-        </IonRouterOutlet>
+    <SqliteServiceContext.Provider value={SqliteService}>
+      <DbVersionServiceContext.Provider value={DbVersionService}>
+        <StorageServiceContext.Provider value={new StorageService(SqliteService, DbVersionService)}>
+          <AppInitializer>
+            <IonReactRouter>
+              <IonTabs>
+                <IonRouterOutlet>
+                  <Redirect exact path="/" to="/home" />
+                  <Route path="/home" render={() => <HomePage />} exact={true} />
+                  <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+                  <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+                  <Route path="/import" render={() => <ImportItem />} exact={true} />
+                </IonRouterOutlet>
 
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href="/home">
-          
-            <IonIcon icon={homeOutline} />
-            <IonLabel>Home</IonLabel>
-          </IonTabButton>
+                <IonTabBar slot="bottom">
+                  <IonTabButton tab="home" href="/home">
+                    <IonIcon icon={homeOutline} />
+                    <IonLabel>Home</IonLabel>
+                  </IonTabButton>
 
-          <IonTabButton tab="list" href="/list">
-            <IonIcon icon={listOutline} />
-            <IonLabel>List</IonLabel>
-          </IonTabButton>
-          
-          <IonTabButton tab="newItem" href="/newItem">
-            <IonIcon icon={addCircleOutline} />
-            <IonLabel>Add</IonLabel>
-          </IonTabButton>
+                  <IonTabButton tab="list" href="/list">
+                    <IonIcon icon={listOutline} />
+                    <IonLabel>List</IonLabel>
+                  </IonTabButton>
 
-          
-          <IonTabButton tab="import" href="/import">
-            <IonIcon icon={add} />
-            <IonLabel>Import</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
+                  <IonTabButton tab="newItem" href="/newItem">
+                    <IonIcon icon={addCircleOutline} />
+                    <IonLabel>Add</IonLabel>
+                  </IonTabButton>
+
+                  <IonTabButton tab="import" href="/import">
+                    <IonIcon icon={add} />
+                    <IonLabel>Import</IonLabel>
+                  </IonTabButton>
+                </IonTabBar>
+              </IonTabs>
+            </IonReactRouter>
+          </AppInitializer>
+        </StorageServiceContext.Provider>
+      </DbVersionServiceContext.Provider>
+    </SqliteServiceContext.Provider>
   );
 }
+
 export default App;
