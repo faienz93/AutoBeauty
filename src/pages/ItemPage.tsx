@@ -3,7 +3,7 @@ import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect,
 import './ItemPage.css';
 import { collection, addDoc, getDocs, setDoc, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/Maintenance';
+import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/Maintenance';
 
 import { useHistory } from 'react-router-dom';
 import DataPickerPopup from '../components/DataPickerPopup';

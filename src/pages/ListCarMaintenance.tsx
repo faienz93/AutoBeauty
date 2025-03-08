@@ -6,7 +6,7 @@ import tagliandoImg from '../assets/maintenance.svg';
 import tireImg from '../assets/tire.svg';
 import repairImg from '../assets/car-repair.svg';
 import carImg from '../assets/car.svg';
-import { Maintenance, MaintenanceType } from '../types/Maintenance';
+import { Maintenance, MaintenanceType } from '../models/Maintenance';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 
 import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
