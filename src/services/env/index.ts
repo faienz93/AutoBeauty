@@ -20,5 +20,7 @@ export const getEnv = () => {
         messagingSenderId: import.meta.env[`VITE_${envName}_MESSAGING_SENDER_ID`],
         appId: import.meta.env[`VITE_${envName}_APP_ID`],
         collection: import.meta.env[`VITE_${envName}_COLLECTION`],
+        sqlitedb: import.meta.env[`VITE_${envName}_SQLITE_DB`],
+        table: import.meta.env[`VITE_${envName}_TABLE`],
     };
 };

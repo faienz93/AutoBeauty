@@ -48,8 +48,6 @@ function ItemPage() {
   };
 
   const handleSubmit = async () => {
-    console.log(formData);
-
     try {
       const customId = uuidv4()
       const newMaintenance: Maintenance = {
