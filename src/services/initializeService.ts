@@ -1,6 +1,6 @@
 import { platform } from '../App';
 import { ISQLiteService } from '../services/sqliteService';
-import { IStorageService } from '../services/storageService';
+import { IStorageServiceUser } from './storageServiceUser';
 
 export interface IInitializeAppService {
   initializeApp(): Promise<boolean>;
@@ -9,9 +9,9 @@ export interface IInitializeAppService {
 class InitializeAppService implements IInitializeAppService {
   appInit = false;
   sqliteServ!: ISQLiteService;
-  storageServ!: IStorageService;
+  storageServ!: IStorageServiceUser;
 
-  constructor(sqliteService: ISQLiteService, storageService: IStorageService) {
+  constructor(sqliteService: ISQLiteService, storageService: IStorageServiceUser) {
     this.sqliteServ = sqliteService;
     this.storageServ = storageService;
   }

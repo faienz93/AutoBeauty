@@ -1,12 +1,12 @@
 import {platform} from '../App';
  import { BehaviorSubject } from 'rxjs';
- import {ISQLiteService } from '../services/sqliteService'; 
- import {IDbVersionService } from '../services/dbVersionService';
+ import {ISQLiteService } from './sqliteService'; 
+ import {IDbVersionService } from './dbVersionService';
  import { SQLiteDBConnection } from '@capacitor-community/sqlite';
  import { UserUpgradeStatements } from '../upgrades/user.upgrade.statements';
  import { User } from '../models/user';
 
- export interface IStorageService {
+ export interface IStorageServiceUser {
      initializeDatabase(): Promise<void>
      getUsers(): Promise<User[]>
      addUser(user: User): Promise<number>
@@ -15,7 +15,7 @@ import {platform} from '../App';
      getDatabaseName(): string
      getDatabaseVersion(): number
  };
- class StorageService implements IStorageService  {
+ class StorageServiceUser implements IStorageServiceUser  {
      versionUpgrades = UserUpgradeStatements;
      loadToVersion = UserUpgradeStatements[UserUpgradeStatements.length-1].toVersion;
      db!: SQLiteDBConnection;
@@ -80,4 +80,4 @@ import {platform} from '../App';
      }
 
  }
- export default StorageService;
+ export default StorageServiceUser;
