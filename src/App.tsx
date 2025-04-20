@@ -36,12 +36,11 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, add, arrowUpCircleSharp } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, arrowUpCircleSharp } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 import HomePage from './pages/HomePage';
 import ItemPage from './pages/ItemPage';
-import ImportItem from './pages/ImportItem';
 import ProductList from './pages/ProductItem';
 
 import { Capacitor } from '@capacitor/core';
@@ -50,6 +49,7 @@ import DbVersionService from './services/dbVersionService';
 import StorageServiceUser from './services/storageServiceUser';
 import AppInitializer from './components/AppInitializer/AppInitializer';
 import UsersPage from './pages/UsersPage';
+import Setting from './pages/Setting';
 
 setupIonicReact({ mode: 'md' });
 
@@ -73,7 +73,7 @@ function App() {
                   <Route path="/home" render={() => <HomePage />} exact={true} />
                   <Route path="/newItem" render={() => <ItemPage />} exact={true} />
                   <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-                  <Route path="/import" render={() => <ImportItem />} exact={true} />
+                  <Route path="/settings" render={() => <Setting />} exact={true} />
                   <Route path="/user" render={() => <UsersPage />} exact={true} />
                 </IonRouterOutlet>
 
@@ -93,9 +93,9 @@ function App() {
                     <IonLabel>Add</IonLabel>
                   </IonTabButton>
 
-                  <IonTabButton tab="import" href="/import">
-                    <IonIcon icon={add} />
-                    <IonLabel>Import</IonLabel>
+                  <IonTabButton tab="settings" href="/settings">
+                    <IonIcon icon={settingsOutline} />
+                    <IonLabel>Setting</IonLabel>
                   </IonTabButton>
 
                   <IonTabButton tab="user" href="/user">

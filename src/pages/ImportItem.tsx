@@ -2,9 +2,7 @@ import React, { useRef, useState } from 'react';
 import { collection, writeBatch, doc } from 'firebase/firestore';
 import { getEnv } from '../services/env';
 import { db } from '../firebase';
-import { Header } from './Header';
-import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonList, IonToast } from '@ionic/react';
-import {v4 as uuidv4} from 'uuid';
+import { IonButton, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonToast } from '@ionic/react';
 import { cloudUpload } from 'ionicons/icons';
 
 
@@ -73,30 +71,31 @@ const ImportItem = () => {
 
   return (
     <>
-      <Header title="Importa" />
-      <IonContent color="light">
-        {/* REF: https://forum.ionicframework.com/t/ioninput-type-file/205203/2 */}
-        <input style={{ display: 'none' }} ref={inputRef} type="file" accept=".json" onChange={handleFileChange} />
+      <IonItemDivider color="light" className='buttonAddList'>
+          <h1>Importa</h1>
+        </IonItemDivider>
+      {/* REF: https://forum.ionicframework.com/t/ioninput-type-file/205203/2 */}
+      <input style={{ display: 'none' }} ref={inputRef} type="file" accept=".json" onChange={handleFileChange} />
 
-        <IonButton onClick={openFileDialog} expand="full" className="buttonAddList">
-          <IonIcon slot="icon-only" icon={cloudUpload}></IonIcon>
-        </IonButton>
-        <IonList inset={true}>
-          <IonItem lines="inset">
-            <IonInput disabled={true} clearInput={true} label={label}></IonInput>
-          </IonItem>
-        </IonList>
+      <IonButton onClick={openFileDialog} expand="full" className="buttonAddList">
+        <IonIcon slot="icon-only" icon={cloudUpload}></IonIcon>
+      </IonButton>
+      <IonList inset={true}>
+        <IonItem lines="inset">
+          <IonInput disabled={true} clearInput={true} label={label}></IonInput>
+        </IonItem>
+      </IonList>
 
-        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleUpload}>
-          Aggiungi a Firebase
-        </IonButton>
+      <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleUpload}>
+        Aggiungi a Firebase
+      </IonButton>
 
-        {isSuccess ? (
-          <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Caricamento avvenuto con successo" duration={1000}></IonToast>
-        ) : (
-          <IonToast trigger="open-toast" color="danger" message="Errore durante il caricamento" duration={1000}></IonToast>
-        )}
-      </IonContent>
+      {isSuccess ? (
+        <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Caricamento avvenuto con successo" duration={1000}></IonToast>
+      ) : (
+        <IonToast trigger="open-toast" color="danger" message="Errore durante il caricamento" duration={1000}></IonToast>
+      )}
+
     </>
   );
 };
