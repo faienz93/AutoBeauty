@@ -1,8 +1,12 @@
+import { getEnv } from '../services/env';
+
+const envVar = getEnv();
+
 export const UserUpgradeStatements = [
     {
     toVersion: 1,
     statements: [
-        `CREATE TABLE IF NOT EXISTS users (
+        `CREATE TABLE IF NOT EXISTS ${envVar?.user_table} (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         name TEXT NOT NULL,
         active INTEGER DEFAULT 1
@@ -14,7 +18,7 @@ export const UserUpgradeStatements = [
     {
     toVersion: 2,
     statements: [
-        `ALTER TABLE users ADD COLUMN email TEXT;`,
+        `ALTER TABLE ${envVar?.user_table} ADD COLUMN email TEXT;`,
     ]
     },
     */

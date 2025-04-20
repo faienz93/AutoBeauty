@@ -1,10 +1,13 @@
 import {platform} from '../App';
- import { BehaviorSubject } from 'rxjs';
- import {ISQLiteService } from './sqliteService'; 
- import {IDbVersionService } from './dbVersionService';
- import { SQLiteDBConnection } from '@capacitor-community/sqlite';
- import { UserUpgradeStatements } from '../upgrades/user.upgrade.statements';
- import { User } from '../models/user';
+import { BehaviorSubject } from 'rxjs';
+import {ISQLiteService } from './sqliteService'; 
+import {IDbVersionService } from './dbVersionService';
+import { SQLiteDBConnection } from '@capacitor-community/sqlite';
+import { UserUpgradeStatements } from '../upgrades/user.upgrade.statements';
+import { User } from '../models/user';
+import { getEnv } from './env';
+
+const envVar = getEnv();
 
  export interface IStorageServiceUser {
      initializeDatabase(): Promise<void>
@@ -19,7 +22,7 @@ import {platform} from '../App';
      versionUpgrades = UserUpgradeStatements;
      loadToVersion = UserUpgradeStatements[UserUpgradeStatements.length-1].toVersion;
      db!: SQLiteDBConnection;
-     database: string = 'myuserdb';
+     database: string = envVar?.sqlitedb;
      sqliteServ!: ISQLiteService;
      dbVerServ!: IDbVersionService;
      isInitCompleted = new BehaviorSubject(false);
@@ -42,6 +45,8 @@ import {platform} from '../App';
                                                  upgrade: this.versionUpgrades});
              this.db = await this.sqliteServ.openDatabase(this.database, this.loadToVersion, false);
              const isData = await this.db.query("select * from sqlite_sequence");
+             console.log("IS DATA")
+             console.log(isData)
              if(isData.values!.length === 0) {
              // create database initial users if any
 
@@ -58,10 +63,10 @@ import {platform} from '../App';
          }
      }
      async getUsers(): Promise<User[]>  {
-         return (await this.db.query('SELECT * FROM users;')).values as User[];
+         return (await this.db.query(`SELECT * FROM ${envVar?.user_table};`)).values as User[];
      }
      async addUser(user: User): Promise<number> {
-         const sql = `INSERT INTO users (name) VALUES (?);`;
+         const sql = `INSERT INTO ${envVar?.user_table} (name) VALUES (?);`;
          const res = await this.db.run(sql,[user.name]);
          if (res.changes !== undefined
              && res.changes.lastId !== undefined && res.changes.lastId > 0) {
@@ -71,11 +76,11 @@ import {platform} from '../App';
          }
      }
      async updateUserById(id: string, active: number): Promise<void> {
-         const sql = `UPDATE users SET active=${active} WHERE id=${id}`;
+         const sql = `UPDATE ${envVar?.user_table} SET active=${active} WHERE id=${id}`;
          await this.db.run(sql);
      }
      async deleteUserById(id: string): Promise<void> {
-         const sql = `DELETE FROM users WHERE id=${id}`;
+         const sql = `DELETE FROM ${envVar?.user_table} WHERE id=${id}`;
          await this.db.run(sql);
      }
 

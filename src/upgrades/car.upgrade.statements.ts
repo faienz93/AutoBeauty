@@ -3,11 +3,11 @@ import { getEnv } from '../services/env';
 const envVar = getEnv();
 
 
-export const UserUpgradeStatements = [
+export const CarUpgradeStatements = [
     {
     toVersion: 1,
     statements: [
-        `CREATE TABLE IF NOT EXISTS ${envVar?.table} (
+        `CREATE TABLE IF NOT EXISTS ${envVar?.car_table} (
         id TEXT PRIMARY KEY NOT NULL,
         data TEXT NOT NULL,
         km INTEGER NOT NULL,
