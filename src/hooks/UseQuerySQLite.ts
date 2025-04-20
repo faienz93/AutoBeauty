@@ -6,6 +6,8 @@ export const useQuerySQLite = (db: SQLiteDBConnection | null, stmt: string, valu
         if (db) {
             try {
                 const data = await db.query(stmt, values);
+                console.log('DATAAAAAAA');
+                console.log(data);
                 return data.values as never[];
             } catch (err: any) {
                 const msg = err.message ? err.message : err;

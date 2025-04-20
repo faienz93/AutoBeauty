@@ -41,14 +41,12 @@ import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 import HomePage from './pages/HomePage';
 import ItemPage from './pages/ItemPage';
-import ProductList from './pages/ProductItem';
 
 import { Capacitor } from '@capacitor/core';
 import SqliteService from './services/sqliteService';
 import DbVersionService from './services/dbVersionService';
-import StorageServiceUser from './services/storageServiceUser';
+
 import AppInitializer from './components/AppInitializer/AppInitializer';
-import UsersPage from './pages/UsersPage';
 import Setting from './pages/Setting';
 import StorageServiceMaintenance from './services/storageServiceMaintenance';
 
@@ -75,7 +73,6 @@ function App() {
                   <Route path="/newItem" render={() => <ItemPage />} exact={true} />
                   <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
                   <Route path="/settings" render={() => <Setting />} exact={true} />
-                  <Route path="/user" render={() => <UsersPage />} exact={true} />
                 </IonRouterOutlet>
 
                 <IonTabBar slot="bottom">
@@ -97,11 +94,6 @@ function App() {
                   <IonTabButton tab="settings" href="/settings">
                     <IonIcon icon={settingsOutline} />
                     <IonLabel>Setting</IonLabel>
-                  </IonTabButton>
-
-                  <IonTabButton tab="user" href="/user">
-                    <IonIcon icon={arrowUpCircleSharp} />
-                    <IonLabel>User</IonLabel>
                   </IonTabButton>
                 </IonTabBar>
 

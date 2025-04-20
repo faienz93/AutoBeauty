@@ -1,6 +1,6 @@
 import { platform } from '../App';
 import { ISQLiteService } from '../services/sqliteService';
-import { IStorageServiceUser } from './storageServiceUser';
+import { IStorageServiceMaintenance } from './storageServiceMaintenance';
 
 export interface IInitializeAppService {
   initializeApp(): Promise<boolean>;
@@ -9,9 +9,9 @@ export interface IInitializeAppService {
 class InitializeAppService implements IInitializeAppService {
   appInit = false;
   sqliteServ!: ISQLiteService;
-  storageServ!: IStorageServiceUser;
+  storageServ!: IStorageServiceMaintenance;
 
-  constructor(sqliteService: ISQLiteService, storageService: IStorageServiceUser) {
+  constructor(sqliteService: ISQLiteService, storageService: IStorageServiceMaintenance) {
     this.sqliteServ = sqliteService;
     this.storageServ = storageService;
   }
@@ -22,7 +22,7 @@ class InitializeAppService implements IInitializeAppService {
           const jeepSQlEL = document.querySelector('jeep-sqlite');
           await this.sqliteServ.initWebStore();
         }
-        // Initialize the myuserdb database
+        // Initialize the database
         await this.storageServ.initializeDatabase();
         if (platform === 'web') {
           await this.sqliteServ.saveToStore(this.storageServ.getDatabaseName());

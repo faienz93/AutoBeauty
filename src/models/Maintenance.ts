@@ -1,7 +1,7 @@
 export type MaintenanceType = 'Tagliando' | 'Revisione' | 'Gomme' | 'Chilometraggio';
 
 export interface Maintenance {
-  id: string;
+  id: number;
   data: string;
   km: number;
   tipo: MaintenanceType;

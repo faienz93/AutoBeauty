@@ -12,8 +12,7 @@ const AppInitializer: FC<AppInitializerProps> = ({ children }) => {
   const ref = useRef(false);
   const sqliteService = useContext(SqliteServiceContext);
   const storageService = useContext(StorageServiceContext);
-  const initializeAppService = new InitializeAppService(sqliteService,
-                                                        storageService);
+  const initializeAppService = new InitializeAppService(sqliteService, storageService);
   useEffect(()=> {
     const initApp = async ():Promise <void> => {
       try {
@@ -21,6 +20,7 @@ const AppInitializer: FC<AppInitializerProps> = ({ children }) => {
         return;
       } catch(error: any) {
         const msg = error.message ? error.message : error;
+        console.error(`AppInitializer: ${msg}`);
          
         alert(`AppInitializer: ${msg}`);         
       }  

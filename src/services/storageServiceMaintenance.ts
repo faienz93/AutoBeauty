@@ -3,25 +3,24 @@ import { BehaviorSubject } from 'rxjs';
 import { ISQLiteService } from './sqliteService';
 import { IDbVersionService } from './dbVersionService';
 import { SQLiteDBConnection } from '@capacitor-community/sqlite';
-import { UserUpgradeStatements } from '../upgrades/user.upgrade.statements';
-import { User } from '../models/user';
 import { getEnv } from './env';
 import { Maintenance } from '../models/Maintenance';
+import { CarUpgradeStatements } from '../upgrades/car.upgrade.statements';
 
 const envVar = getEnv();
 
 export interface IStorageServiceMaintenance {
     initializeDatabase(): Promise<void>
     getMaintenance(): Promise<Maintenance[]>
-    addMaintenance(user: Maintenance): Promise<number>
+    addMaintenance(maintenance: Maintenance): Promise<number>
     updateMaintenanceById(maintenance: Maintenance): Promise<void>
     deleteMaintenanceById(id: string): Promise<void>
     getDatabaseName(): string
     getDatabaseVersion(): number
 };
 class StorageServiceMaintenance implements IStorageServiceMaintenance {
-    versionUpgrades = UserUpgradeStatements;
-    loadToVersion = UserUpgradeStatements[UserUpgradeStatements.length - 1].toVersion;
+    versionUpgrades = CarUpgradeStatements;
+    loadToVersion = CarUpgradeStatements[CarUpgradeStatements.length - 1].toVersion;
     db!: SQLiteDBConnection;
     database: string = envVar?.sqlitedb;
     sqliteServ!: ISQLiteService;
@@ -47,13 +46,14 @@ class StorageServiceMaintenance implements IStorageServiceMaintenance {
                 upgrade: this.versionUpgrades
             });
             this.db = await this.sqliteServ.openDatabase(this.database, this.loadToVersion, false);
+            console.log(this.db);
             const isData = await this.db.query("select * from sqlite_sequence");
-            console.log("IS DATA")
-            console.log(isData)
             if (isData.values!.length === 0) {
-                // create database initial users if any
+                // create database initial maintenance if any
 
             }
+            console.log('DB created');
+            console.log(isData)
 
             this.dbVerServ.setDbVersion(this.database, this.loadToVersion);
             if (platform === 'web') {
@@ -62,6 +62,7 @@ class StorageServiceMaintenance implements IStorageServiceMaintenance {
             this.isInitCompleted.next(true);
         } catch (error: any) {
             const msg = error.message ? error.message : error;
+            console.error(msg)
             throw new Error(`storageService.initializeDatabase: ${msg}`);
         }
     }
@@ -69,7 +70,7 @@ class StorageServiceMaintenance implements IStorageServiceMaintenance {
         return (await this.db.query(`SELECT * FROM ${envVar?.car_table};`)).values as Maintenance[];
     }
     async addMaintenance(maintenance: Maintenance): Promise<number> {
-        const sql = `INSERT INTO ${envVar?.user_table} (id, data, km, tipo, costo, note) VALUES (?);`;
+        const sql = `INSERT INTO ${envVar?.car_table} (id, data, km, tipo, costo, note) VALUES (?, ?, ?, ?, ?, ?);`;
         const res = await this.db.run(sql, [
             maintenance.id,
             maintenance.data,
@@ -78,6 +79,7 @@ class StorageServiceMaintenance implements IStorageServiceMaintenance {
             maintenance.costo,
             maintenance.note,
         ]);
+        console.log(sql)
         if (res.changes !== undefined
             && res.changes.lastId !== undefined && res.changes.lastId > 0) {
             return res.changes.lastId;

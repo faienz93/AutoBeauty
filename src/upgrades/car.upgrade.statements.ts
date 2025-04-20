@@ -6,9 +6,10 @@ const envVar = getEnv();
 export const CarUpgradeStatements = [
     {
     toVersion: 1,
+    // Importante mettere almeno una chiave primaria autoincrement altrimenti darà errore in fase di creazione delle tabella, perchè non crea sqlite_sequence
     statements: [
         `CREATE TABLE IF NOT EXISTS ${envVar?.car_table} (
-        id TEXT PRIMARY KEY NOT NULL,
+        id INTEGER PRIMARY KEY AUTOINCREMENT, 
         data TEXT NOT NULL,
         km INTEGER NOT NULL,
         tipo TEXT NOT NULL,
