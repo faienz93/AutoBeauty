@@ -50,6 +50,7 @@ import StorageServiceUser from './services/storageServiceUser';
 import AppInitializer from './components/AppInitializer/AppInitializer';
 import UsersPage from './pages/UsersPage';
 import Setting from './pages/Setting';
+import StorageServiceMaintenance from './services/storageServiceMaintenance';
 
 setupIonicReact({ mode: 'md' });
 
@@ -58,13 +59,13 @@ export const platform = Capacitor.getPlatform();
 // Singleton Services
 export const SqliteServiceContext = React.createContext(SqliteService);
 export const DbVersionServiceContext = React.createContext(DbVersionService);
-export const StorageServiceContext = React.createContext(new StorageServiceUser(SqliteService, DbVersionService));
+export const StorageServiceContext = React.createContext(new StorageServiceMaintenance(SqliteService, DbVersionService));
 
 function App() {
   return (
     <SqliteServiceContext.Provider value={SqliteService}>
       <DbVersionServiceContext.Provider value={DbVersionService}>
-        <StorageServiceContext.Provider value={new StorageServiceUser(SqliteService, DbVersionService)}>
+        <StorageServiceContext.Provider value={new StorageServiceMaintenance(SqliteService, DbVersionService)}>
           <AppInitializer>
             <IonReactRouter>
               <IonTabs>
