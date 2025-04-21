@@ -4,7 +4,6 @@ import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/Maintenance';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
-import { SqliteServiceContext, StorageServiceContext } from '../App';
 import { SQLiteDBConnection } from "@capacitor-community/sqlite";
 import { platform } from '../App';
 
@@ -13,16 +12,6 @@ function ItemPage() {
 
   const [isSuccess, setIsSuccess] = useState(false);
   const dbNameRef = useRef('');
-
-
-
-
-  // Database
-  const ref = useRef(false);
-  const isInitComplete = useRef(false);
-  const [db, setDb] = useState<SQLiteDBConnection | null>(null);
-  const sqliteServ = useContext(SqliteServiceContext);
-  const storageServ = useContext(StorageServiceContext);
 
   const currentDate = new Date().toLocaleDateString('it-IT', {
     year: 'numeric',
@@ -37,42 +26,19 @@ function ItemPage() {
     note: '',
   });
 
-  const openDatabase = () => {
-    try {
-      const dbMaintenanceName = storageServ.getDatabaseName();
-      dbNameRef.current = dbMaintenanceName;
-      const version = storageServ.getDatabaseVersion();
 
-      sqliteServ.openDatabase(dbMaintenanceName, version, false).then((database) => {
-        console.log('openDatabase', database);
-        setDb(database);
-        ref.current = true;
-      });
-    } catch (error) {
-      const msg = `Error open database:: ${error}`;
-      console.error(msg);
-      alert(msg);
-    }
-  }
 
   const handleAddMaintenance = async (newMaintenance: Maintenance) => {
-    console.log(db)
-    if (db) {
-      // Send the newUser to the addUser storage service method
-      const isConn = await sqliteServ.isConnection(dbNameRef.current, false);
-      console.log('isConn', isConn);
-      const lastId = await storageServ.addMaintenance(newMaintenance);
-      newMaintenance.id = lastId;
-      console.log('lastId', lastId);
-      setFormData({
-        data: currentDate,
-        km: 0,
-        tipo: 'Tagliando',
-        costo: 0,
-        note: '',
-      });
 
-    }
+    setFormData({
+      data: currentDate,
+      km: 0,
+      tipo: 'Tagliando',
+      costo: 0,
+      note: '',
+    });
+
+
   };
 
 
@@ -119,63 +85,10 @@ function ItemPage() {
   };
 
 
-  useIonViewWillEnter(() => {
-    console.log('useIonViewWillEnter -------------------------------------------');
-    const initSubscription = storageServ.isInitCompleted.subscribe((value) => {
-      console.log('isInitCompleted', value);
-      isInitComplete.current = value;
-      if (isInitComplete.current === true) {
-        const dbUsersName = storageServ.getDatabaseName();
-        console.log('--- dbUsersName ---');
-        console.log(dbUsersName);
-        if (ref.current === false) {
-          if (platform === "web") {
-            window.addEventListener('beforeunload', (event) => {
 
-              sqliteServ.closeDatabase(dbNameRef.current, false).then(() => {
-                ref.current = false;
-              })
-                .catch((error) => {
-                  const msg = `Error close database:: ${error}`;
-                  console.error(msg);
-                  alert(msg);
-                });
-            });
-            customElements.whenDefined('jeep-sqlite').then(() => {
-              openDatabase();
-            })
-              .catch((error) => {
-                const msg = `Error open database:: ${error}`;
-                console.log(`msg`);
-                alert(msg);
-              });
-
-          } else {
-            openDatabase();
-          }
-        }
-      }
-    });
-
-    return () => {
-      initSubscription.unsubscribe();
-    };
-  }, [storageServ]);
-
-
-  useIonViewWillLeave(() => {
-    sqliteServ.closeDatabase(dbNameRef.current, false).then(() => {
-      ref.current = false;
-    })
-      .catch((error) => {
-        const msg = `Error close database:: ${error}`;
-        console.error(msg);
-        alert(msg);
-      });
-  });
 
   return (
-    <IonPage>
+    <>
       <Header title="Maintenance" />
       <IonContent color="light">
         <IonList inset={true}>
@@ -240,7 +153,7 @@ function ItemPage() {
           <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta della manutenzione" duration={1000}></IonToast>
         )}
       </IonContent>
-    </IonPage>
+    </>
   );
 }
 

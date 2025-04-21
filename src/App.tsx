@@ -43,67 +43,57 @@ import HomePage from './pages/HomePage';
 import ItemPage from './pages/ItemPage';
 
 import { Capacitor } from '@capacitor/core';
-import SqliteService from './services/sqliteService';
-import DbVersionService from './services/dbVersionService';
 
-import AppInitializer from './components/AppInitializer/AppInitializer';
+
+
 import Setting from './pages/Setting';
-import StorageServiceMaintenance from './services/storageServiceMaintenance';
+
 
 setupIonicReact({ mode: 'md' });
 
 export const platform = Capacitor.getPlatform();
 
-// Singleton Services
-export const SqliteServiceContext = React.createContext(SqliteService);
-export const DbVersionServiceContext = React.createContext(DbVersionService);
-export const StorageServiceContext = React.createContext(new StorageServiceMaintenance(SqliteService, DbVersionService));
+
 
 function App() {
   return (
-    <SqliteServiceContext.Provider value={SqliteService}>
-      <DbVersionServiceContext.Provider value={DbVersionService}>
-        <StorageServiceContext.Provider value={new StorageServiceMaintenance(SqliteService, DbVersionService)}>
-          <AppInitializer>
-            <IonReactRouter>
-              <IonTabs>
-                <IonRouterOutlet>
-                  <Redirect exact path="/" to="/home" />
-                  <Route path="/home" render={() => <HomePage />} exact={true} />
-                  <Route path="/newItem" render={() => <ItemPage />} exact={true} />
-                  <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-                  <Route path="/settings" render={() => <Setting />} exact={true} />
-                </IonRouterOutlet>
 
-                <IonTabBar slot="bottom">
-                  <IonTabButton tab="home" href="/home">
-                    <IonIcon icon={homeOutline} />
-                    <IonLabel>Home</IonLabel>
-                  </IonTabButton>
 
-                  <IonTabButton tab="list" href="/list">
-                    <IonIcon icon={listOutline} />
-                    <IonLabel>List</IonLabel>
-                  </IonTabButton>
+    <IonReactRouter>
+      <IonTabs>
+        <IonRouterOutlet>
+          <Redirect exact path="/" to="/home" />
+          <Route path="/home" render={() => <HomePage />} exact={true} />
+          <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+          <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+          <Route path="/settings" render={() => <Setting />} exact={true} />
+        </IonRouterOutlet>
 
-                  <IonTabButton tab="newItem" href="/newItem">
-                    <IonIcon icon={addCircleOutline} />
-                    <IonLabel>Add</IonLabel>
-                  </IonTabButton>
+        <IonTabBar slot="bottom">
+          <IonTabButton tab="home" href="/home">
+            <IonIcon icon={homeOutline} />
+            <IonLabel>Home</IonLabel>
+          </IonTabButton>
 
-                  <IonTabButton tab="settings" href="/settings">
-                    <IonIcon icon={settingsOutline} />
-                    <IonLabel>Setting</IonLabel>
-                  </IonTabButton>
-                </IonTabBar>
+          <IonTabButton tab="list" href="/list">
+            <IonIcon icon={listOutline} />
+            <IonLabel>List</IonLabel>
+          </IonTabButton>
 
-                
-              </IonTabs>
-            </IonReactRouter>
-          </AppInitializer>
-        </StorageServiceContext.Provider>
-      </DbVersionServiceContext.Provider>
-    </SqliteServiceContext.Provider>
+          <IonTabButton tab="newItem" href="/newItem">
+            <IonIcon icon={addCircleOutline} />
+            <IonLabel>Add</IonLabel>
+          </IonTabButton>
+
+          <IonTabButton tab="settings" href="/settings">
+            <IonIcon icon={settingsOutline} />
+            <IonLabel>Setting</IonLabel>
+          </IonTabButton>
+        </IonTabBar>
+      </IonTabs>
+    </IonReactRouter>
+
+
   );
 }
 
