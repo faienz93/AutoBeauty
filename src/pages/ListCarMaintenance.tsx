@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
-import { IonContent, IonThumbnail, IonItem, IonLabel, IonList, IonIcon, IonText, IonButton, IonBadge, useIonViewWillEnter, useIonViewWillLeave, IonPage } from '@ionic/react';
+import React, { useContext, useEffect, useState } from 'react';
+import { IonContent, IonThumbnail, IonItem, IonLabel, IonList, IonIcon, IonText, IonButton, IonBadge} from '@ionic/react';
 
 // import './homepage.css';
 import tagliandoImg from '../assets/maintenance.svg';
@@ -9,14 +9,9 @@ import carImg from '../assets/car.svg';
 import { Maintenance, MaintenanceType } from '../models/Maintenance';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from './AlertConfirmation';
-import { getEnv } from '../services/env';
 import { Header } from './Header';
-import { PouchDbService } from '../services/pouchDbService';
 import { DatabaseContext } from '../App';
 
-
-
-const envVar = getEnv();
 
 function ListCarMaintenance() {
   // All'interno del tuo componente:
@@ -42,7 +37,7 @@ function ListCarMaintenance() {
     }
   };
 
-  const handleDeleteMaintenance = async (maintenanceId: number) => {
+  const handleDeleteMaintenance = async (maintenanceId: string) => {
     try {
       const doc = await db.get(maintenanceId.toString());
       const response = await db.remove(doc);
@@ -117,7 +112,7 @@ function ListCarMaintenance() {
                   trigger="resent-alert"
                   isOpen={confirmDelete}
                   onClose={() => setConfirmDelete(false)}
-                  onConfirm={() => handleDeleteMaintenance(item.id)}
+                  onConfirm={() => handleDeleteMaintenance(item._id)}
                 />
               </IonItem>
             ))}
