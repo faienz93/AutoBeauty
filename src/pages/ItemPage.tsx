@@ -57,8 +57,7 @@ function ItemPage() {
       console.log("RESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
       console.log(result.rows);
     })
-
-
+    
     setFormData({
       data: currentDate,
       km: 0,
@@ -66,8 +65,6 @@ function ItemPage() {
       costo: 0,
       note: '',
     });
-
-
   };
 
 

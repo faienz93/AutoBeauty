@@ -45,12 +45,6 @@ function ListCarMaintenance() {
     }
   };
 
-  // const deleteDocumente = async (id: string) => {
-  //   await deleteDoc(doc(db, envVar?.collection, id));
-  //   fetchMaintenances()
-  // };
-
-
   const handleDeleteMaintenance = async (maintenanceId: number) => {
     try {
       const doc = await db.getDatabase().get(maintenanceId.toString());
@@ -61,8 +55,6 @@ function ListCarMaintenance() {
       console.log(err);
     }
   };
-
-
 
   const getMaintenanceIcon = (type: MaintenanceType): string => {
     switch (type) {
@@ -76,12 +68,6 @@ function ListCarMaintenance() {
         return carImg;
     }
   };
-
-
-
-
-
-
   return (
     <>
       <Header title="List Maintenance" />
