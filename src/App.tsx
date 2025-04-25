@@ -54,13 +54,13 @@ import { getEnv } from './services/env';
 setupIonicReact({ mode: 'md' });
 const envVar = getEnv();
 export const platform = Capacitor.getPlatform();
-export const DatabaseContext = React.createContext(PouchDbService.getInstance(envVar?.car_table).getDatabase());
+export const DatabaseContext = React.createContext(new PouchDbService(envVar?.car_table));
 
 
 function App() {
   return (
 
-    <DatabaseContext.Provider value={PouchDbService.getInstance(envVar?.car_table).getDatabase()}>
+    <DatabaseContext.Provider value={new PouchDbService(envVar?.car_table)}>
         <IonReactRouter>
           <IonTabs>
             <IonRouterOutlet>
