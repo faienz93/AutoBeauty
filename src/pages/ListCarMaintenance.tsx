@@ -12,6 +12,7 @@ import { AlertConfirmation } from './AlertConfirmation';
 import { getEnv } from '../services/env';
 import { Header } from './Header';
 import { PouchDbService } from '../services/pouchDbService';
+import { DatabaseContext } from '../App';
 
 
 
@@ -21,19 +22,15 @@ function ListCarMaintenance() {
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const [db] = useState<PouchDbService>(() => 
-    PouchDbService.getInstance(envVar?.car_table)
-  );
+  const db = useContext(DatabaseContext);
 
-  useEffect(() => {
-    if (db) {
+  useEffect(() => { 
       fetchMaintenances();
-    }
-  }, [db]);
+  }, []);
 
   const fetchMaintenances = async () => {
     try {
-      const result = await db?.getDatabase().allDocs({ include_docs: true });
+      const result = await db.allDocs({ include_docs: true });
       console.log('Fetched docs:', result);
       const data = result.rows.map((row: any) => ({
         id: row.doc._id,
@@ -47,8 +44,8 @@ function ListCarMaintenance() {
 
   const handleDeleteMaintenance = async (maintenanceId: number) => {
     try {
-      const doc = await db.getDatabase().get(maintenanceId.toString());
-      const response = await db.getDatabase().remove(doc);
+      const doc = await db.get(maintenanceId.toString());
+      const response = await db.remove(doc);
       console.log('Maintenance deleted successfully:');
       console.log(response);
     } catch (err) {

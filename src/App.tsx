@@ -47,51 +47,54 @@ import { Capacitor } from '@capacitor/core';
 
 
 import Setting from './pages/Setting';
+import { PouchDbService } from './services/pouchDbService';
+import { getEnv } from './services/env';
 
 
 setupIonicReact({ mode: 'md' });
-
+const envVar = getEnv();
 export const platform = Capacitor.getPlatform();
-
+export const DatabaseContext = React.createContext(PouchDbService.getInstance(envVar?.car_table).getDatabase());
 
 
 function App() {
   return (
 
+    <DatabaseContext.Provider value={PouchDbService.getInstance(envVar?.car_table).getDatabase()}>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Redirect exact path="/" to="/home" />
+              <Route path="/home" render={() => <HomePage />} exact={true} />
+              <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+              <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+              <Route path="/settings" render={() => <Setting />} exact={true} />
+            </IonRouterOutlet>
 
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Redirect exact path="/" to="/home" />
-          <Route path="/home" render={() => <HomePage />} exact={true} />
-          <Route path="/newItem" render={() => <ItemPage />} exact={true} />
-          <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-          <Route path="/settings" render={() => <Setting />} exact={true} />
-        </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href="/home">
+                <IonIcon icon={homeOutline} />
+                <IonLabel>Home</IonLabel>
+              </IonTabButton>
 
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href="/home">
-            <IonIcon icon={homeOutline} />
-            <IonLabel>Home</IonLabel>
-          </IonTabButton>
+              <IonTabButton tab="list" href="/list">
+                <IonIcon icon={listOutline} />
+                <IonLabel>List</IonLabel>
+              </IonTabButton>
 
-          <IonTabButton tab="list" href="/list">
-            <IonIcon icon={listOutline} />
-            <IonLabel>List</IonLabel>
-          </IonTabButton>
+              <IonTabButton tab="newItem" href="/newItem">
+                <IonIcon icon={addCircleOutline} />
+                <IonLabel>Add</IonLabel>
+              </IonTabButton>
 
-          <IonTabButton tab="newItem" href="/newItem">
-            <IonIcon icon={addCircleOutline} />
-            <IonLabel>Add</IonLabel>
-          </IonTabButton>
-
-          <IonTabButton tab="settings" href="/settings">
-            <IonIcon icon={settingsOutline} />
-            <IonLabel>Setting</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
+              <IonTabButton tab="settings" href="/settings">
+                <IonIcon icon={settingsOutline} />
+                <IonLabel>Setting</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+    </DatabaseContext.Provider>
 
 
   );
