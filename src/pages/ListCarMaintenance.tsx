@@ -11,6 +11,7 @@ import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from './AlertConfirmation';
 import { getEnv } from '../services/env';
 import { Header } from './Header';
+import { PouchDbService } from '../services/pouchDbService';
 
 
 
@@ -20,32 +21,45 @@ function ListCarMaintenance() {
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const [db] = useState<PouchDbService>(() => 
+    PouchDbService.getInstance(envVar?.car_table)
+  );
 
+  useEffect(() => {
+    if (db) {
+      fetchMaintenances();
+    }
+  }, [db]);
 
-
-
-
-  // const fetchMaintenances = async () => {
-  //   const querySnapshot = await getDocs(collection(db, envVar?.collection));
-  //   const data = querySnapshot.docs.map((doc) => ({
-  //     ...(doc.data() as Maintenance),
-  //   }));
-  //   setMaintenances(data);
-  // };
+  const fetchMaintenances = async () => {
+    try {
+      const result = await db?.getDatabase().allDocs({ include_docs: true });
+      console.log('Fetched docs:', result);
+      const data = result.rows.map((row: any) => ({
+        id: row.doc._id,
+        ...row.doc
+      }));
+      setMaintenances(data);
+    } catch (error) {
+      console.error('Error fetching maintenances:', error);
+    }
+  };
 
   // const deleteDocumente = async (id: string) => {
   //   await deleteDoc(doc(db, envVar?.collection, id));
   //   fetchMaintenances()
   // };
 
-  // useEffect(() => {
-  //   fetchMaintenances();
-
-  //   console.log(maintenances);
-  // }, []);
 
   const handleDeleteMaintenance = async (maintenanceId: number) => {
-    
+    try {
+      const doc = await db.getDatabase().get(maintenanceId.toString());
+      const response = await db.getDatabase().remove(doc);
+      console.log('Maintenance deleted successfully:');
+      console.log(response);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
 
@@ -66,7 +80,7 @@ function ListCarMaintenance() {
 
 
 
-  
+
 
   return (
     <>

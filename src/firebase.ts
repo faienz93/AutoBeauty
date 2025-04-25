@@ -4,7 +4,7 @@ import { getEnv } from './services/env';
 
 const envVar = getEnv();
 
-console.log(envVar)
+
 
 if (!envVar) {
   throw new Error("Environment variables are not set correctly.");

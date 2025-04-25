@@ -1,17 +1,25 @@
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage } from '@ionic/react';
 import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/Maintenance';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
-import { SQLiteDBConnection } from "@capacitor-community/sqlite";
-import { platform } from '../App';
+import { getEnv } from '../services/env';
+import { PouchDbService } from '../services/pouchDbService';
+
+const envVar = getEnv();
 
 function ItemPage() {
+
   console.log('Rendering NewItem component');
 
   const [isSuccess, setIsSuccess] = useState(false);
-  const dbNameRef = useRef('');
+  const [db, setDb] = useState<any>(null);
+
+  useEffect(() => {
+    const database = PouchDbService.getInstance(envVar?.car_table);
+    setDb(database);
+  }, []);
 
   const currentDate = new Date().toLocaleDateString('it-IT', {
     year: 'numeric',
@@ -29,6 +37,27 @@ function ItemPage() {
 
 
   const handleAddMaintenance = async (newMaintenance: Maintenance) => {
+
+    db.getInfo().then((info) => {
+      console.log('Database info:', info);
+    })
+
+    const example = {
+      _id: newMaintenance.id.toString(),
+      ...newMaintenance
+    }
+
+    db.getDatabase().put(example).then((response) => {
+      console.log('Maintenance added successfully:', response);
+    }).catch((error) => {
+      console.error('Error adding maintenance:', error);
+    });
+
+    const res = db.getDatabase().allDocs({ include_docs: true }).then((result: any) => {
+      console.log("RESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
+      console.log(result.rows);
+    })
+
 
     setFormData({
       data: currentDate,

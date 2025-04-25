@@ -53,6 +53,8 @@ In your tsconfig.json activate allowSyntheticDefaultImports:
   }
 }
 
+siccome ottenevo un errore https://stackoverflow.com/a/75819381/4700162 alla fine ho dovuto fare questo per la mia app react
+
 ## TODO
 
 - [ ] aggiungere il campo note quando si inserisce un un nuovo item

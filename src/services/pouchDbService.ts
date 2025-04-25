@@ -1,23 +1,19 @@
 import { Capacitor } from '@capacitor/core';
-import * as PouchDB from 'pouchdb';
+import PouchDB from 'pouchdb';
 import cordovaSqlitePlugin from 'pouchdb-adapter-cordova-sqlite';
 // PouchDB.plugin(cordovaSqlitePlugin);
 
 
 export interface PouchDbInfo extends PouchDB.Core.DatabaseInfo {
-    /** Name of the database you gave when you called new PouchDB(), and also the unique identifier for the database. */
     db_name: string;
-
-    /** Total number of non-deleted documents in the database. */
     doc_count: number;
-
-    /** Sequence number of the database. It starts at 0 and gets incremented every time a document is added or modified */
     update_seq: number | string;
 }
 
 
 export interface IPouchDbService {
     getPlatform(): string;
+    getDatabase(): PouchDB.Database;
     getInfo(): Promise<PouchDbInfo>;
     closeDatabase(): Promise<void>;
     deleteDatabase(): Promise<void>;
@@ -36,7 +32,7 @@ export interface IPouchDbService {
     // delete(dbName: string, id: string, rev: string): Promise<PouchDB.Core.Response>;
 };
 
-class PouchDbService implements IPouchDbService {
+export class PouchDbService implements IPouchDbService {
     
     private platform = Capacitor.getPlatform();
     private db!: PouchDB.Database;
@@ -48,12 +44,18 @@ class PouchDbService implements IPouchDbService {
         return this.platform;
     }
 
+    getDatabase(): PouchDB.Database {
+        return this.db;
+    }
+
     private constructor(dbName: string){
         this.dbName = dbName;
         if (this.platform === 'web') {
+            console.log('Web platform detected. Using default PouchDB adapter.');
             this.db = new PouchDB(dbName);
         } else {
-            PouchDB.plugin(cordovaSqlitePlugin);
+            
+            console.log('Cordova platform detected. Using cordova-sqlite adapter.');
             this.db = new PouchDB(dbName, {adapter: 'cordova-sqlite'});
         }
     }
@@ -61,8 +63,10 @@ class PouchDbService implements IPouchDbService {
 
     public static getInstance(dbName: string): PouchDbService {
         if (!PouchDbService.instance) {
+            console.log('Creating new instance of PouchDbService');
             PouchDbService.instance = new PouchDbService(dbName);
         }
+        console.log('Returning existing instance of PouchDbService');
         return PouchDbService.instance;
     }
 
