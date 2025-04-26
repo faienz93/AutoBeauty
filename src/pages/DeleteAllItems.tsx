@@ -11,11 +11,9 @@ const DeleteAllItem = () => {
   const db = useContext(DatabaseContext);
 
   const handleDelete = async () => {
-    alert("Deleting data...");
     const result = db.deleteDatabase();
     console.log(result)
     setIsSuccess(true);
-
   };
 
   return (
