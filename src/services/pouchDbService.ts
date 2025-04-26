@@ -69,6 +69,10 @@ export class PouchDbService implements IPouchDbService {
         return await this.db.allDocs(options);
     }
 
+    async bulkDocs(docs: any[], options?: PouchDB.Core.BulkDocsOptions): Promise<(PouchDB.Core.Response | PouchDB.Core.Error)[]> {
+        return await this.db.bulkDocs(docs, options);
+    }
+
     async remove(doc: any): Promise<PouchDB.Core.Response> {
         return await this.db.remove(doc);
     }
