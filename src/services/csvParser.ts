@@ -2,8 +2,6 @@
 // import { stringify } from 'csv-stringify/sync';
 // import {stringify} from 'csv-stringify/browser/esm/sync';
 import Papa from "papaparse";
-import { Maintenance } from '../models/Maintenance';
-
 
 
 export class CsvService<T> {
@@ -32,24 +30,15 @@ export class CsvService<T> {
               reject(msg);
               return;
             }
-            
+
             try {
               const parsedData = results.data as T[];
-              console.log("Parsed Data:");
-              console.log(parsedData);
               resolve(parsedData);
             } catch (error) {
               reject(new Error(`Error converting data: ${error}`));
             }
           }
         });
-        // console.log(csv);
-        // console.log("------------")
-        // const parsedData = csv?.data as never[];
-        // console.log(parsedData);
-
-        // resolve(parsedData);
-
       });
 
     } catch (error) {
@@ -59,41 +48,20 @@ export class CsvService<T> {
 
   }
 
-  // async exportCsv(headers: []): Promise<string> {
-  //   try {
-  //     const result = await this.db.allDocs({
-  //       include_docs: true
-  //     });
+  exportCsv(data: T[], header: string[]): Blob {
 
-  //     const manutenzioni = result.rows
-  //       .map(row => row.doc)
-  //       .map(doc => ({
-  //         data: doc?.data,
-  //         km: doc?.km,
-  //         tipo: doc?.tipo,
-  //         costo: doc?.costo,
-  //         note: doc.note || ''
-  //       }));
-
-  //     // Usa csv-stringify per l'export
-  //     return stringify(manutenzioni, {
-  //       delimiter: '|',
-  //       header: true,
-  //       columns: headers
-  //     });
-  //   } catch (error) {
-  //     console.error('Errore esportazione:', error);
-  //     throw error;
-  //   }
-  // }
-
-  // Metodo di utility per validare il formato
-  // private isValidFormat(record: any): boolean {
-  //   return (
-  //     record.data &&
-  //     !isNaN(record.km) &&
-  //     record.tipo &&
-  //     record.costo
-  //   );
-  // }
+    try {
+      const csv = Papa.unparse(data, {
+        delimiter: '|',
+        header: true,
+        columns: header
+      });
+      const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+      return csvData;
+    } catch (error) {
+      console.error('Errore esportazione:', error);
+      throw error;
+    }
+    
+  }
 }
