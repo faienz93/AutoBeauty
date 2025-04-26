@@ -1,6 +1,6 @@
 export type MaintenanceType = 'Tagliando' | 'Revisione' | 'Gomme' | 'Chilometraggio';
 
-interface PouchDbType {
+export interface PouchDbType {
   _id?: string;
   _rev?: string;
 }

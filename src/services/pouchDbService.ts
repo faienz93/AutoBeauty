@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import PouchDB from 'pouchdb';
 import cordovaSqlitePlugin from 'pouchdb-adapter-cordova-sqlite';
+import { PouchDbType } from '../models/Maintenance';
 // PouchDB.plugin(cordovaSqlitePlugin);
 
 
@@ -54,7 +55,7 @@ export class PouchDbService implements IPouchDbService {
     }
 
     
-    async put(doc: any): Promise<PouchDB.Core.Response> {
+    async put(doc: PouchDbType): Promise<PouchDB.Core.Response> {
         try {
             return await this.db.put(doc);
         } catch (error) {
