@@ -113,7 +113,7 @@ function ListCarMaintenance() {
                   msg='Sei sicuro di voler eliminare questa manutenzione?'
                   isOpen={confirmDelete}
                   onClose={() => setConfirmDelete(false)}
-                  onConfirm={() => handleDeleteMaintenance(item._id)}
+                  onConfirm={() => item._id && handleDeleteMaintenance(item._id)}
                 />
               </IonItem>
             ))}
