@@ -1,13 +1,19 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonToast } from '@ionic/react';
+import { AlertConfirmation } from './AlertConfirmation';
+import { DatabaseContext } from '../App';
 
 
 
 const DeleteAllItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const db = useContext(DatabaseContext);
 
   const handleDelete = async () => {
     alert("Deleting data...");
+    const result = db.deleteDatabase();
+    console.log(result)
     setIsSuccess(true);
 
   };
@@ -19,9 +25,18 @@ const DeleteAllItem = () => {
         <h1>Cancella tutto</h1>
       </IonItemDivider>
 
-      <IonButton color="danger" expand="full" className="buttonAddList" onClick={handleDelete}>
+      <IonButton color="danger" expand="full" id="delete-allitem" className="buttonAddList" onClick={() => setConfirmDelete(true)}>
         Cancella tutto
       </IonButton>
+
+
+      <AlertConfirmation
+        msg="Sei sicuro di voler cancellare tutto? Questa azione non può essere annullata."
+        trigger="delete-allitem"
+        isOpen={confirmDelete}
+        onClose={() => setConfirmDelete(false)}
+        onConfirm={() => handleDelete()}
+      />
 
       {isSuccess ? (
         <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Cancellazione avvenuta con successo" duration={1000}></IonToast>

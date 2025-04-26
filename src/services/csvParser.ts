@@ -1,6 +1,3 @@
-// import { ColumnOption, parse } from 'csv-parse';
-// import { stringify } from 'csv-stringify/sync';
-// import {stringify} from 'csv-stringify/browser/esm/sync';
 import Papa from "papaparse";
 
 

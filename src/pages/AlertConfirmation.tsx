@@ -1,13 +1,13 @@
 import { IonAlert } from "@ionic/react";
 
 
-export const AlertConfirmation = ({ trigger, isOpen, onClose, onConfirm }: { trigger: string, isOpen: boolean, onClose: () => void, onConfirm: () => void }) => {
+export const AlertConfirmation = ({ msg, trigger, isOpen, onClose, onConfirm }: { msg: string, trigger: string, isOpen: boolean, onClose: () => void, onConfirm: () => void }) => {
     console.log("Confirmation")
     return (
       <IonAlert
         isOpen={isOpen} 
         header="Attenzione"
-        message="Sei sicuro di voler cancellare la manutenzione?"
+        message= {msg}
         trigger={trigger}
         buttons={[
           {
