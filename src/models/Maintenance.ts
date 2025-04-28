@@ -1,7 +1,10 @@
 export type MaintenanceType = 'Tagliando' | 'Revisione' | 'Gomme' | 'Chilometraggio';
 
-export interface Maintenance {
-  id: string;
+export interface PouchDbType {
+  _id?: string;
+  _rev?: string;
+}
+export interface Maintenance extends PouchDbType {
   data: string;
   km: number;
   tipo: MaintenanceType;

@@ -36,81 +36,67 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, add, arrowUpCircleSharp } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, arrowUpCircleSharp } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 import HomePage from './pages/HomePage';
 import ItemPage from './pages/ItemPage';
-import ImportItem from './pages/ImportItem';
-import ProductList from './pages/ProductItem';
 
 import { Capacitor } from '@capacitor/core';
-import SqliteService from './services/sqliteService';
-import DbVersionService from './services/dbVersionService';
-import StorageService from './services/storageService';
-import AppInitializer from './components/AppInitializer/AppInitializer';
-import UsersPage from './pages/UsersPage';
+
+
+
+import Setting from './pages/Setting';
+import { PouchDbService } from './services/pouchDbService';
+import { getEnv } from './services/env';
+
 
 setupIonicReact({ mode: 'md' });
-
+const envVar = getEnv();
 export const platform = Capacitor.getPlatform();
+export const DatabaseContext = React.createContext(new PouchDbService(envVar?.car_table));
 
-// Singleton Services
-export const SqliteServiceContext = React.createContext(SqliteService);
-export const DbVersionServiceContext = React.createContext(DbVersionService);
-export const StorageServiceContext = React.createContext(new StorageService(SqliteService, DbVersionService));
 
 function App() {
   return (
-    <SqliteServiceContext.Provider value={SqliteService}>
-      <DbVersionServiceContext.Provider value={DbVersionService}>
-        <StorageServiceContext.Provider value={new StorageService(SqliteService, DbVersionService)}>
-          <AppInitializer>
-            <IonReactRouter>
-              <IonTabs>
-                <IonRouterOutlet>
-                  <Redirect exact path="/" to="/home" />
-                  <Route path="/home" render={() => <HomePage />} exact={true} />
-                  <Route path="/newItem" render={() => <ItemPage />} exact={true} />
-                  <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-                  <Route path="/import" render={() => <ImportItem />} exact={true} />
-                  <Route path="/user" render={() => <UsersPage />} exact={true} />
-                </IonRouterOutlet>
 
-                <IonTabBar slot="bottom">
-                  <IonTabButton tab="home" href="/home">
-                    <IonIcon icon={homeOutline} />
-                    <IonLabel>Home</IonLabel>
-                  </IonTabButton>
+    <DatabaseContext.Provider value={new PouchDbService(envVar?.car_table)}>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Redirect exact path="/" to="/home" />
+              <Route path="/home" render={() => <HomePage />} exact={true} />
+              <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+              <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+              <Route path="/settings" render={() => <Setting />} exact={true} />
+            </IonRouterOutlet>
 
-                  <IonTabButton tab="list" href="/list">
-                    <IonIcon icon={listOutline} />
-                    <IonLabel>List</IonLabel>
-                  </IonTabButton>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href="/home">
+                <IonIcon icon={homeOutline} />
+                <IonLabel>Home</IonLabel>
+              </IonTabButton>
 
-                  <IonTabButton tab="newItem" href="/newItem">
-                    <IonIcon icon={addCircleOutline} />
-                    <IonLabel>Add</IonLabel>
-                  </IonTabButton>
+              <IonTabButton tab="list" href="/list">
+                <IonIcon icon={listOutline} />
+                <IonLabel>List</IonLabel>
+              </IonTabButton>
 
-                  <IonTabButton tab="import" href="/import">
-                    <IonIcon icon={add} />
-                    <IonLabel>Import</IonLabel>
-                  </IonTabButton>
+              <IonTabButton tab="newItem" href="/newItem">
+                <IonIcon icon={addCircleOutline} />
+                <IonLabel>Add</IonLabel>
+              </IonTabButton>
 
-                  <IonTabButton tab="user" href="/user">
-                    <IonIcon icon={arrowUpCircleSharp} />
-                    <IonLabel>User</IonLabel>
-                  </IonTabButton>
-                </IonTabBar>
+              <IonTabButton tab="settings" href="/settings">
+                <IonIcon icon={settingsOutline} />
+                <IonLabel>Setting</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+    </DatabaseContext.Provider>
 
-                
-              </IonTabs>
-            </IonReactRouter>
-          </AppInitializer>
-        </StorageServiceContext.Provider>
-      </DbVersionServiceContext.Provider>
-    </SqliteServiceContext.Provider>
+
   );
 }
 

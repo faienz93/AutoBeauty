@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Maintenance, MaintenanceType } from '../types/Maintenance';
+import { Maintenance, MaintenanceType } from '../models/Maintenance';
 import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonCard, IonText } from '@ionic/react';
 import { IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
