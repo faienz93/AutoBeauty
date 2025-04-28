@@ -19,10 +19,6 @@ function ListCarMaintenance() {
   const [confirmDelete, setConfirmDelete] = useState(false);
   const db = useContext(DatabaseContext);
 
-  useEffect(() => { 
-      fetchMaintenances();
-  }, []);
-
   const fetchMaintenances = async () => {
     try {
       const result = await db.allDocs({ include_docs: true });
@@ -44,12 +40,19 @@ function ListCarMaintenance() {
     }
   };
 
+  useEffect(() => { 
+      fetchMaintenances();
+  }, []);
+
+  
+
   const handleDeleteMaintenance = async (maintenanceId: string) => {
     try {
       const doc = await db.get(maintenanceId.toString());
       const response = await db.remove(doc);
       console.log('Maintenance deleted successfully:');
       console.log(response);
+      fetchMaintenances();
     } catch (err) {
       console.log(err);
     }
@@ -119,6 +122,7 @@ function ListCarMaintenance() {
                   key={index}
                   trigger="delete-alert"
                   msg='Sei sicuro di voler eliminare questa manutenzione?'
+                  key={index}
                   isOpen={confirmDelete}
                   onClose={() => setConfirmDelete(false)}
                   onConfirm={() => item._id && handleDeleteMaintenance(item._id)}
