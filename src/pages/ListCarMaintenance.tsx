@@ -30,7 +30,14 @@ function ListCarMaintenance() {
       const data = result.rows.map((row: any) => ({
         id: row.doc._id,
         ...row.doc
-      }));
+      }))
+      .sort((a: Maintenance, b: Maintenance) => {
+        // Ordina per data decrescente
+        // return new Date(b.data).getTime() - new Date(a.data).getTime();
+        
+        // Oppure per km decrescente
+        return b.km - a.km;
+      });
       setMaintenances(data);
     } catch (error) {
       console.error('Error fetching maintenances:', error);
