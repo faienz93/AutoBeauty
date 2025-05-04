@@ -12,6 +12,7 @@ import { CardMaintenance } from './CardMaintenance';
 const HomePage = () => {
   const [countMaintenances, setCountMaintenances] = useState(0);
   const [latestMaintenances, setLatestMaintenances] = useState({});
+  const [lastKm, setLastKm] = useState(0);
   const db = useContext(DatabaseContext);
   const today = new Date().toLocaleDateString('it-IT', {
     year: 'numeric',
@@ -20,6 +21,22 @@ const HomePage = () => {
   });
 
   const getLatestMaintenances = async () => {
+
+    const kmResult = await db.find<Maintenance>({
+      selector: {
+        km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
+        _id: { $gt: null } // assicura che il documento esista
+      },
+      sort: [{ km: 'desc' }], // ordina per km decrescente
+      limit: 1, // prende solo il primo risultato
+      fields: ['km', 'data'] // opzionale: prende solo i campi necessari
+    });
+
+    const lastKm = kmResult.docs[0]?.km || 0;
+    console.log('Ultimo chilometraggio:', lastKm);
+    setLastKm(lastKm);
+
+    
 
     const promises = maintenanceTypes.map(async (maintenanceType) => {
       const res = await db.find<Maintenance>({
@@ -42,9 +59,6 @@ const HomePage = () => {
     }), {}) as Stats;
 
     setLatestMaintenances(updatedMaintenances);
-
-
-
   };
 
 
@@ -68,7 +82,7 @@ const HomePage = () => {
 
   useEffect(() => {
     console.log("latestMaintenances updated:", latestMaintenances);
-  }, [latestMaintenances]); // Si attiva solo quando latestMaintenances cambia
+  }, [latestMaintenances]);
 
 
   return (
@@ -84,6 +98,12 @@ const HomePage = () => {
             <IonCardHeader>
               <IonCardTitle>Data odierna</IonCardTitle>
               <IonCardSubtitle>{today}</IonCardSubtitle>
+            </IonCardHeader>
+          </IonCard>
+          <IonCard style={{ flexGrow: 1 }}>
+            <IonCardHeader>
+              <IonCardTitle>Ultimo Km</IonCardTitle>
+              <IonCardSubtitle>{lastKm}</IonCardSubtitle>
             </IonCardHeader>
           </IonCard>
         </div>
