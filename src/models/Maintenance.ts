@@ -13,3 +13,11 @@ export interface Maintenance extends PouchDbType {
 }
 
 export const maintenanceTypes: MaintenanceType[] = ['Tagliando', 'Gomme', 'Revisione', 'Chilometraggio'];
+
+
+export interface Stats {
+  Tagliando: Maintenance;
+  Gomme: Maintenance;
+  Revisione: Maintenance;
+  Chilometraggio: Maintenance;
+};

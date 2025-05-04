@@ -109,6 +109,7 @@ function ListCarMaintenance() {
                   <IonIcon icon={trashOutline} color="danger" />
                 </IonButton>
                 <AlertConfirmation
+                  key={index}
                   trigger="delete-alert"
                   msg='Sei sicuro di voler eliminare questa manutenzione?'
                   isOpen={confirmDelete}

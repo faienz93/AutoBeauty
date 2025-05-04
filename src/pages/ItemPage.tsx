@@ -12,8 +12,6 @@ function ItemPage() {
   const db = useContext(DatabaseContext);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  
-
   const currentDate = new Date().toLocaleDateString('it-IT', {
     year: 'numeric',
     month: 'short',
@@ -44,7 +42,6 @@ function ItemPage() {
     });
 
     const res = db.allDocs({ include_docs: true }).then((result: any) => {
-      console.log("RESSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS")
       console.log(result.rows);
     })
 
