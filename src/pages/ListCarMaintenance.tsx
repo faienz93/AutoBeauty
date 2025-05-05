@@ -122,7 +122,6 @@ function ListCarMaintenance() {
                   key={index}
                   trigger="delete-alert"
                   msg='Sei sicuro di voler eliminare questa manutenzione?'
-                  key={index}
                   isOpen={confirmDelete}
                   onClose={() => setConfirmDelete(false)}
                   onConfirm={() => item._id && handleDeleteMaintenance(item._id)}
