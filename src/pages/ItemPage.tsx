@@ -13,11 +13,8 @@ interface LocationState {
 
 function ItemPage() {
 
-  const location = useLocation<LocationState>();
   // https://stackoverflow.com/a/59464381/4700162
-  console.log("LOCATIOOON")
-  console.log(location.state?.item)
- 
+  const location = useLocation<LocationState>();
   
   console.log('Rendering NewItem component');
   const db = useContext(DatabaseContext);
