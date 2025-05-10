@@ -11,6 +11,7 @@ import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from './AlertConfirmation';
 import { Header } from './Header';
 import { DatabaseContext } from '../App';
+import { useHistory } from 'react-router-dom';
 
 
 function ListCarMaintenance() {
@@ -18,6 +19,20 @@ function ListCarMaintenance() {
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [confirmDelete, setConfirmDelete] = useState(false);
   const db = useContext(DatabaseContext);
+  const history = useHistory();
+
+
+  const handleEdit = (item: any) => {
+    // history.push({ `/items/edit/${item._id}`,  state: { item } })
+    history.push({
+      pathname: `/items/edit/${item._id}`,
+      // search: '?update=true',  // query string
+      state: {  // location state
+        item, 
+      },
+    })
+    
+  };
 
   const fetchMaintenances = async () => {
     try {
@@ -112,7 +127,7 @@ function ListCarMaintenance() {
                   <h2>€ {item.costo}</h2>
                 </IonText>
 
-                <IonButton fill="clear" slot="end" onClick={() => alert('Edit')}>
+                <IonButton fill="clear" slot="end" onClick={() => handleEdit(item)}>
                   <IonIcon icon={pencil} />
                 </IonButton>
                 <IonButton fill="clear" id="delete-alert" slot="end" onClick={() => setConfirmDelete(true)}>

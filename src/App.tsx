@@ -67,6 +67,7 @@ function App() {
               <Redirect exact path="/" to="/home" />
               <Route path="/home" render={() => <HomePage />} exact={true} />
               <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+              <Route path="/items/edit/:id" render={() => <ItemPage />} exact={true} />
               <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
               <Route path="/settings" render={() => <Setting />} exact={true} />
             </IonRouterOutlet>

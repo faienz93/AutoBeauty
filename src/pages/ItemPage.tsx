@@ -5,9 +5,20 @@ import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/Mainte
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
 import { DatabaseContext } from '../App';
+import { useLocation, useParams } from 'react-router-dom';
+
+interface LocationState {
+  item: Maintenance;
+}
 
 function ItemPage() {
 
+  const location = useLocation<LocationState>();
+  // https://stackoverflow.com/a/59464381/4700162
+  console.log("LOCATIOOON")
+  console.log(location.state?.item)
+ 
+  
   console.log('Rendering NewItem component');
   const db = useContext(DatabaseContext);
   const [isSuccess, setIsSuccess] = useState(false);
@@ -17,12 +28,26 @@ function ItemPage() {
     month: 'short',
     day: 'numeric',
   });
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(() => { 
+
+    if(location.state?.item) {
+      // aggiornamento
+      return {
+        data: location.state.item.data,
+        km: location.state.item.km,
+        tipo: location.state.item.tipo as MaintenanceType,
+        costo: location.state.item.costo,
+        note: location.state.item.note || ''
+      };
+    }
+
+    return {
     data: currentDate,
     km: 0,
     tipo: 'Tagliando' as MaintenanceType,
     costo: 0,
     note: '',
+    }
   });
 
 
