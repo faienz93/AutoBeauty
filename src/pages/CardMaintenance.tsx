@@ -1,18 +1,31 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from "@ionic/react";
 import { Maintenance } from "../models/Maintenance";
+import { LimitGomme, LimitTagliando } from "../constant";
 
 
 export const CardMaintenance = ({ tipo, maintenance }: { tipo: string, maintenance: Maintenance }) => {
     console.log('Rendering CardMaintenance component');
 
+    const kmUltimoIntervento = maintenance?.km;
+
+    const kmAttuali = 114362
+
+
+    const diffKm = kmAttuali - kmUltimoIntervento;
+
+    let daFare = false;
+    if (tipo === 'Gomme') daFare = diffKm >= LimitGomme;
+    if (tipo === 'Tagliando') daFare = diffKm >= LimitTagliando;
+
+
     return (
         <div key={tipo}>
-            <IonCard color="success" style={{ flexGrow: 1 }}>
+            <IonCard color={daFare ? "warning" : "success"} style={{ flexGrow: 1 }}>
                 <IonCardHeader>
                     <IonCardTitle>{tipo}</IonCardTitle>
                     <IonCardSubtitle>{maintenance?.data}</IonCardSubtitle>
                 </IonCardHeader>
-                <IonCardContent>Da Fare</IonCardContent>
+                <IonCardContent> {daFare ? "Da fare" : "Da non fare"}</IonCardContent>
             </IonCard>
         </div>
     )
