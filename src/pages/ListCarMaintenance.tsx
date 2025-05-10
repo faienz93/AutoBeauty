@@ -21,9 +21,8 @@ function ListCarMaintenance() {
   const db = useContext(DatabaseContext);
   const history = useHistory();
 
-
+  // // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (item: any) => {
-    // history.push({ `/items/edit/${item._id}`,  state: { item } })
     history.push({
       pathname: `/items/edit/${item._id}`,
       // search: '?update=true',  // query string

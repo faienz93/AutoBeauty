@@ -15,6 +15,7 @@ function ItemPage() {
 
   // https://stackoverflow.com/a/59464381/4700162
   const location = useLocation<LocationState>();
+  console.log(location.state?.item)
   
   console.log('Rendering NewItem component');
   const db = useContext(DatabaseContext);
@@ -178,9 +179,16 @@ function ItemPage() {
             <IonTextarea label="Comments" label-placement="floating" rows={5} onIonChange={(e) => handleInputChange('note', e.detail.value)}></IonTextarea>
           </IonItem>
         </IonList>
+
+        {location.state?.item ? 
         <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
-          Aggiungi Manutenzione
+         Modifica Manutenzione
         </IonButton>
+        :
+        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+         Aggiungi Manutenzione
+        </IonButton>
+        }
 
         {isSuccess ? (
           <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Manutenzione aggiunta con successo!" duration={5000}></IonToast>
