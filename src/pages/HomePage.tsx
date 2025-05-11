@@ -4,10 +4,10 @@ import { LastKm, Maintenance, maintenanceTypes, Stats } from '../models/Maintena
 import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
 import { IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from './Header';
-import { DatabaseContext } from '../App';
+import { DbMaintenanceContext } from '../App';
 import { CardMaintenance } from './CardMaintenance';
 import { useHistory } from 'react-router-dom';
-import { pencil } from 'ionicons/icons';
+import { colorFill, pencil } from 'ionicons/icons';
 
 
 
@@ -15,14 +15,14 @@ const HomePage = () => {
   const [countMaintenances, setCountMaintenances] = useState(0);
   const [latestMaintenances, setLatestMaintenances] = useState({});
   const [lastKm, setLastKm] = useState<LastKm>({
-    data:  new Date().toLocaleDateString('it-IT', {
+    data: new Date().toLocaleDateString('it-IT', {
       year: 'numeric',
       month: 'short',
       day: 'numeric',
     }),
     km: 0
   });
-  const db = useContext(DatabaseContext);
+  const db = useContext(DbMaintenanceContext);
   const today = new Date().toLocaleDateString('it-IT', {
     year: 'numeric',
     month: 'short',
@@ -37,10 +37,10 @@ const HomePage = () => {
       pathname: `/newkm/edit/${lastKm._id}`,
       // search: '?update=true',  // query string
       state: {  // location state
-        item: lastKm, 
+        item: lastKm,
       },
     })
-    
+
   };
   const getLatestMaintenances = async () => {
 
@@ -61,7 +61,7 @@ const HomePage = () => {
       km: lastKm?.km || 0
     });
 
-    
+
 
     const promises = maintenanceTypes.map(async (maintenanceType) => {
       const res = await db.find<Maintenance>({
@@ -113,28 +113,30 @@ const HomePage = () => {
   return (
     <>
       <Header title="Home" showBackButton={false} />
-      <IonContent fullscreen={true}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-          }}>
+      <IonContent>
+        
           <IonCard style={{ flexGrow: 1 }}>
             <IonCardHeader>
               <IonCardTitle>Data odierna</IonCardTitle>
               <IonCardSubtitle>{today}</IonCardSubtitle>
             </IonCardHeader>
           </IonCard>
-          <IonCard style={{ flexGrow: 1 }}>
-            <IonCardHeader>
+          
+          <IonCard color='tertiary'>
+            <IonCardHeader style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'start',
+                // justifyContent: 'space-between' 
+              }}>
               <IonCardTitle>Ultimo Km</IonCardTitle>
               <IonCardSubtitle>{lastKm.data}: <strong>{lastKm.km}</strong></IonCardSubtitle>
-              <IonButton fill="clear" onClick={() => handleEdit(lastKm)}>
-                                <IonIcon icon={pencil} /> Modifica
-                              </IonButton>
+              <IonButton style={{ color: 'white'}} fill="clear" onClick={() => handleEdit(lastKm)}>
+                <IonIcon icon={pencil} /> Modifica
+              </IonButton>
             </IonCardHeader>
           </IonCard>
-        </div>
+        
 
         {countMaintenances == 0 ? (
           <IonText color="secondary">

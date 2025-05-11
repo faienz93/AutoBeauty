@@ -10,7 +10,7 @@ import { Maintenance, MaintenanceType } from '../models/Maintenance';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from './AlertConfirmation';
 import { Header } from './Header';
-import { DatabaseContext } from '../App';
+import { DbMaintenanceContext } from '../App';
 import { useHistory } from 'react-router-dom';
 
 
@@ -18,7 +18,7 @@ function ListCarMaintenance() {
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const db = useContext(DatabaseContext);
+  const db = useContext(DbMaintenanceContext);
   const history = useHistory();
 
   // // https://stackoverflow.com/a/59464381/4700162

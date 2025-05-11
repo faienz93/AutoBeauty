@@ -4,7 +4,7 @@ import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/Maintenance';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
-import { DatabaseContext } from '../App';
+import { DbMaintenanceContext } from '../App';
 import { useLocation, useParams } from 'react-router-dom';
 
 interface MaintenanceState {
@@ -18,7 +18,7 @@ function ItemPage() {
   console.log(location.state?.item)
   
   console.log('Rendering NewItem component');
-  const db = useContext(DatabaseContext);
+  const db = useContext(DbMaintenanceContext);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const currentDate = new Date().toLocaleDateString('it-IT', {
