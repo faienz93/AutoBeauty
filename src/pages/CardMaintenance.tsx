@@ -16,6 +16,18 @@ export const CardMaintenance = ({ tipo, maintenance }: { tipo: string, maintenan
     let daFare = false;
     if (tipo === 'Gomme') daFare = diffKm >= LimitGomme;
     if (tipo === 'Tagliando') daFare = diffKm >= LimitTagliando;
+    if (tipo === 'Revisione') {
+      const dataUltimaRevisione = new Date(maintenance?.data);
+      console.log(maintenance)
+      console.log(dataUltimaRevisione)
+      const anniPassati = new Date().getFullYear() - dataUltimaRevisione.getFullYear();
+      console.log(new Date().getFullYear())
+      console.log(dataUltimaRevisione)
+      console.log(anniPassati)
+      daFare = anniPassati >= 2;
+
+      console.log(daFare)
+    }
 
 
     return (
