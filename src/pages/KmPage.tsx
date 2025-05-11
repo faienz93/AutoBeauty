@@ -1,5 +1,5 @@
-import React, { useState, useContext, useRef, useEffect } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage } from '@ionic/react';
+import React, { useState, useContext } from 'react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput } from '@ionic/react';
 import './ItemPage.css';
 import { LastKm } from '../models/Maintenance';
 import DataPickerPopup from '../components/DataPickerPopup';
