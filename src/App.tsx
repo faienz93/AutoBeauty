@@ -36,7 +36,7 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, settingsOutline, arrowUpCircleSharp } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 import HomePage from './pages/HomePage';
@@ -49,6 +49,7 @@ import { Capacitor } from '@capacitor/core';
 import Setting from './pages/Setting';
 import { PouchDbService } from './services/pouchDbService';
 import { getEnv } from './services/env';
+import KmPage from './pages/KmPage';
 
 
 setupIonicReact({ mode: 'md' });
@@ -67,8 +68,10 @@ function App() {
               <Redirect exact path="/" to="/home" />
               <Route path="/home" render={() => <HomePage />} exact={true} />
               <Route path="/newItem" render={() => <ItemPage />} exact={true} />
-              <Route path="/items/edit/:id" render={() => <ItemPage />} exact={true} />
+              <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
               <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+              <Route path="/newkm" render={() => <KmPage />} exact={true} />
+              <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
               <Route path="/settings" render={() => <Setting />} exact={true} />
             </IonRouterOutlet>
 
@@ -86,6 +89,11 @@ function App() {
               <IonTabButton tab="newItem" href="/newItem">
                 <IonIcon icon={addCircleOutline} />
                 <IonLabel>Add</IonLabel>
+              </IonTabButton>
+
+              <IonTabButton tab="newkm" href="/newkm">
+                <IonIcon icon={speedometerOutline} />
+                <IonLabel>KM</IonLabel>
               </IonTabButton>
 
               <IonTabButton tab="settings" href="/settings">

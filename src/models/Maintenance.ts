@@ -1,4 +1,4 @@
-export type MaintenanceType = 'Tagliando' | 'Revisione' | 'Gomme' | 'Chilometraggio';
+export type MaintenanceType = 'Tagliando' | 'Revisione' | 'Gomme';
 
 export interface PouchDbType {
   _id?: string;
@@ -12,7 +12,7 @@ export interface Maintenance extends PouchDbType {
   note?: string;
 }
 
-export const maintenanceTypes: MaintenanceType[] = ['Tagliando', 'Gomme', 'Revisione', 'Chilometraggio'];
+export const maintenanceTypes: MaintenanceType[] = ['Tagliando', 'Gomme', 'Revisione'];
 
 
 export interface Stats {
@@ -21,3 +21,10 @@ export interface Stats {
   Revisione: Maintenance;
   Chilometraggio: Maintenance;
 };
+
+
+
+export interface LastKm extends PouchDbType {
+  data: string;
+  km: number
+}

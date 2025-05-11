@@ -20,11 +20,16 @@ export const CardMaintenance = ({ tipo, maintenance }: { tipo: string, maintenan
       const dataUltimaRevisione = new Date(maintenance?.data);
       console.log(maintenance)
       console.log(dataUltimaRevisione)
-      const anniPassati = new Date().getFullYear() - dataUltimaRevisione.getFullYear();
+     
+      
       console.log(new Date().getFullYear())
       console.log(dataUltimaRevisione)
-      console.log(anniPassati)
-      daFare = anniPassati >= 2;
+      const dataAttuale = new Date();
+      const mesiPassati = 
+      (dataAttuale.getFullYear() - dataUltimaRevisione.getFullYear()) * 12 + 
+      (dataAttuale.getMonth() - dataUltimaRevisione.getMonth());
+    
+      daFare = mesiPassati >= 24; // 24 mesi = 2 anni
 
       console.log(daFare)
     }

@@ -24,7 +24,7 @@ function ListCarMaintenance() {
   // // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (item: any) => {
     history.push({
-      pathname: `/items/edit/${item._id}`,
+      pathname: `/newItem/edit/${item._id}`,
       // search: '?update=true',  // query string
       state: {  // location state
         item, 
