@@ -4,11 +4,11 @@ import { getEnv } from '../services/env';
 import { IonButton, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonToast } from '@ionic/react';
 import { cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/csvParser';
-import { DatabaseContext } from '../App';
+import { DbMaintenanceContext } from '../App';
 import { Maintenance } from '../models/Maintenance';
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const db = useContext(DatabaseContext);
+  const db = useContext(DbMaintenanceContext);
 
   const [file, setFile] = useState<File | null>(null);
   const [data, setData] = useState<any[]>([]);

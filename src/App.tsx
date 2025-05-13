@@ -36,7 +36,7 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, settingsOutline, arrowUpCircleSharp } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 import HomePage from './pages/HomePage';
@@ -49,25 +49,30 @@ import { Capacitor } from '@capacitor/core';
 import Setting from './pages/Setting';
 import { PouchDbService } from './services/pouchDbService';
 import { getEnv } from './services/env';
+import KmPage from './pages/KmPage';
+import { Maintenance } from './models/Maintenance';
 
 
 setupIonicReact({ mode: 'md' });
 const envVar = getEnv();
 export const platform = Capacitor.getPlatform();
-export const DatabaseContext = React.createContext(new PouchDbService(envVar?.car_table));
+export const DbMaintenanceContext = React.createContext(new PouchDbService<Maintenance>(envVar?.car_table));
 
 
 function App() {
   return (
 
-    <DatabaseContext.Provider value={new PouchDbService(envVar?.car_table)}>
+    <DbMaintenanceContext.Provider value={new PouchDbService<Maintenance>(envVar?.car_table)}>
         <IonReactRouter>
           <IonTabs>
             <IonRouterOutlet>
               <Redirect exact path="/" to="/home" />
               <Route path="/home" render={() => <HomePage />} exact={true} />
               <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+              <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
               <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+              <Route path="/newkm" render={() => <KmPage />} exact={true} />
+              <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
               <Route path="/settings" render={() => <Setting />} exact={true} />
             </IonRouterOutlet>
 
@@ -87,6 +92,11 @@ function App() {
                 <IonLabel>Add</IonLabel>
               </IonTabButton>
 
+              <IonTabButton tab="newkm" href="/newkm">
+                <IonIcon icon={speedometerOutline} />
+                <IonLabel>KM</IonLabel>
+              </IonTabButton>
+
               <IonTabButton tab="settings" href="/settings">
                 <IonIcon icon={settingsOutline} />
                 <IonLabel>Setting</IonLabel>
@@ -94,7 +104,7 @@ function App() {
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>
-    </DatabaseContext.Provider>
+    </DbMaintenanceContext.Provider>
 
 
   );

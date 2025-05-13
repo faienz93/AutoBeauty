@@ -26,7 +26,7 @@ export interface IPouchDbService {
     find<T extends {}>(query: PouchDB.Find.FindRequest<T>): Promise<PouchDB.Find.FindResponse<T>>;
 }
 
-export class PouchDbService implements IPouchDbService {
+export class PouchDbService<T extends PouchDbType> implements IPouchDbService {
 
     private platform = Capacitor.getPlatform();
     private db!: PouchDB.Database;
@@ -53,6 +53,11 @@ export class PouchDbService implements IPouchDbService {
     private async createBasicIndexes() {
         if (this.db && this.db.createIndex) {
             try {
+
+                const tempDoc = {} as T;
+                const keys = Object.keys(tempDoc);
+      
+                console.log('Chiavi trovate:', keys);
                 await this.db.createIndex({ index: { fields: ['km'] } });
                 await this.db.createIndex({ index: { fields: ['tipo'] } });
                 await this.db.createIndex({ index: { fields: ['data'] } });

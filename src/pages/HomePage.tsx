@@ -1,28 +1,50 @@
 import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
-import { Maintenance, maintenanceTypes, Stats } from '../models/Maintenance';
-import { IonContent, IonCard, IonText } from '@ionic/react';
+import { LastKm, Maintenance, maintenanceTypes, Stats } from '../models/Maintenance';
+import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
 import { IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from './Header';
-import { DatabaseContext } from '../App';
+import { DbMaintenanceContext } from '../App';
 import { CardMaintenance } from './CardMaintenance';
+import { useHistory } from 'react-router-dom';
+import { colorFill, pencil } from 'ionicons/icons';
 
 
 
 const HomePage = () => {
   const [countMaintenances, setCountMaintenances] = useState(0);
   const [latestMaintenances, setLatestMaintenances] = useState({});
-  const [lastKm, setLastKm] = useState(0);
-  const db = useContext(DatabaseContext);
+  const [lastKm, setLastKm] = useState<LastKm>({
+    data: new Date().toLocaleDateString('it-IT', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }),
+    km: 0
+  });
+  const db = useContext(DbMaintenanceContext);
   const today = new Date().toLocaleDateString('it-IT', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
 
+  const history = useHistory();
+
+  // https://stackoverflow.com/a/59464381/4700162
+  const handleEdit = (lastKm: LastKm) => {
+    history.push({
+      pathname: `/newkm/edit/${lastKm._id}`,
+      // search: '?update=true',  // query string
+      state: {  // location state
+        item: lastKm,
+      },
+    })
+
+  };
   const getLatestMaintenances = async () => {
 
-    const kmResult = await db.find<Maintenance>({
+    const itemByKmAndData = await db.find<Maintenance>({
       selector: {
         km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
         _id: { $gt: null } // assicura che il documento esista
@@ -32,11 +54,14 @@ const HomePage = () => {
       fields: ['km', 'data'] // opzionale: prende solo i campi necessari
     });
 
-    const lastKm = kmResult.docs[0]?.km || 0;
+    const lastKm = itemByKmAndData.docs[0];
     console.log('Ultimo chilometraggio:', lastKm);
-    setLastKm(lastKm);
+    setLastKm({
+      data: lastKm.data,
+      km: lastKm?.km || 0
+    });
 
-    
+
 
     const promises = maintenanceTypes.map(async (maintenanceType) => {
       const res = await db.find<Maintenance>({
@@ -88,25 +113,30 @@ const HomePage = () => {
   return (
     <>
       <Header title="Home" showBackButton={false} />
-      <IonContent fullscreen={true}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-          }}>
+      <IonContent>
+        
           <IonCard style={{ flexGrow: 1 }}>
             <IonCardHeader>
               <IonCardTitle>Data odierna</IonCardTitle>
               <IonCardSubtitle>{today}</IonCardSubtitle>
             </IonCardHeader>
           </IonCard>
-          <IonCard style={{ flexGrow: 1 }}>
-            <IonCardHeader>
+          
+          <IonCard color='tertiary'>
+            <IonCardHeader style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'start',
+                // justifyContent: 'space-between' 
+              }}>
               <IonCardTitle>Ultimo Km</IonCardTitle>
-              <IonCardSubtitle>{lastKm}</IonCardSubtitle>
+              <IonCardSubtitle>{lastKm.data}: <strong>{lastKm.km}</strong></IonCardSubtitle>
+              <IonButton style={{ color: 'white'}} fill="clear" onClick={() => handleEdit(lastKm)}>
+                <IonIcon icon={pencil} /> Modifica
+              </IonButton>
             </IonCardHeader>
           </IonCard>
-        </div>
+        
 
         {countMaintenances == 0 ? (
           <IonText color="secondary">

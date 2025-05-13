@@ -4,12 +4,21 @@ import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/Maintenance';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
-import { DatabaseContext } from '../App';
+import { DbMaintenanceContext } from '../App';
+import { useLocation, useParams } from 'react-router-dom';
+
+interface MaintenanceState {
+  item: Maintenance;
+}
 
 function ItemPage() {
 
+  // https://stackoverflow.com/a/59464381/4700162
+  const location = useLocation<MaintenanceState>();
+  console.log(location.state?.item)
+  
   console.log('Rendering NewItem component');
-  const db = useContext(DatabaseContext);
+  const db = useContext(DbMaintenanceContext);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const currentDate = new Date().toLocaleDateString('it-IT', {
@@ -17,12 +26,26 @@ function ItemPage() {
     month: 'short',
     day: 'numeric',
   });
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState(() => { 
+
+    if(location.state?.item) {
+      // aggiornamento
+      return {
+        data: location.state.item.data,
+        km: location.state.item.km,
+        tipo: location.state.item.tipo as MaintenanceType,
+        costo: location.state.item.costo,
+        note: location.state.item.note || ''
+      };
+    }
+
+    return {
     data: currentDate,
     km: 0,
     tipo: 'Tagliando' as MaintenanceType,
     costo: 0,
     note: '',
+    }
   });
 
 
@@ -156,9 +179,16 @@ function ItemPage() {
             <IonTextarea label="Comments" label-placement="floating" rows={5} onIonChange={(e) => handleInputChange('note', e.detail.value)}></IonTextarea>
           </IonItem>
         </IonList>
+
+        {location.state?.item ? 
         <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
-          Aggiungi Manutenzione
+         Modifica Manutenzione
         </IonButton>
+        :
+        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+         Aggiungi Manutenzione
+        </IonButton>
+        }
 
         {isSuccess ? (
           <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Manutenzione aggiunta con successo!" duration={5000}></IonToast>
