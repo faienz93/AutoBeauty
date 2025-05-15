@@ -26,10 +26,10 @@ export interface IPouchDbService {
     find<T extends {}>(query: PouchDB.Find.FindRequest<T>): Promise<PouchDB.Find.FindResponse<T>>;
 }
 
-export class PouchDbService<T extends PouchDbType> implements IPouchDbService {
+export abstract class PouchDbService implements IPouchDbService {
 
     private platform = Capacitor.getPlatform();
-    private db!: PouchDB.Database;
+    protected db!: PouchDB.Database;
     private dbName: string;
 
     constructor(dbName: string) {
@@ -47,39 +47,11 @@ export class PouchDbService<T extends PouchDbType> implements IPouchDbService {
             this.db = new PouchDB(this.dbName, { adapter: 'cordova-sqlite' });
         }
 
-        this.createBasicIndexes();
+        this.createSpecificIndexes();
     }
 
-    private async createBasicIndexes() {
-        if (this.db && this.db.createIndex) {
-            try {
-
-                const tempDoc = {} as T;
-                const keys = Object.keys(tempDoc);
-      
-                console.log('Chiavi trovate:', keys);
-                await this.db.createIndex({ index: { fields: ['km'] } });
-                await this.db.createIndex({ index: { fields: ['tipo'] } });
-                await this.db.createIndex({ index: { fields: ['data'] } });
-
-                // await this.db.createIndex({
-                //     index: {
-                //         fields: ['km'],
-                //         name: 'km-idx'
-                //     }
-                // });
-
-                // await this.db.createIndex({
-                //     index: {
-                //         fields: ['tipo', 'data'],
-                //         name: 'tipo-data-idx'
-                //     }
-                // });
-            } catch (error) {
-                console.warn('Impossibile creare indici PouchDB:', error);
-            }
-        }
-    }
+    protected abstract createSpecificIndexes(): Promise<void>;
+    
 
     async getInfo(): Promise<PouchDbInfo> {
         try {

@@ -51,18 +51,19 @@ import { PouchDbService } from './services/pouchDbService';
 import { getEnv } from './services/env';
 import KmPage from './pages/KmPage';
 import { Maintenance } from './models/Maintenance';
+import { MaintenanceDbService } from './services/MaintenanceDbService';
 
 
 setupIonicReact({ mode: 'md' });
 const envVar = getEnv();
 export const platform = Capacitor.getPlatform();
-export const DbMaintenanceContext = React.createContext(new PouchDbService<Maintenance>(envVar?.car_table));
+export const DbMaintenanceContext = React.createContext(new MaintenanceDbService(envVar?.car_table));
 
 
 function App() {
   return (
 
-    <DbMaintenanceContext.Provider value={new PouchDbService<Maintenance>(envVar?.car_table)}>
+    <DbMaintenanceContext.Provider value={new MaintenanceDbService(envVar?.car_table)}>
         <IonReactRouter>
           <IonTabs>
             <IonRouterOutlet>
