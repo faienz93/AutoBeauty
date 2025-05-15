@@ -5,8 +5,6 @@ const availableEnvironments = Object.keys(import.meta.env)
 
 export const getEnv = () => {
     const envName = availableEnvironments[0];
-    console.log(envName)
-    console.log(import.meta.env)
     if (!envName) {
         console.error(`Environment variable ${envName} is not defined`);
         return;
@@ -20,5 +18,7 @@ export const getEnv = () => {
         messagingSenderId: import.meta.env[`VITE_${envName}_MESSAGING_SENDER_ID`],
         appId: import.meta.env[`VITE_${envName}_APP_ID`],
         collection: import.meta.env[`VITE_${envName}_COLLECTION`],
+        sqlitedb: import.meta.env[`VITE_${envName}_SQLITE_DB`],
+        car_table: import.meta.env[`VITE_${envName}_CAR_TABLE`]
     };
 };

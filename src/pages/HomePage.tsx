@@ -1,94 +1,151 @@
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
-import { Maintenance, MaintenanceType } from '../types/Maintenance';
-import { IonContent, IonHeader, IonToolbar, IonTitle, IonButtons, IonBackButton, IonCard, IonText } from '@ionic/react';
+import { LastKm, Maintenance, maintenanceTypes, Stats } from '../models/Maintenance';
+import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
 import { IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
 import { Header } from './Header';
-import { getEnv } from '../services/env';
+import { DbMaintenanceContext } from '../App';
+import { CardMaintenance } from './CardMaintenance';
+import { useHistory } from 'react-router-dom';
+import { colorFill, pencil } from 'ionicons/icons';
 
-const envVar = getEnv();
+
 
 const HomePage = () => {
-  const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
+  const [countMaintenances, setCountMaintenances] = useState(0);
+  const [latestMaintenances, setLatestMaintenances] = useState({});
+  const [lastKm, setLastKm] = useState<LastKm>({
+    data: new Date().toLocaleDateString('it-IT', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+    }),
+    km: 0
+  });
+  const db = useContext(DbMaintenanceContext);
   const today = new Date().toLocaleDateString('it-IT', {
     year: 'numeric',
     month: 'short',
     day: 'numeric',
   });
-  const fetchMaintenances = async () => {
-    const querySnapshot = await getDocs(collection(db, envVar?.collection));
-    const data = querySnapshot.docs.map((doc) => ({
-      ...(doc.data() as Maintenance),
-    }));
-    setMaintenances(data);
+
+  const history = useHistory();
+
+  // https://stackoverflow.com/a/59464381/4700162
+  const handleEdit = (lastKm: LastKm) => {
+    history.push({
+      pathname: `/newkm/edit/${lastKm._id}`,
+      // search: '?update=true',  // query string
+      state: {  // location state
+        item: lastKm,
+      },
+    })
+
+  };
+  const getLatestMaintenances = async () => {
+
+    const itemByKmAndData = await db.find<Maintenance>({
+      selector: {
+        km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
+        _id: { $gt: null } // assicura che il documento esista
+      },
+      sort: [{ km: 'desc' }], // ordina per km decrescente
+      limit: 1, // prende solo il primo risultato
+      fields: ['km', 'data'] // opzionale: prende solo i campi necessari
+    });
+
+    const lastKm = itemByKmAndData.docs[0];
+    console.log('Ultimo chilometraggio:', lastKm);
+    setLastKm({
+      data: lastKm.data,
+      km: lastKm?.km || 0
+    });
+
+
+
+    const promises = maintenanceTypes.map(async (maintenanceType) => {
+      const res = await db.find<Maintenance>({
+        selector: {
+          tipo: maintenanceType,
+          data: { $gt: null }
+        },
+        sort: [{ data: 'desc' }],
+        limit: 1
+      });
+
+      return { type: maintenanceType, doc: res.docs[0] || null };
+    });
+
+    const results = await Promise.all(promises)
+
+    const updatedMaintenances = results.reduce((acc, result) => ({
+      ...acc,
+      [result.type]: result.doc
+    }), {}) as Stats;
+
+    setLatestMaintenances(updatedMaintenances);
+  };
+
+
+
+  const countCarMaintenances = async () => {
+    const res = await db.getInfo();
+    console.log(res.doc_count);
+    setCountMaintenances(res.doc_count);
   };
 
   useEffect(() => {
-    fetchMaintenances();
+    const fetchData = async () => {
+      await countCarMaintenances();
+      await getLatestMaintenances();
+    };
+    fetchData();
 
-    console.log(maintenances);
+    console.log(countMaintenances);
+    console.log(latestMaintenances);
   }, []);
+
+  useEffect(() => {
+    console.log("latestMaintenances updated:", latestMaintenances);
+  }, [latestMaintenances]);
+
+
   return (
     <>
       <Header title="Home" showBackButton={false} />
-      <IonContent fullscreen={true}>
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'flex-start',
-          }}>
+      <IonContent>
+        
           <IonCard style={{ flexGrow: 1 }}>
             <IonCardHeader>
               <IonCardTitle>Data odierna</IonCardTitle>
               <IonCardSubtitle>{today}</IonCardSubtitle>
             </IonCardHeader>
           </IonCard>
-        </div>
+          
+          <IonCard color='tertiary'>
+            <IonCardHeader style={{ 
+                display: 'flex', 
+                flexDirection: 'column', 
+                alignItems: 'start',
+                // justifyContent: 'space-between' 
+              }}>
+              <IonCardTitle>Ultimo Km</IonCardTitle>
+              <IonCardSubtitle>{lastKm.data}: <strong>{lastKm.km}</strong></IonCardSubtitle>
+              <IonButton style={{ color: 'white'}} fill="clear" onClick={() => handleEdit(lastKm)}>
+                <IonIcon icon={pencil} /> Modifica
+              </IonButton>
+            </IonCardHeader>
+          </IonCard>
+        
 
-        {maintenances.length == 0 ? (
+        {countMaintenances == 0 ? (
           <IonText color="secondary">
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
         ) : (
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'flex-start',
-            }}>
-            <IonCard style={{ flexGrow: 1 }}>
-              <IonCardHeader>
-                <IonCardTitle>KM Attuali</IonCardTitle>
-                <IonCardSubtitle>28/12/2024</IonCardSubtitle>
-              </IonCardHeader>
-            </IonCard>
-
-            <IonCard color="success" style={{ flexGrow: 1 }}>
-              <IonCardHeader>
-                <IonCardTitle>Tagliando</IonCardTitle>
-                <IonCardSubtitle>27/12/2024</IonCardSubtitle>
-              </IonCardHeader>
-
-              <IonCardContent>Da non fare</IonCardContent>
-            </IonCard>
-            <IonCard color="danger" style={{ flexGrow: 1 }}>
-              <IonCardHeader>
-                <IonCardTitle> Gomme</IonCardTitle>
-                <IonCardSubtitle>30/10/2024</IonCardSubtitle>
-              </IonCardHeader>
-
-              <IonCardContent>DA FARE</IonCardContent>
-            </IonCard>
-            <IonCard color="danger" style={{ flexGrow: 1 }}>
-              <IonCardHeader>
-                <IonCardTitle> Revisione</IonCardTitle>
-                <IonCardSubtitle>30/10/2024</IonCardSubtitle>
-              </IonCardHeader>
-
-              <IonCardContent>DA FARE</IonCardContent>
-            </IonCard>
-          </div>
+          Object.entries(latestMaintenances).map(([tipo, maintenance]) => (
+            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} />
+          ))
         )}
       </IonContent>
     </>

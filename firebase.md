@@ -1,4 +1,4 @@
-## Firebase xxx
+## Firebase
 Prima crea un progetto Firebase:
 
 Vai su https://console.firebase.google.com/
@@ -10,11 +10,12 @@ Clicca "Create Project"
 
 Installa Firebase nel tuo progetto:
 
-bashCopynpm install firebase
+`npm install firebase`
 
 Crea un file src/firebase.ts per la configurazione:
 
-typescriptCopyimport { initializeApp } from 'firebase/app';
+```
+import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 
 const firebaseConfig = {
@@ -30,10 +31,12 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
+```
 
-Modifica il tuo componente NewItemPage:
+- Modifica il tuo componente NewItemPage:
 
-typescriptCopyimport { useState } from 'react';
+```
+import { useState } from 'react';
 import { collection, addDoc, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 import { Maintenance, MaintenanceType } from '../types';
@@ -204,10 +207,12 @@ function NewItemPage() {
 }
 
 export default NewItemPage;
+```
 
 Per leggere i dati in un altro componente:
 
-typescriptCopyimport { collection, getDocs } from 'firebase/firestore';
+```
+import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebase';
 
 // All'interno del tuo componente:
@@ -225,6 +230,7 @@ const fetchMaintenances = async () => {
 useEffect(() => {
   fetchMaintenances();
 }, []);
+```
 Questo setup ti dà:
 
 Persistenza dei dati in cloud

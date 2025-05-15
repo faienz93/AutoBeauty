@@ -8,9 +8,6 @@ import { setupIonicReact } from '@ionic/react';
 setupIonicReact();
 import { Route, Redirect } from 'react-router';
 
-
-
-
 /* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
 import '@ionic/react/css/structure.css';
@@ -39,53 +36,78 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, add } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 import HomePage from './pages/HomePage';
 import ItemPage from './pages/ItemPage';
-import ImportItem from './pages/ImportItem';
-import ProductList from './pages/ProductItem';
+
+import { Capacitor } from '@capacitor/core';
+
+
+
+import Setting from './pages/Setting';
+import { PouchDbService } from './services/pouchDbService';
+import { getEnv } from './services/env';
+import KmPage from './pages/KmPage';
+import { Maintenance } from './models/Maintenance';
+
 
 setupIonicReact({ mode: 'md' });
+const envVar = getEnv();
+export const platform = Capacitor.getPlatform();
+export const DbMaintenanceContext = React.createContext(new PouchDbService<Maintenance>(envVar?.car_table));
+
 
 function App() {
   return (
-    <IonReactRouter>
-      <IonTabs>
-        <IonRouterOutlet>
-          <Redirect exact path="/" to="/home" />          
-          <Route path="/home" render={() => <HomePage />} exact={true} />
-          <Route path="/newItem" render={() => <ItemPage />} exact={true} />          
-          <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-          <Route path="/import" render={() => <ImportItem />} exact={true} />
-        </IonRouterOutlet>
 
-        <IonTabBar slot="bottom">
-          <IonTabButton tab="home" href="/home">
-          
-            <IonIcon icon={homeOutline} />
-            <IonLabel>Home</IonLabel>
-          </IonTabButton>
+    <DbMaintenanceContext.Provider value={new PouchDbService<Maintenance>(envVar?.car_table)}>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Redirect exact path="/" to="/home" />
+              <Route path="/home" render={() => <HomePage />} exact={true} />
+              <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+              <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
+              <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+              <Route path="/newkm" render={() => <KmPage />} exact={true} />
+              <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
+              <Route path="/settings" render={() => <Setting />} exact={true} />
+            </IonRouterOutlet>
 
-          <IonTabButton tab="list" href="/list">
-            <IonIcon icon={listOutline} />
-            <IonLabel>List</IonLabel>
-          </IonTabButton>
-          
-          <IonTabButton tab="newItem" href="/newItem">
-            <IonIcon icon={addCircleOutline} />
-            <IonLabel>Add</IonLabel>
-          </IonTabButton>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href="/home">
+                <IonIcon icon={homeOutline} />
+                <IonLabel>Home</IonLabel>
+              </IonTabButton>
 
-          
-          <IonTabButton tab="import" href="/import">
-            <IonIcon icon={add} />
-            <IonLabel>Import</IonLabel>
-          </IonTabButton>
-        </IonTabBar>
-      </IonTabs>
-    </IonReactRouter>
+              <IonTabButton tab="list" href="/list">
+                <IonIcon icon={listOutline} />
+                <IonLabel>List</IonLabel>
+              </IonTabButton>
+
+              <IonTabButton tab="newItem" href="/newItem">
+                <IonIcon icon={addCircleOutline} />
+                <IonLabel>Add</IonLabel>
+              </IonTabButton>
+
+              <IonTabButton tab="newkm" href="/newkm">
+                <IonIcon icon={speedometerOutline} />
+                <IonLabel>KM</IonLabel>
+              </IonTabButton>
+
+              <IonTabButton tab="settings" href="/settings">
+                <IonIcon icon={settingsOutline} />
+                <IonLabel>Setting</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+    </DbMaintenanceContext.Provider>
+
+
   );
 }
+
 export default App;

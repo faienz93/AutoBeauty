@@ -1,45 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { IonContent, IonThumbnail, IonItem, IonLabel, IonList, IonIcon, IonText, IonButton, IonBadge } from '@ionic/react';
+import React, { useContext, useEffect, useState } from 'react';
+import { IonContent, IonThumbnail, IonItem, IonLabel, IonList, IonIcon, IonText, IonButton, IonBadge} from '@ionic/react';
 
 // import './homepage.css';
 import tagliandoImg from '../assets/maintenance.svg';
 import tireImg from '../assets/tire.svg';
 import repairImg from '../assets/car-repair.svg';
 import carImg from '../assets/car.svg';
-import { Maintenance, MaintenanceType } from '../types/Maintenance';
+import { Maintenance, MaintenanceType } from '../models/Maintenance';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
-
-import { collection, deleteDoc, doc, getDocs } from 'firebase/firestore';
-import { db } from '../firebase';
 import { AlertConfirmation } from './AlertConfirmation';
-import { getEnv } from '../services/env';
 import { Header } from './Header';
+import { DbMaintenanceContext } from '../App';
+import { useHistory } from 'react-router-dom';
 
-const envVar = getEnv();
 
 function ListCarMaintenance() {
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [confirmDelete, setConfirmDelete] = useState(false);
+  const db = useContext(DbMaintenanceContext);
+  const history = useHistory();
+
+  // // https://stackoverflow.com/a/59464381/4700162
+  const handleEdit = (item: any) => {
+    history.push({
+      pathname: `/newItem/edit/${item._id}`,
+      // search: '?update=true',  // query string
+      state: {  // location state
+        item, 
+      },
+    })
+    
+  };
 
   const fetchMaintenances = async () => {
-    const querySnapshot = await getDocs(collection(db, envVar?.collection));
-    const data = querySnapshot.docs.map((doc) => ({
-      ...(doc.data() as Maintenance),
-    }));
-    setMaintenances(data);
+    try {
+      const result = await db.allDocs({ include_docs: true });
+      console.log('Fetched docs:', result);
+      const data = result.rows.map((row: any) => ({
+        id: row.doc._id,
+        ...row.doc
+      }))
+      .sort((a: Maintenance, b: Maintenance) => {
+        // Ordina per data decrescente
+        // return new Date(b.data).getTime() - new Date(a.data).getTime();
+        
+        // Oppure per km decrescente
+        return b.km - a.km;
+      });
+      setMaintenances(data);
+    } catch (error) {
+      console.error('Error fetching maintenances:', error);
+    }
   };
 
-  const deleteDocumente = async (id: string) => {
-    await deleteDoc(doc(db, envVar?.collection, id));
-    fetchMaintenances()
-  };
-
-  useEffect(() => {
-    fetchMaintenances();
-
-    console.log(maintenances);
+  useEffect(() => { 
+      fetchMaintenances();
   }, []);
+
+  
+
+  const handleDeleteMaintenance = async (maintenanceId: string) => {
+    try {
+      const doc = await db.get(maintenanceId.toString());
+      const response = await db.remove(doc);
+      console.log('Maintenance deleted successfully:');
+      console.log(response);
+      fetchMaintenances();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const getMaintenanceIcon = (type: MaintenanceType): string => {
     switch (type) {
@@ -53,7 +84,6 @@ function ListCarMaintenance() {
         return carImg;
     }
   };
-
   return (
     <>
       <Header title="List Maintenance" />
@@ -96,17 +126,19 @@ function ListCarMaintenance() {
                   <h2>€ {item.costo}</h2>
                 </IonText>
 
-                <IonButton fill="clear" slot="end" onClick={() => alert('Edit')}>
+                <IonButton fill="clear" slot="end" onClick={() => handleEdit(item)}>
                   <IonIcon icon={pencil} />
                 </IonButton>
-                <IonButton fill="clear" id="present-alert" slot="end" onClick={() => setConfirmDelete(true)}>
+                <IonButton fill="clear" id="delete-alert" slot="end" onClick={() => setConfirmDelete(true)}>
                   <IonIcon icon={trashOutline} color="danger" />
                 </IonButton>
                 <AlertConfirmation
-                  trigger="resent-alert"
+                  key={index}
+                  trigger="delete-alert"
+                  msg='Sei sicuro di voler eliminare questa manutenzione?'
                   isOpen={confirmDelete}
                   onClose={() => setConfirmDelete(false)}
-                  onConfirm={() => deleteDocumente(item.id)}
+                  onConfirm={() => item._id && handleDeleteMaintenance(item._id)}
                 />
               </IonItem>
             ))}
