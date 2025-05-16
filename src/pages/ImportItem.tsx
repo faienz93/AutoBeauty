@@ -3,7 +3,7 @@ import React, { useContext, useRef, useState } from 'react';
 import { getEnv } from '../services/env';
 import { IonButton, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonToast } from '@ionic/react';
 import { cloudUpload } from 'ionicons/icons';
-import { CsvService } from '../services/csvParser';
+import { CsvService } from '../services/excel/csvParser';
 import { DbMaintenanceContext } from '../App';
 import { Maintenance } from '../models/Maintenance';
 const ImportItem = () => {

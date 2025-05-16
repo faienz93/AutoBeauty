@@ -47,11 +47,11 @@ import { Capacitor } from '@capacitor/core';
 
 
 import Setting from './pages/Setting';
-import { PouchDbService } from './services/pouchDbService';
+import { PouchDbService } from './services/database/pouchDbService';
 import { getEnv } from './services/env';
 import KmPage from './pages/KmPage';
 import { Maintenance } from './models/Maintenance';
-import { MaintenanceDbService } from './services/MaintenanceDbService';
+import { MaintenanceDbService } from './services/database/MaintenanceDbService';
 
 
 setupIonicReact({ mode: 'md' });
