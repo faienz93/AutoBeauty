@@ -3,15 +3,11 @@ import { Maintenance } from "../models/MaintenanceType";
 import { LimitGomme, LimitTagliando } from "../constant";
 
 
-export const CardMaintenance = ({ tipo, maintenance }: { tipo: string, maintenance: Maintenance }) => {
+export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string, maintenance: Maintenance, currentKm: number }) => {
     console.log('Rendering CardMaintenance component');
 
     const kmUltimoIntervento = maintenance?.km;
-
-    const kmAttuali = 114362
-
-
-    const diffKm = kmAttuali - kmUltimoIntervento;
+    const diffKm = currentKm - kmUltimoIntervento;
 
     let daFare = false;
     if (tipo === 'Gomme') daFare = diffKm >= LimitGomme;

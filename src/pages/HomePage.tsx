@@ -16,7 +16,7 @@ import { getDateString } from '../services/utils';
 const HomePage = () => {
   const [countMaintenances, setCountMaintenances] = useState(0);
   const [latestMaintenances, setLatestMaintenances] = useState({});
-  const [lastKm, setLastKm] = useState<LastKm>({
+  const [currentKm, setLastKm] = useState<LastKm>({
     data: new Date().toLocaleDateString('it-IT', {
       year: 'numeric',
       month: 'short',
@@ -153,8 +153,8 @@ const HomePage = () => {
                 // justifyContent: 'space-between' 
               }}>
               <IonCardTitle>Ultimo Km</IonCardTitle>
-              <IonCardSubtitle>{lastKm.data}: <strong>{lastKm.km}</strong></IonCardSubtitle>
-              <IonButton style={{ color: 'white'}} fill="clear" onClick={() => handleEdit(lastKm)}>
+              <IonCardSubtitle>{currentKm.data}: <strong>{currentKm.km}</strong></IonCardSubtitle>
+              <IonButton style={{ color: 'white'}} fill="clear" onClick={() => handleEdit(currentKm)}>
                 <IonIcon icon={pencil} /> Modifica
               </IonButton>
             </IonCardHeader>
@@ -167,7 +167,7 @@ const HomePage = () => {
           </IonText>
         ) : (
           Object.entries(latestMaintenances).map(([tipo, maintenance]) => (
-            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} />
+            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} currentKm={currentKm.km} />
           ))
         )}
       </IonContent>
