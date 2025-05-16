@@ -1,13 +1,15 @@
 import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
-import { LastKm, Maintenance, maintenanceTypes, Stats } from '../models/MaintenanceType';
+import { Maintenance, maintenanceTypes, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
 import { IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from './Header';
-import { DbMaintenanceContext } from '../App';
+import { DbLastKmContext, DbMaintenanceContext } from '../App';
 import { CardMaintenance } from './CardMaintenance';
 import { useHistory } from 'react-router-dom';
 import { colorFill, pencil } from 'ionicons/icons';
+import { LastKm } from '../models/LastKmType';
+import { getDateString } from '../services/utils';
 
 
 
@@ -22,7 +24,8 @@ const HomePage = () => {
     }),
     km: 0
   });
-  const db = useContext(DbMaintenanceContext);
+  const dbMaitenenance = useContext(DbMaintenanceContext);
+  const dbKm = useContext(DbLastKmContext);
   const today = new Date().toLocaleDateString('it-IT', {
     year: 'numeric',
     month: 'short',
@@ -44,7 +47,7 @@ const HomePage = () => {
   };
   const getLatestMaintenances = async () => {
 
-    const itemByKmAndData = await db.find<Maintenance>({
+    const searchMaintentenanceByKm = await dbMaitenenance.find<Maintenance>({
       selector: {
         km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
         _id: { $gt: null } // assicura che il documento esista
@@ -54,17 +57,37 @@ const HomePage = () => {
       fields: ['km', 'data'] // opzionale: prende solo i campi necessari
     });
 
-    const lastKm = itemByKmAndData.docs[0];
-    console.log('Ultimo chilometraggio:', lastKm);
+    const searchLastKm = await dbKm.find<LastKm>({
+      selector: {
+        km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
+        _id: { $gt: null } // assicura che il documento esista
+      },
+      sort: [{ km: 'desc' }], // ordina per km decrescente
+      limit: 1, // prende solo il primo risultato
+      fields: ['km', 'data'] // opzionale: prende solo i campi necessari
+    });
+
+    // 1. Estraggo km e data con default a 0 / stringa odierna
+    const lastMaintenance = searchMaintentenanceByKm.docs[0] || {};
+    const lastKm   = searchLastKm.docs[0] || {};
+    const kmMaint   = lastMaintenance.km ?? 0;
+    const kmLast    = lastKm.km ?? 0;
+    const dataMaint = lastMaintenance.data ?? getDateString();
+    const dataLast  = lastKm.data  ?? getDateString();
+    // 2. Calcolo il chilometraggio massimo
+    const maxKm = Math.max(kmMaint, kmLast);
+    // 3. Determino la data corrispondente al massimo
+    const maxData = (kmMaint >= kmLast) ? dataMaint : dataLast;
+    // 4. Imposto lo stato con il valore e la data massima
     setLastKm({
-      data: lastKm.data,
-      km: lastKm?.km || 0
+      km:   maxKm,
+      data: maxData
     });
 
 
 
     const promises = maintenanceTypes.map(async (maintenanceType) => {
-      const res = await db.find<Maintenance>({
+      const res = await dbMaitenenance.find<Maintenance>({
         selector: {
           tipo: maintenanceType,
           data: { $gt: null }
@@ -89,7 +112,7 @@ const HomePage = () => {
 
 
   const countCarMaintenances = async () => {
-    const res = await db.getInfo();
+    const res = await dbMaitenenance.getInfo();
     console.log(res.doc_count);
     setCountMaintenances(res.doc_count);
   };
