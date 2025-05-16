@@ -47,24 +47,25 @@ import { Capacitor } from '@capacitor/core';
 
 
 import Setting from './pages/Setting';
-import { PouchDbService } from './services/database/pouchDbService';
 import { getEnv } from './services/env';
 import KmPage from './pages/KmPage';
-import { Maintenance } from './models/MaintenanceType';
 import { MaintenanceDbService } from './services/database/MaintenanceDbService';
+import { LastKmDbService } from './services/database/LastKmDbService';
 
 
 setupIonicReact({ mode: 'md' });
 const envVar = getEnv();
 export const platform = Capacitor.getPlatform();
 export const DbMaintenanceContext = React.createContext(new MaintenanceDbService(envVar?.car_table));
+export const DbLastKmContext = React.createContext(new LastKmDbService(envVar?.km_table));
 
 
 function App() {
   return (
 
     <DbMaintenanceContext.Provider value={new MaintenanceDbService(envVar?.car_table)}>
-        <IonReactRouter>
+      <DbLastKmContext.Provider value={new LastKmDbService(envVar?.km_table)}> 
+          <IonReactRouter>
           <IonTabs>
             <IonRouterOutlet>
               <Redirect exact path="/" to="/home" />
@@ -105,6 +106,7 @@ function App() {
             </IonTabBar>
           </IonTabs>
         </IonReactRouter>
+      </DbLastKmContext.Provider>
     </DbMaintenanceContext.Provider>
 
 

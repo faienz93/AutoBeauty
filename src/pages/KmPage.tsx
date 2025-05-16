@@ -1,11 +1,11 @@
 import React, { useState, useContext } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput } from '@ionic/react';
 import './ItemPage.css';
-import { LastKm } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
-import { DbMaintenanceContext } from '../App';
+import { DbLastKmContext } from '../App';
 import { useLocation, useParams } from 'react-router-dom';
+import { LastKm } from '../models/LastKmType';
 
 interface KmState {
   item: LastKm;
@@ -18,7 +18,7 @@ function KmPage() {
   console.log(location.state?.item)
 
   console.log('Rendering NewItem component');
-  const db = useContext(DbMaintenanceContext);
+  const dbKm = useContext(DbLastKmContext);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const currentDate = new Date().toLocaleDateString('it-IT', {
@@ -44,21 +44,21 @@ function KmPage() {
 
 
 
-  const handleAddMaintenance = async (newMaintenance: LastKm) => {
+  const handleAddKm = async (newKm: LastKm) => {
 
-    db.getInfo().then((info) => {
+    dbKm.getInfo().then((info) => {
       console.log('Database info:', info);
     })
 
 
 
-    db.put(newMaintenance).then((response) => {
+    dbKm.put(newKm).then((response) => {
       console.log('Maintenance added successfully:', response);
     }).catch((error) => {
       console.error('Error adding maintenance:', error);
     });
 
-    const res = db.allDocs({ include_docs: true }).then((result: any) => {
+    const res = dbKm.allDocs({ include_docs: true }).then((result: any) => {
       console.log(result.rows);
     })
 
@@ -99,7 +99,7 @@ function KmPage() {
 
       console.log('lastKm', lastKm);
 
-      handleAddMaintenance(lastKm);
+      handleAddKm(lastKm);
       console.log("PROVA2")
       setIsSuccess(true);
     } catch (error) {
