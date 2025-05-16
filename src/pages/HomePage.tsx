@@ -17,20 +17,12 @@ const HomePage = () => {
   const [countMaintenances, setCountMaintenances] = useState(0);
   const [latestMaintenances, setLatestMaintenances] = useState({});
   const [currentKm, setLastKm] = useState<LastKm>({
-    data: new Date().toLocaleDateString('it-IT', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-    }),
+    data: getDateString(),
     km: 0
   });
   const dbMaitenenance = useContext(DbMaintenanceContext);
   const dbKm = useContext(DbLastKmContext);
-  const today = new Date().toLocaleDateString('it-IT', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+  const today = getDateString();
 
   const history = useHistory();
 

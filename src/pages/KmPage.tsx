@@ -6,6 +6,7 @@ import { Header } from './Header';
 import { DbLastKmContext } from '../App';
 import { useLocation, useParams } from 'react-router-dom';
 import { LastKm } from '../models/LastKmType';
+import { getDateString } from '../services/utils';
 
 interface KmState {
   item: LastKm;
@@ -21,11 +22,7 @@ function KmPage() {
   const dbKm = useContext(DbLastKmContext);
   const [isSuccess, setIsSuccess] = useState(false);
 
-  const currentDate = new Date().toLocaleDateString('it-IT', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric',
-  });
+  const currentDate = getDateString();
   const [formData, setFormData] = useState(() => {
 
     if (location.state?.item) {
