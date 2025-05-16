@@ -1,8 +1,8 @@
 import { Capacitor } from '@capacitor/core';
 import PouchDB from 'pouchdb';
 import cordovaSqlitePlugin from 'pouchdb-adapter-cordova-sqlite';
-import { PouchDbType } from '../../models/Maintenance';
 import PouchFind from 'pouchdb-find';
+import { PouchDbType } from '../../models/PouchDbType';
 PouchDB.plugin(PouchFind);
 PouchDB.plugin(cordovaSqlitePlugin);
 

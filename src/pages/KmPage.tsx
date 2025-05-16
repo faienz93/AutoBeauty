@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput } from '@ionic/react';
 import './ItemPage.css';
-import { LastKm } from '../models/Maintenance';
+import { LastKm } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
 import { DbMaintenanceContext } from '../App';

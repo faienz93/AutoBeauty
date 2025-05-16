@@ -1,9 +1,8 @@
+import { PouchDbType } from "./PouchDbType";
+
 export type MaintenanceType = 'Tagliando' | 'Revisione' | 'Gomme';
 
-export interface PouchDbType {
-  _id?: string;
-  _rev?: string;
-}
+
 export interface Maintenance extends PouchDbType {
   data: string;
   km: number;
@@ -23,8 +22,3 @@ export interface Stats {
 };
 
 
-
-export interface LastKm extends PouchDbType {
-  data: string;
-  km: number
-}

@@ -1,6 +1,6 @@
 import React, { useContext, useEffect } from 'react';
 import { useState } from 'react';
-import { LastKm, Maintenance, maintenanceTypes, Stats } from '../models/Maintenance';
+import { LastKm, Maintenance, maintenanceTypes, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
 import { IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from './Header';

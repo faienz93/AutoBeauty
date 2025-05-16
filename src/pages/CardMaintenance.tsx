@@ -1,5 +1,5 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from "@ionic/react";
-import { Maintenance } from "../models/Maintenance";
+import { Maintenance } from "../models/MaintenanceType";
 import { LimitGomme, LimitTagliando } from "../constant";
 
 

@@ -5,7 +5,7 @@ import { IonButton, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonToas
 import { cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { DbMaintenanceContext } from '../App';
-import { Maintenance } from '../models/Maintenance';
+import { Maintenance } from '../models/MaintenanceType';
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const db = useContext(DbMaintenanceContext);

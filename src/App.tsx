@@ -50,7 +50,7 @@ import Setting from './pages/Setting';
 import { PouchDbService } from './services/database/pouchDbService';
 import { getEnv } from './services/env';
 import KmPage from './pages/KmPage';
-import { Maintenance } from './models/Maintenance';
+import { Maintenance } from './models/MaintenanceType';
 import { MaintenanceDbService } from './services/database/MaintenanceDbService';
 
 

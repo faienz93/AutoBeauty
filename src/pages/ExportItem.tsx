@@ -2,7 +2,7 @@ import React, { useContext, useRef, useState } from 'react';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonToast } from '@ionic/react';
 import { DbMaintenanceContext } from '../App';
 import { CsvService } from '../services/excel/csvParser';
-import { Maintenance } from '../models/Maintenance';
+import { Maintenance } from '../models/MaintenanceType';
 
 
 

@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage } from '@ionic/react';
 import './ItemPage.css';
-import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/Maintenance';
+import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
 import { DbMaintenanceContext } from '../App';

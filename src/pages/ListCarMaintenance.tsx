@@ -6,7 +6,7 @@ import tagliandoImg from '../assets/maintenance.svg';
 import tireImg from '../assets/tire.svg';
 import repairImg from '../assets/car-repair.svg';
 import carImg from '../assets/car.svg';
-import { Maintenance, MaintenanceType } from '../models/Maintenance';
+import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from './AlertConfirmation';
 import { Header } from './Header';
