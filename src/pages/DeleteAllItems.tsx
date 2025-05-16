@@ -1,18 +1,22 @@
 import React, { useContext, useRef, useState } from 'react';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonToast } from '@ionic/react';
 import { AlertConfirmation } from './AlertConfirmation';
-import { DbMaintenanceContext } from '../App';
+import { DbLastKmContext, DbMaintenanceContext } from '../App';
 
 
 
 const DeleteAllItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const db = useContext(DbMaintenanceContext);
+  const maintenanceDb = useContext(DbMaintenanceContext);
+  const kmDb = useContext(DbLastKmContext);
 
   const handleDelete = async () => {
-    const result = db.deleteDatabase();
-    console.log(result)
+    const deletedMaintenanceDb = maintenanceDb.deleteDatabase();
+    const deletedKmDb = kmDb.deleteDatabase();
+    
+    console.log(deletedMaintenanceDb)
+    console.log(deletedKmDb)
     setIsSuccess(true);
   };
 
