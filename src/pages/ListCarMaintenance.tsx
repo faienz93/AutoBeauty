@@ -2,17 +2,14 @@ import React, { useContext, useEffect, useState } from 'react';
 import { IonContent, IonThumbnail, IonItem, IonLabel, IonList, IonIcon, IonText, IonButton, IonBadge} from '@ionic/react';
 
 // import './homepage.css';
-import tagliandoImg from '../assets/maintenance.svg';
-import tireImg from '../assets/tire.svg';
-import repairImg from '../assets/car-repair.svg';
-import carImg from '../assets/car.svg';
-import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
+
+import { Maintenance } from '../models/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from './AlertConfirmation';
 import { Header } from './Header';
 import { DbMaintenanceContext } from '../App';
 import { useHistory } from 'react-router-dom';
-import { getMaintenanceKey } from '../services/utils';
+import { getMaintenanceIcon, getMaintenanceKey } from '../services/utils';
 
 
 function ListCarMaintenance() {
@@ -79,18 +76,7 @@ function ListCarMaintenance() {
     }
   };
 
-  const getMaintenanceIcon = (type: MaintenanceType): string => {
-    switch (type) {
-      case 'Tagliando':
-        return tagliandoImg;
-      case 'Gomme':
-        return tireImg;
-      case 'Revisione':
-        return repairImg;
-      default:
-        return carImg;
-    }
-  };
+  
   return (
     <>
       <Header title="List Maintenance" />
