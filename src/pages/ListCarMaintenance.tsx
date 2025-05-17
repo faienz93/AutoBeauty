@@ -12,6 +12,7 @@ import { AlertConfirmation } from './AlertConfirmation';
 import { Header } from './Header';
 import { DbMaintenanceContext } from '../App';
 import { useHistory } from 'react-router-dom';
+import { getMaintenanceKey } from '../services/utils';
 
 
 function ListCarMaintenance() {
@@ -37,7 +38,13 @@ function ListCarMaintenance() {
     try {
       const result = await db.allDocs({ include_docs: true });
       console.log('Fetched docs:', result);
-      const data = result.rows.map((row: any) => ({
+      const data = result.rows.
+      filter((value, index) => {
+        // filtra solo i documenti che hanno une specifica chiave
+        let key = getMaintenanceKey()
+        return value.doc?._id.startsWith(key);
+      })
+      .map((row: any) => ({
         id: row.doc._id,
         ...row.doc
       }))

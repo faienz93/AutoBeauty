@@ -6,7 +6,7 @@ import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
 import { DbMaintenanceContext } from '../App';
 import { useLocation, useParams } from 'react-router-dom';
-import { getDateString } from '../services/utils';
+import { getDateString, getUUIDKey } from '../services/utils';
 
 interface MaintenanceState {
   item: Maintenance;
@@ -53,9 +53,9 @@ function ItemPage() {
       console.log('Database info:', info);
     })
 
-    
-
-    db.put(newMaintenance).then((response) => {
+    const mnt = { ...newMaintenance, _id: getUUIDKey() } as Maintenance;
+    console.log('mnt', mnt);
+    db.put(mnt).then((response) => {
       console.log('Maintenance added successfully:', response);
     }).catch((error) => {
       console.error('Error adding maintenance:', error);

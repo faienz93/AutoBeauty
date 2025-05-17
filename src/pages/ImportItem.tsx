@@ -6,6 +6,7 @@ import { cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { DbMaintenanceContext } from '../App';
 import { Maintenance } from '../models/MaintenanceType';
+import { getUUIDKey } from '../services/utils';
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const db = useContext(DbMaintenanceContext);
@@ -54,7 +55,19 @@ const ImportItem = () => {
     try {
       const res = await csvService.importCsv(file) as Maintenance[];
       console.log("VEDIAMO COSA STAMPARE")
+      
+
+      res.forEach((item) => {
+        item._id = getUUIDKey();
+      });
+
       console.log(res)
+
+      // map((item) => {
+      //   item._id = getTimestampKey();
+      // });
+
+
       try {
         await db.bulkDocs(res);
         setIsSuccess(true);
