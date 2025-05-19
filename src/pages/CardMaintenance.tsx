@@ -14,14 +14,7 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
     if (tipo === 'Gomme') daFare = diffKm >= LimitGomme;
     if (tipo === 'Tagliando') daFare = diffKm >= LimitTagliando;
     if (tipo === 'Revisione') {
-
-      
-      console.log('Revisione')
-      console.log(maintenance?.data)
-      const dataUltimaRevisione = parseStringToDate(maintenance?.data);
-      console.log(dataUltimaRevisione)
-      
-     
+      const dataUltimaRevisione = parseStringToDate(maintenance?.data);    
       const dataAttuale = new Date();
       const mesiPassati = 
       (dataAttuale.getFullYear() - dataUltimaRevisione.getFullYear()) * 12 + 
