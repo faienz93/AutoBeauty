@@ -9,7 +9,7 @@ import { CardMaintenance } from './CardMaintenance';
 import { useHistory } from 'react-router-dom';
 import { colorFill, pencil } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
-import { getDateString } from '../services/utils';
+import { getDateString, getMaintenanceKey } from '../services/utils';
 
 
 
@@ -61,18 +61,18 @@ const HomePage = () => {
 
     // 1. Estraggo km e data con default a 0 / stringa odierna
     const lastMaintenance = searchMaintentenanceByKm.docs[0] || {};
-    const lastKm   = searchLastKm.docs[0] || {};
-    const kmMaint   = lastMaintenance.km ?? 0;
-    const kmLast    = lastKm.km ?? 0;
+    const lastKm = searchLastKm.docs[0] || {};
+    const kmMaint = lastMaintenance.km ?? 0;
+    const kmLast = lastKm.km ?? 0;
     const dataMaint = lastMaintenance.data ?? getDateString();
-    const dataLast  = lastKm.data  ?? getDateString();
+    const dataLast = lastKm.data ?? getDateString();
     // 2. Calcolo il chilometraggio massimo
     const maxKm = Math.max(kmMaint, kmLast);
     // 3. Determino la data corrispondente al massimo
     const maxData = (kmMaint >= kmLast) ? dataMaint : dataLast;
     // 4. Imposto lo stato con il valore e la data massima
     setLastKm({
-      km:   maxKm,
+      km: maxKm,
       data: maxData
     });
 
@@ -104,9 +104,18 @@ const HomePage = () => {
 
 
   const countCarMaintenances = async () => {
-    const res = await dbMaitenenance.getInfo();
-    console.log(res.doc_count);
-    setCountMaintenances(res.doc_count);
+    // const res = await dbMaitenenance.getInfo();
+
+    const res = await dbMaitenenance.allDocs({ include_docs: true });
+    console.log('Fetched docs:', res);
+    const data = res.rows.
+    filter((value) => {
+      // filtra solo i documenti che hanno une specifica chiave
+      let key = getMaintenanceKey()
+      return value.doc?._id.startsWith(key);
+    })
+
+    setCountMaintenances(data.length);
   };
 
   useEffect(() => {
@@ -129,29 +138,29 @@ const HomePage = () => {
     <>
       <Header title="Home" showBackButton={false} />
       <IonContent>
-        
-          <IonCard style={{ flexGrow: 1 }}>
-            <IonCardHeader>
-              <IonCardTitle>Data odierna</IonCardTitle>
-              <IonCardSubtitle>{today}</IonCardSubtitle>
-            </IonCardHeader>
-          </IonCard>
-          
-          <IonCard color='tertiary'>
-            <IonCardHeader style={{ 
-                display: 'flex', 
-                flexDirection: 'column', 
-                alignItems: 'start',
-                // justifyContent: 'space-between' 
-              }}>
-              <IonCardTitle>Ultimo Km</IonCardTitle>
-              <IonCardSubtitle>{currentKm.data}: <strong>{currentKm.km}</strong></IonCardSubtitle>
-              <IonButton style={{ color: 'white'}} fill="clear" onClick={() => handleEdit(currentKm)}>
-                <IonIcon icon={pencil} /> Modifica
-              </IonButton>
-            </IonCardHeader>
-          </IonCard>
-        
+
+        <IonCard style={{ flexGrow: 1 }}>
+          <IonCardHeader>
+            <IonCardTitle>Data odierna</IonCardTitle>
+            <IonCardSubtitle>{today}</IonCardSubtitle>
+          </IonCardHeader>
+        </IonCard>
+
+        <IonCard color='tertiary'>
+          <IonCardHeader style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'start',
+            // justifyContent: 'space-between' 
+          }}>
+            <IonCardTitle>Ultimo Km</IonCardTitle>
+            <IonCardSubtitle>{currentKm.data}: <strong>{currentKm.km}</strong></IonCardSubtitle>
+            <IonButton style={{ color: 'white' }} fill="clear" onClick={() => handleEdit(currentKm)}>
+              <IonIcon icon={pencil} /> Modifica
+            </IonButton>
+          </IonCardHeader>
+        </IonCard>
+
 
         {countMaintenances == 0 ? (
           <IonText color="secondary">
