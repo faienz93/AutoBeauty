@@ -1,7 +1,7 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from "@ionic/react";
 import { Maintenance } from "../models/MaintenanceType";
 import { LimitGomme, LimitTagliando } from "../constant";
-import { getDateString, parseStringToDate } from "../services/utils";
+import { parseStringToDate } from "../services/utils";
 
 
 export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string, maintenance: Maintenance, currentKm: number }) => {

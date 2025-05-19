@@ -6,7 +6,7 @@ import { AlertConfirmation } from './AlertConfirmation';
 import { Header } from './Header';
 import { MaintenanceDbCtx } from '../App';
 import { useHistory } from 'react-router-dom';
-import { getMaintenanceIcon, getMaintenanceKey } from '../services/utils';
+import { getMaintenanceIcon, getMaintenanceKey, parseStringToDate } from '../services/utils';
 
 
 function ListCarMaintenance() {
@@ -44,10 +44,10 @@ function ListCarMaintenance() {
       }))
       .sort((a: Maintenance, b: Maintenance) => {
         // Ordina per data decrescente
-        // return new Date(b.data).getTime() - new Date(a.data).getTime();
+        return new Date(parseStringToDate(b.data)).getTime() - new Date(parseStringToDate(a.data)).getTime();
         
         // Oppure per km decrescente
-        return b.km - a.km;
+        // return b.km - a.km;
       });
       setMaintenances(data);
     } catch (error) {
