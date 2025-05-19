@@ -1,8 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { IonContent, IonThumbnail, IonItem, IonLabel, IonList, IonIcon, IonText, IonButton, IonBadge} from '@ionic/react';
-
-// import './homepage.css';
-
 import { Maintenance } from '../models/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from './AlertConfirmation';
@@ -36,7 +33,7 @@ function ListCarMaintenance() {
       const result = await db.allDocs({ include_docs: true });
       console.log('Fetched docs:', result);
       const data = result.rows.
-      filter((value, index) => {
+      filter((value) => {
         // filtra solo i documenti che hanno une specifica chiave
         let key = getMaintenanceKey()
         return value.doc?._id.startsWith(key);

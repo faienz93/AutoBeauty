@@ -1,13 +1,13 @@
-import React, { useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useState } from 'react';
-import { Maintenance, maintenanceTypes, Stats } from '../models/MaintenanceType';
+import { Maintenance, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
-import { IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from './Header';
 import { KilometersDbCtx, MaintenanceDbCtx } from '../App';
 import { CardMaintenance } from './CardMaintenance';
 import { useHistory } from 'react-router-dom';
-import { colorFill, pencil } from 'ionicons/icons';
+import { pencil } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getMaintenanceKey } from '../services/utils';
 
@@ -80,8 +80,6 @@ const HomePage = () => {
 
 
   const countCarMaintenances = async () => {
-    // const res = await dbMaitenenance.getInfo();
-
     const res = await dbMaitenenance.allDocs({ include_docs: true });
     console.log('Fetched docs:', res);
     const maintenance = res.rows.
@@ -99,10 +97,6 @@ const HomePage = () => {
       ...acc,
       [result.tipo]: result as Maintenance
     }), {}) as Stats;
-
-    
-
-    console.log(updatedMaintenances)
 
     setLatestMaintenances(updatedMaintenances);
     setCountMaintenances(maintenance.length);

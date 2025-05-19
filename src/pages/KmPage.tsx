@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from './Header';
 import { KilometersDbCtx } from '../App';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString } from '../services/utils';
 
@@ -43,21 +43,11 @@ function KmPage() {
 
   const handleAddKm = async (newKm: Kilometers) => {
 
-    dbKm.getInfo().then((info) => {
-      console.log('Database info:', info);
-    })
-
-
-
     dbKm.put(newKm).then((response) => {
       console.log('Maintenance added successfully:', response);
     }).catch((error) => {
       console.error('Error adding maintenance:', error);
     });
-
-    const res = dbKm.allDocs({ include_docs: true }).then((result: any) => {
-      console.log(result.rows);
-    })
 
     setFormData({
       data: currentDate,

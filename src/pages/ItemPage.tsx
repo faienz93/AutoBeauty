@@ -49,21 +49,12 @@ function ItemPage() {
 
   const handleAddMaintenance = async (newMaintenance: Maintenance) => {
 
-    db.getInfo().then((info) => {
-      console.log('Database info:', info);
-    })
-
     const mnt = { ...newMaintenance, _id: getUUIDKey() } as Maintenance;
-    console.log('mnt', mnt);
     db.put(mnt).then((response) => {
       console.log('Maintenance added successfully:', response);
     }).catch((error) => {
       console.error('Error adding maintenance:', error);
     });
-
-    const res = db.allDocs({ include_docs: true }).then((result: any) => {
-      console.log(result.rows);
-    })
 
     setFormData({
       data: currentDate,
