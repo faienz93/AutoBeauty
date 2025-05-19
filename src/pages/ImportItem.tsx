@@ -6,7 +6,8 @@ import { cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { MaintenanceDbCtx } from '../App';
 import { Maintenance } from '../models/MaintenanceType';
-import { getUUIDKey } from '../services/utils';
+import { getDateString, getUUIDKey, parseStringToDate } from '../services/utils';
+import { parse } from 'papaparse';
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const db = useContext(MaintenanceDbCtx);
@@ -53,23 +54,16 @@ const ImportItem = () => {
     if (!env) return;
 
     try {
-      const res = await csvService.importCsv(file) as Maintenance[];
-      console.log("VEDIAMO COSA STAMPARE")
+      const importedItemFromCsv = await csvService.importCsv(file) as Maintenance[];
       
-
-      res.forEach((item) => {
+      // Parse result
+      importedItemFromCsv.forEach((item: Maintenance) => {
         item._id = getUUIDKey();
+        item.data = getDateString(parseStringToDate(item.data));
       });
 
-      console.log(res)
-
-      // map((item) => {
-      //   item._id = getTimestampKey();
-      // });
-
-
       try {
-        await db.bulkDocs(res);
+        await db.bulkDocs(importedItemFromCsv);
         setIsSuccess(true);
       } catch (error) {
         console.error('Error during bulk upload:', error);

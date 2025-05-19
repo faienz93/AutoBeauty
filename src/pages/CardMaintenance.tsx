@@ -1,6 +1,7 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from "@ionic/react";
 import { Maintenance } from "../models/MaintenanceType";
 import { LimitGomme, LimitTagliando } from "../constant";
+import { getDateString, parseStringToDate } from "../services/utils";
 
 
 export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string, maintenance: Maintenance, currentKm: number }) => {
@@ -13,13 +14,14 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
     if (tipo === 'Gomme') daFare = diffKm >= LimitGomme;
     if (tipo === 'Tagliando') daFare = diffKm >= LimitTagliando;
     if (tipo === 'Revisione') {
-      const dataUltimaRevisione = new Date(maintenance?.data);
-      console.log(maintenance)
-      console.log(dataUltimaRevisione)
-     
+
       
-      console.log(new Date().getFullYear())
+      console.log('Revisione')
+      console.log(maintenance?.data)
+      const dataUltimaRevisione = parseStringToDate(maintenance?.data);
       console.log(dataUltimaRevisione)
+      
+     
       const dataAttuale = new Date();
       const mesiPassati = 
       (dataAttuale.getFullYear() - dataUltimaRevisione.getFullYear()) * 12 + 

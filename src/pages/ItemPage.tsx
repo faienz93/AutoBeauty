@@ -70,12 +70,7 @@ function ItemPage() {
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
     if (inputIdentifier === 'data') {
-      const selectedDate = new Date(newValue).toLocaleDateString('it-IT', {
-        year: 'numeric',
-        month: 'short',
-        day: 'numeric',
-      });
-      newValue = selectedDate;
+      newValue = getDateString(newValue);
     }
 
     setFormData((prevState) => ({
