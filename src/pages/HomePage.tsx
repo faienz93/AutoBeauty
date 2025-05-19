@@ -75,30 +75,6 @@ const HomePage = () => {
       km: maxKm,
       data: maxData
     });
-
-
-
-    const promises = maintenanceTypes.map(async (maintenanceType) => {
-      const res = await dbMaitenenance.find<Maintenance>({
-        selector: {
-          tipo: maintenanceType,
-          data: { $gt: null }
-        },
-        sort: [{ data: 'desc' }],
-        limit: 1
-      });
-
-      return { type: maintenanceType, doc: res.docs[0] || null };
-    });
-
-    const results = await Promise.all(promises)
-
-    const updatedMaintenances = results.reduce((acc, result) => ({
-      ...acc,
-      [result.type]: result.doc
-    }), {}) as Stats;
-
-    setLatestMaintenances(updatedMaintenances);
   };
 
 
@@ -108,14 +84,28 @@ const HomePage = () => {
 
     const res = await dbMaitenenance.allDocs({ include_docs: true });
     console.log('Fetched docs:', res);
-    const data = res.rows.
+    const maintenance = res.rows.
     filter((value) => {
       // filtra solo i documenti che hanno une specifica chiave
       let key = getMaintenanceKey()
       return value.doc?._id.startsWith(key);
     })
+    .map((row: any) => ({
+      id: row.doc._id,
+      ...row.doc
+    })) as Maintenance[];
 
-    setCountMaintenances(data.length);
+    const updatedMaintenances = maintenance.reduce((acc, result) => ({
+      ...acc,
+      [result.tipo]: result as Maintenance
+    }), {}) as Stats;
+
+    
+
+    console.log(updatedMaintenances)
+
+    setLatestMaintenances(updatedMaintenances);
+    setCountMaintenances(maintenance.length);
   };
 
   useEffect(() => {
@@ -124,9 +114,6 @@ const HomePage = () => {
       await getLatestMaintenances();
     };
     fetchData();
-
-    console.log(countMaintenances);
-    console.log(latestMaintenances);
   }, []);
 
   useEffect(() => {
