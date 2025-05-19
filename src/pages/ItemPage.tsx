@@ -17,15 +17,15 @@ function ItemPage() {
   // https://stackoverflow.com/a/59464381/4700162
   const location = useLocation<MaintenanceState>();
   console.log(location.state?.item)
-  
+
   console.log('Rendering NewItem component');
   const db = useContext(MaintenanceDbCtx);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const currentDate = getDateString();
-  const [formData, setFormData] = useState(() => { 
+  const [formData, setFormData] = useState(() => {
 
-    if(location.state?.item) {
+    if (location.state?.item) {
       // aggiornamento
       return {
         data: location.state.item.data,
@@ -37,13 +37,25 @@ function ItemPage() {
     }
 
     return {
-    data: currentDate,
-    km: 0,
-    tipo: 'Tagliando' as MaintenanceType,
-    costo: 0,
-    note: '',
+      data: currentDate,
+      km: 0,
+      tipo: 'Tagliando' as MaintenanceType,
+      costo: 0,
+      note: '',
     }
   });
+
+  const formatCost = (value: string): string => {
+    return value.replace('.', ',');
+  };
+
+  const validateKm = (value: number): boolean => {
+    return value >= 0 && value <= 999999;
+  };
+
+  const validateCost = (value: number): boolean => {
+    return value >= 0 && value <= 999999;
+  };
 
 
 
@@ -71,6 +83,21 @@ function ItemPage() {
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
     if (inputIdentifier === 'data') {
       newValue = getDateString(newValue);
+    }
+
+    if (inputIdentifier === 'km') {
+      const kmValue = Number(newValue);
+      if (!validateKm(kmValue)) {
+        return; // Non aggiorna il valore se non è valido
+      }
+    }
+
+    if (inputIdentifier === 'costo') {
+      const costValue = Number(newValue.replace(',', '.'));
+      if (!validateCost(costValue)) {
+        return; // Non aggiorna il valore se non è valido
+      }
+      newValue = formatCost(newValue);
     }
 
     setFormData((prevState) => ({
@@ -123,17 +150,22 @@ function ItemPage() {
               value={formData.km}
               onIonChange={(e) => handleInputChange('km', e.detail.value)}
               min={0}
+              max={999999}
+              errorText="Il valore deve essere tra 0 e 999.999"
             />
           </IonItem>
           <IonItem>
             <IonInput
               labelPlacement="floating"
               label="Costo (€)"
-              type="number"
+              type="text"
+              inputmode="decimal"
               name="costo"
               value={formData.costo}
               onIonChange={(e) => handleInputChange('costo', e.detail.value)}
               min={0}
+              max={999999}
+              errorText="Il valore deve essere tra 0 e 999.999"
             />
           </IonItem>
           <IonItem lines="inset" slot="header">
@@ -163,14 +195,14 @@ function ItemPage() {
           </IonItem>
         </IonList>
 
-        {location.state?.item ? 
-        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
-         Modifica Manutenzione
-        </IonButton>
-        :
-        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
-         Aggiungi Manutenzione
-        </IonButton>
+        {location.state?.item ?
+          <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+            Modifica Manutenzione
+          </IonButton>
+          :
+          <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+            Aggiungi Manutenzione
+          </IonButton>
         }
 
         {isSuccess ? (
