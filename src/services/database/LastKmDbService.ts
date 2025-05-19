@@ -1,6 +1,6 @@
 import { PouchDbService } from "./pouchDbService";
 
-export class LastKmDbService extends PouchDbService {
+export class KilometersDbService extends PouchDbService {
     protected async createSpecificIndexes(): Promise<void> {
         if (this.db && this.db.createIndex) {
             try {

@@ -1,7 +1,7 @@
 import { PouchDbType } from "./PouchDbType";
 
 
-export interface LastKm extends PouchDbType {
+export interface Kilometers extends PouchDbType {
   data: string;
   km: number
 }

@@ -4,11 +4,11 @@ import { Maintenance, maintenanceTypes, Stats } from '../models/MaintenanceType'
 import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
 import { IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from './Header';
-import { DbLastKmContext, DbMaintenanceContext } from '../App';
+import { KilometersDbCtx, MaintenanceDbCtx } from '../App';
 import { CardMaintenance } from './CardMaintenance';
 import { useHistory } from 'react-router-dom';
 import { colorFill, pencil } from 'ionicons/icons';
-import { LastKm } from '../models/LastKmType';
+import { Kilometers } from '../models/KilometersType';
 import { getDateString } from '../services/utils';
 
 
@@ -16,18 +16,18 @@ import { getDateString } from '../services/utils';
 const HomePage = () => {
   const [countMaintenances, setCountMaintenances] = useState(0);
   const [latestMaintenances, setLatestMaintenances] = useState({});
-  const [currentKm, setLastKm] = useState<LastKm>({
+  const [currentKm, setLastKm] = useState<Kilometers>({
     data: getDateString(),
     km: 0
   });
-  const dbMaitenenance = useContext(DbMaintenanceContext);
-  const dbKm = useContext(DbLastKmContext);
+  const dbMaitenenance = useContext(MaintenanceDbCtx);
+  const dbKm = useContext(KilometersDbCtx);
   const today = getDateString();
 
   const history = useHistory();
 
   // https://stackoverflow.com/a/59464381/4700162
-  const handleEdit = (lastKm: LastKm) => {
+  const handleEdit = (lastKm: Kilometers) => {
     history.push({
       pathname: `/newkm/edit/${lastKm._id}`,
       // search: '?update=true',  // query string
@@ -49,7 +49,7 @@ const HomePage = () => {
       fields: ['km', 'data'] // opzionale: prende solo i campi necessari
     });
 
-    const searchLastKm = await dbKm.find<LastKm>({
+    const searchLastKm = await dbKm.find<Kilometers>({
       selector: {
         km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
         _id: { $gt: null } // assicura che il documento esista

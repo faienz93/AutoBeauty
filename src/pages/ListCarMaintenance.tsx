@@ -7,7 +7,7 @@ import { Maintenance } from '../models/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from './AlertConfirmation';
 import { Header } from './Header';
-import { DbMaintenanceContext } from '../App';
+import { MaintenanceDbCtx } from '../App';
 import { useHistory } from 'react-router-dom';
 import { getMaintenanceIcon, getMaintenanceKey } from '../services/utils';
 
@@ -16,7 +16,7 @@ function ListCarMaintenance() {
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const db = useContext(DbMaintenanceContext);
+  const db = useContext(MaintenanceDbCtx);
   const history = useHistory();
 
   // // https://stackoverflow.com/a/59464381/4700162
