@@ -119,12 +119,12 @@ function ListCarMaintenance() {
                 <IonButton fill="clear" slot="end" onClick={() => handleEdit(item)}>
                   <IonIcon icon={pencil} />
                 </IonButton>
-                <IonButton fill="clear" id="delete-alert" slot="end" onClick={() => setConfirmDelete(true)}>
+                <IonButton fill="clear" id={`delete-alert-${index}`} slot="end" onClick={() => setConfirmDelete(true)}>
                   <IonIcon icon={trashOutline} color="danger" />
                 </IonButton>
                 <AlertConfirmation
                   key={index}
-                  trigger="delete-alert"
+                  trigger={`delete-alert-${index}`}
                   msg='Sei sicuro di voler eliminare questa manutenzione?'
                   isOpen={confirmDelete}
                   onClose={() => setConfirmDelete(false)}
