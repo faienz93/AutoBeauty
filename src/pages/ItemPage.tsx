@@ -3,7 +3,7 @@ import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect,
 import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
-import { Header } from './Header';
+import { Header } from '../components/Header';
 import { MaintenanceDbCtx } from '../App';
 import { useLocation, useParams } from 'react-router-dom';
 import { getDateString, getUUIDKey } from '../services/utils';

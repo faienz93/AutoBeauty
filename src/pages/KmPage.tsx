@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
-import { Header } from './Header';
+import { Header } from '../components/Header';
 import { KilometersDbCtx } from '../App';
 import { useLocation } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';

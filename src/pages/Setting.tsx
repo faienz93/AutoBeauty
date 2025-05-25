@@ -1,8 +1,8 @@
-import { Header } from './Header';
+import { Header } from '../components/Header';
 import { IonContent } from '@ionic/react';
-import ImportItem from './ImportItem';
-import ExportItem from './ExportItem';
-import DeleteAllItem from './DeleteAllItems';
+import ImportItem from '../components/ImportItem';
+import ExportItem from '../components/ExportItem';
+import DeleteAllItem from '../components/DeleteAllItems';
 
 
 
