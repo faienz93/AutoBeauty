@@ -1,5 +1,5 @@
-import { useContext, useEffect, useState } from 'react';
-import { IonContent, IonThumbnail, IonItem, IonLabel, IonList, IonIcon, IonText, IonButton, IonBadge } from '@ionic/react';
+import { useContext, useState } from 'react';
+import { IonThumbnail, IonItem, IonLabel, IonIcon, IonText, IonButton, IonBadge } from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from '../components/AlertConfirmation';
@@ -10,10 +10,9 @@ import { getMaintenanceIcon } from '../services/utils';
 interface ListItemProps {
     /** The text to display inside the button */
     maintenance: Maintenance;
-    
-  }
+}
 
-export const ListItem = ({maintenance}: ListItemProps) => {
+export const ListItem = ({ maintenance }: ListItemProps) => {
 
     console.log('ListItem');
     console.log(maintenance);
