@@ -1,11 +1,12 @@
 import { IonBackButton, IonButtons, IonHeader, IonTitle, IonToolbar } from '@ionic/react';
+import { memo } from 'react';
 
 interface HeaderProps {
   title: string;
   showBackButton?: boolean;
 }
 
-export const Header: React.FC<HeaderProps> = ({ title, showBackButton = true }) => {
+export const Header = memo(({ title, showBackButton = true }: HeaderProps) => {
   return (
     <IonHeader>
       <IonToolbar>
@@ -19,4 +20,4 @@ export const Header: React.FC<HeaderProps> = ({ title, showBackButton = true }) 
       </IonToolbar>
     </IonHeader>
   );
-};
+});
