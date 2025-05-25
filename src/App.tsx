@@ -45,7 +45,7 @@ import '@ionic/react/css/core.css';
 import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
-import HomePage from './pages/HomePage';
+
 import ItemPage from './pages/ItemPage';
 
 import { Capacitor } from '@capacitor/core';
@@ -57,6 +57,7 @@ import { getEnv } from './services/env';
 import KmPage from './pages/KmPage';
 import { MaintenanceDbService } from './services/database/MaintenanceDbService';
 import { KilometersDbService } from './services/database/LastKmDbService';
+import HomePage from "./pages/HomePage";
 
 
 setupIonicReact({ mode: 'md' });

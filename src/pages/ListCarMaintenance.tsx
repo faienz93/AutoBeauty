@@ -16,7 +16,7 @@ function ListCarMaintenance() {
   const fetchMaintenances = useCallback(async () => {
     try {
       const result = await db.allDocs({ include_docs: true });
-      console.log('Fetched docs:', result);
+      console.log('Fetched docs ----->:', result);
       const data = result.rows.
       filter((value) => {
         // filtra solo i documenti che hanno une specifica chiave
@@ -43,11 +43,6 @@ function ListCarMaintenance() {
   useEffect(() => { 
       fetchMaintenances();
   }, []);
-
-  
-
-  
-
   
   return (
     <>
