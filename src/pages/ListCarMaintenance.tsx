@@ -60,7 +60,7 @@ function ListCarMaintenance() {
         ) : (
           <IonList inset={true}>
             {maintenances.map((item, index) => (
-              <ListItem key={index} maintenance={item} />
+              <ListItem key={index} maintenance={item} onDelete={fetchMaintenances} />
             ))}
           </IonList>
         )}

@@ -8,11 +8,11 @@ import { useHistory } from 'react-router-dom';
 import { getMaintenanceIcon } from '../services/utils';
 
 interface ListItemProps {
-    /** The text to display inside the button */
     maintenance: Maintenance;
+    onDelete: () => void;
 }
 
-export const ListItem = ({ maintenance }: ListItemProps) => {
+export const ListItem = ({ maintenance, onDelete }: ListItemProps) => {
 
     console.log('ListItem');
     console.log(maintenance);
@@ -40,7 +40,7 @@ export const ListItem = ({ maintenance }: ListItemProps) => {
             const response = await db.remove(doc);
             console.log('Maintenance deleted successfully:');
             console.log(response);
-            //   fetchMaintenances();
+            onDelete()
         } catch (err) {
             console.log(err);
         }
