@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import { IonContent, IonList, IonText} from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { Header } from '../components/Header';
@@ -13,7 +13,7 @@ function ListCarMaintenance() {
   
   const db = useContext(MaintenanceDbCtx);
 
-  const fetchMaintenances = async () => {
+  const fetchMaintenances = useCallback(async () => {
     try {
       const result = await db.allDocs({ include_docs: true });
       console.log('Fetched docs:', result);
@@ -38,7 +38,7 @@ function ListCarMaintenance() {
     } catch (error) {
       console.error('Error fetching maintenances:', error);
     }
-  };
+  }, [db]);
 
   useEffect(() => { 
       fetchMaintenances();

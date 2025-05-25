@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { memo, useContext, useState } from 'react';
 import { IonThumbnail, IonItem, IonLabel, IonIcon, IonText, IonButton, IonBadge } from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
@@ -12,10 +12,9 @@ interface ListItemProps {
     onDelete: () => void;
 }
 
-export const ListItem = ({ maintenance, onDelete }: ListItemProps) => {
+export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
 
-    console.log('ListItem');
-    console.log(maintenance);
+    console.log("ListItem render", maintenance);
 
     const [confirmDelete, setConfirmDelete] = useState(false);
     const db = useContext(MaintenanceDbCtx);
@@ -96,4 +95,4 @@ export const ListItem = ({ maintenance, onDelete }: ListItemProps) => {
             </IonItem>
         </>
     )
-}
+});
