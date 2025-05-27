@@ -5,7 +5,7 @@ import { IonButton, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonToas
 import { cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { MaintenanceDbCtx } from '../App';
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { getDateString, getUUIDKey, parseStringToDate } from '../services/utils';
 import { parse } from 'papaparse';
 const ImportItem = () => {
@@ -57,13 +57,19 @@ const ImportItem = () => {
       const importedItemFromCsv = await csvService.importCsv(file) as Maintenance[];
       
       // Parse result
-      importedItemFromCsv.forEach((item: Maintenance) => {
-        item._id = getUUIDKey();
-        item.data = getDateString(parseStringToDate(item.data));
-      });
+      
+
+      const convertedItems: Maintenance[] = importedItemFromCsv.map(item => ({
+        _id: getUUIDKey(),
+        data: getDateString(parseStringToDate(item.data)),
+        km: Number(item.km) || 0,        // conversione esplicita a number
+        tipo: item.tipo as MaintenanceType,
+        costo: Number(item.costo) || 0,  // conversione esplicita a number
+        note: item.note || ''
+      }));
 
       try {
-        await db.bulkDocs(importedItemFromCsv);
+        await db.bulkDocs(convertedItems);
         setIsSuccess(true);
       } catch (error) {
         console.error('Error during bulk upload:', error);

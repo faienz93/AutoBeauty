@@ -44,11 +44,12 @@ export const LastKmFinded = ({onKmUpdate}: LastKmFindedProps) => {
         const searchMaintentenanceByKm = await dbMaitenenance.find<Maintenance>({
             selector: {
                 km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-                //_id: { $regex: `^${getMaintenanceKey()}` }  // filtra per il prefisso corretto
+                // _id: { $gt: null }
             },
             sort: [{ km: 'desc' }], // ordina per km decrescente
-            limit: 10, // prende solo il primo risultato
-            //use_index: 'km' // opzionale: prende solo i campi necessari
+            limit: 1, // prende solo il primo risultato
+            //fields: ['km', 'data'], // opzionalmente prendo solo specific campi
+            use_index: 'idx-km'
         });
 
         console.log('searchMaintentenanceByKm', searchMaintentenanceByKm);
@@ -56,10 +57,12 @@ export const LastKmFinded = ({onKmUpdate}: LastKmFindedProps) => {
         const searchLastKm = await dbKm.find<Kilometers>({
             selector: {
                 km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
+                //_id: { $gt: null }
             },
             sort: [{ km: 'desc' }], // ordina per km decrescente
             limit: 1, // prende solo il primo risultato
-            use_index: 'km',
+            //fields: ['km', 'data'],
+            use_index: 'idx-km',
         });
 
         console.log('searchLastKm', searchLastKm);
