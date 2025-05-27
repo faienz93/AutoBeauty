@@ -1,13 +1,11 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { useState } from 'react';
-import { Maintenance, Stats } from '../models/MaintenanceType';
-import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
+import { Maintenance, MaintenanceType, Stats } from '../models/MaintenanceType';
+import { IonContent, IonCard, IonText } from '@ionic/react';
 import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from '../components/Header';
-import { KilometersDbCtx, MaintenanceDbCtx } from '../App';
+import { MaintenanceDbCtx } from '../App';
 import { CardMaintenance } from '../components/CardMaintenance';
-import { useHistory } from 'react-router-dom';
-import { pencil } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getMaintenanceKey, parseStringToDate } from '../services/utils';
 import { LastKmFinded } from '../components/LastKmFinded';
@@ -15,7 +13,7 @@ import { LastKmFinded } from '../components/LastKmFinded';
 
 
 const HomePage = () => {
-  const [countMaintenances, setCountMaintenances] = useState(0);
+
   const [latestMaintenances, setLatestMaintenances] = useState({});
 
   const dbMaitenenance = useContext(MaintenanceDbCtx);
@@ -34,7 +32,7 @@ const HomePage = () => {
 
   const countCarMaintenances = async () => {
     const res = await dbMaitenenance.allDocs({ include_docs: true });
-    console.log('Fetched docs:', res);
+    
     const maintenance = res.rows.
       filter((value) => {
         // filtra solo i documenti che hanno une specifica chiave
@@ -53,13 +51,17 @@ const HomePage = () => {
         // return b.km - a.km;
       }) as Maintenance[];
 
+    
     const updatedMaintenances = maintenance.reduce((acc, result) => ({
       ...acc,
       [result.tipo]: result as Maintenance
     }), {}) as Stats;
 
+    console.log('Fetched docs:', maintenance);
+    console.log(Object.keys(updatedMaintenances))
     setLatestMaintenances(updatedMaintenances);
-    setCountMaintenances(maintenance.length);
+    
+    
   };
 
   useEffect(() => {
@@ -90,7 +92,7 @@ const HomePage = () => {
         <LastKmFinded onKmUpdate={handleKmUpdate} />
 
 
-        {countMaintenances == 0 ? (
+        {latestMaintenances && Object.keys(latestMaintenances).length == 0 ? (
           <IonText color="secondary">
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
