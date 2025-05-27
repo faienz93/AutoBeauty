@@ -44,22 +44,25 @@ export const LastKmFinded = ({onKmUpdate}: LastKmFindedProps) => {
         const searchMaintentenanceByKm = await dbMaitenenance.find<Maintenance>({
             selector: {
                 km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-                _id: { $gt: null } // assicura che il documento esista
+                //_id: { $regex: `^${getMaintenanceKey()}` }  // filtra per il prefisso corretto
             },
             sort: [{ km: 'desc' }], // ordina per km decrescente
-            limit: 1, // prende solo il primo risultato
-            fields: ['km', 'data'] // opzionale: prende solo i campi necessari
+            limit: 10, // prende solo il primo risultato
+            //use_index: 'km' // opzionale: prende solo i campi necessari
         });
+
+        console.log('searchMaintentenanceByKm', searchMaintentenanceByKm);
 
         const searchLastKm = await dbKm.find<Kilometers>({
             selector: {
                 km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-                _id: { $gt: null } // assicura che il documento esista
             },
             sort: [{ km: 'desc' }], // ordina per km decrescente
             limit: 1, // prende solo il primo risultato
-            fields: ['km', 'data'] // opzionale: prende solo i campi necessari
+            use_index: 'km',
         });
+
+        console.log('searchLastKm', searchLastKm);
 
         // 1. Estraggo km e data con default a 0 / stringa odierna
         const lastMaintenance = searchMaintentenanceByKm.docs[0] || {};
