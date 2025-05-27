@@ -52,10 +52,19 @@ const HomePage = () => {
       }) as Maintenance[];
 
     
-    const updatedMaintenances = maintenance.reduce((acc, result) => ({
-      ...acc,
-      [result.tipo]: result as Maintenance
-    }), {}) as Stats;
+    const updatedMaintenances = maintenance.reduce((acc, current) => {
+      const existing = acc[current.tipo];
+      
+      // Se non esiste una manutenzione per questo tipo O
+      // se la manutenzione corrente è più recente, aggiorna
+      if (!existing || 
+          new Date(parseStringToDate(current.data)).getTime() > 
+          new Date(parseStringToDate(existing.data)).getTime()) {
+        acc[current.tipo] = current;
+      }
+      
+      return acc;
+    }, {} as Stats);
 
     console.log('Fetched docs:', maintenance);
     console.log(Object.keys(updatedMaintenances))
