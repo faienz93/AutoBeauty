@@ -74,16 +74,10 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      await countCarMaintenances();
-
-    };
-    fetchData();
+    
+    countCarMaintenances();
+    
   }, []);
-
-  useEffect(() => {
-    console.log("latestMaintenances updated:", latestMaintenances);
-  }, [latestMaintenances]);
 
 
   return (
