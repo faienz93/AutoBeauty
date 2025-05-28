@@ -1,4 +1,3 @@
-
 import { v4 as uuidv4 } from 'uuid';
 
 
@@ -43,4 +42,28 @@ export const getMaintenanceKey = () => {
 export const getUUIDKey = () => {
   // return 'mnt-' + Date.now();
   return getMaintenanceKey() + uuidv4();
+}
+
+/**
+ * Converte una stringa numerica in formato italiano (con virgola) in un numero
+ * @param value - La stringa da convertire (es: "78,30" o "78.30")
+ * @returns Il numero convertito o 0 se la conversione fallisce
+ */
+export const parseItalianNumber = (value: string | number): number => {
+  if (typeof value === 'number') {
+    return value;
+  }
+  
+  if (!value || typeof value !== 'string') {
+    return 0;
+  }
+  
+  // Rimuove spazi e sostituisce la virgola con il punto
+  const normalizedValue = value.toString().trim().replace(',', '.');
+  
+  // Converte a numero
+  const result = parseFloat(normalizedValue);
+  
+  // Restituisce 0 se la conversione fallisce
+  return isNaN(result) ? 0 : result;
 }

@@ -6,7 +6,7 @@ import { cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { MaintenanceDbCtx } from '../App';
 import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
-import { getDateString, getUUIDKey, parseStringToDate } from '../services/utils';
+import { getDateString, getUUIDKey, parseStringToDate, parseItalianNumber } from '../services/utils';
 import { parse } from 'papaparse';
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -62,9 +62,9 @@ const ImportItem = () => {
       const convertedItems: Maintenance[] = importedItemFromCsv.map(item => ({
         _id: getUUIDKey(),
         data: getDateString(parseStringToDate(item.data)),
-        km: Number(item.km) || 0,        // conversione esplicita a number
+        km: parseItalianNumber(item.km),        // gestisce numeri con virgola italiana
         tipo: item.tipo as MaintenanceType,
-        costo: Number(item.costo) || 0,  // conversione esplicita a number
+        costo: parseItalianNumber(item.costo),  // gestisce numeri con virgola italiana
         note: item.note || ''
       }));
 
