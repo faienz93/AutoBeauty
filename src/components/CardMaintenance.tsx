@@ -82,7 +82,6 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
             </IonButton>
           </div>
         </div>
-
       </IonCard>
     </div>
   )
