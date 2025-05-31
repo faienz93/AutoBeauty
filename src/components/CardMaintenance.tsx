@@ -46,11 +46,13 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
 
   const statusText = daFare ? 'DA FARE' : 'OK';
 
+  const colorBorder = '#00000014'
+  const shadowColor = '#00000014'; // 0.08 opacity = 14 in hex (0.08 * 255 ≈ 14)
 
 
   return (
     <div style={{ margin: '16px 0' }}>
-      <IonCard color='light' style={{ borderRadius: 18, boxShadow: '0 4px 12px rgba(0,0,0,0.08)' }}>
+      <IonCard color='light' style={{ borderRadius: 18, boxShadow: `0 4px 12px ${shadowColor}` }}>
         <IonCardHeader>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <div>
@@ -77,8 +79,19 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
         </IonCardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', padding: '0 16px 16px' }}>
-            <IonButton fill="outline" onClick={() => handleEdit(maintenance)}>
-              <IonIcon icon={pencil} /> Modifica
+            <IonButton
+              fill="outline"
+              style={{
+                '--color': {colorBorder},
+                '--border-color': {colorBorder},
+                '--border-width': '2px',
+                '--border-style': 'solid',  
+                '--border-radius': '50%',
+                '--background': 'light',
+              } as React.CSSProperties}
+              onClick={() => handleEdit(maintenance)}
+            >
+              <IonIcon slot="icon-only" icon={pencil} />
             </IonButton>
           </div>
         </div>
