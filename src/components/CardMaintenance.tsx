@@ -2,13 +2,27 @@ import { IonBadge, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSub
 import { Maintenance } from "../models/MaintenanceType";
 import { LimitGomme, LimitTagliando } from "../constant";
 import { parseStringToDate } from "../services/utils";
-
+import { useHistory } from 'react-router-dom';
 import { useMaintenanceIcon } from "../hooks/useMaitenanceIcon";
 import { pencil } from "ionicons/icons";
 
 
 export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string, maintenance: Maintenance, currentKm: number }) => {
   console.log('Rendering CardMaintenance component');
+
+
+  const history = useHistory();
+  // https://stackoverflow.com/a/59464381/4700162
+  const handleEdit = (item: Maintenance) => {
+    history.push({
+      pathname: `/newItem/edit/${item._id}`,
+      // search: '?update=true',  // query string
+      state: {  // location state
+        item: item,
+      },
+    })
+
+  };
 
   const kmUltimoIntervento = maintenance?.km;
   const diffKm = currentKm - kmUltimoIntervento;
@@ -63,7 +77,7 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
         </IonCardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <div style={{ display: 'flex', alignItems: 'center', padding: '0 16px 16px' }}>
-            <IonButton fill="outline">
+            <IonButton fill="outline" onClick={() => handleEdit(maintenance)}>
               <IonIcon icon={pencil} /> Modifica
             </IonButton>
           </div>
