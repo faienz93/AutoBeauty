@@ -62,13 +62,13 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
           </div> */}
         </IonCardContent>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', padding: '0 16px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', padding: '0 16px 16px' }}>
             <IonButton fill="outline">
-          <IonIcon icon={pencil} /> Modifica
-        </IonButton>
-            </div>
-            </div>
-        
+              <IonIcon icon={pencil} /> Modifica
+            </IonButton>
+          </div>
+        </div>
+
       </IonCard>
     </div>
   )
