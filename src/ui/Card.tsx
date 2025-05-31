@@ -73,8 +73,8 @@ export const Card = ({title, subtitle, mainNote, comment, id, shadowColor, iconC
                         <IonButton
                             fill="outline"
                             style={{
-                                '--color': { shadowColor },
-                                '--border-color': { shadowColor },
+                                '--color': shadowColor ,
+                                '--border-color': shadowColor ,
                                 '--border-width': '2px',
                                 '--border-style': 'solid',
                                 '--border-radius': '50%',

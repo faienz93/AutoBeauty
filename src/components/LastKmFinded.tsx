@@ -7,15 +7,16 @@ import { Header } from '../components/Header';
 import { KilometersDbCtx, MaintenanceDbCtx } from '../App';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { useHistory } from 'react-router-dom';
-import { pencil } from 'ionicons/icons';
+import { pencil, speedometerOutline } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getMaintenanceKey } from '../services/utils';
+import { Card } from '../ui/Card';
 
 interface LastKmFindedProps {
     onKmUpdate?: (km: Kilometers) => void;
 }
 
-export const LastKmFinded = ({onKmUpdate}: LastKmFindedProps) => {
+export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
 
     const dbMaitenenance = useContext(MaintenanceDbCtx);
     const dbKm = useContext(KilometersDbCtx);
@@ -85,7 +86,7 @@ export const LastKmFinded = ({onKmUpdate}: LastKmFindedProps) => {
         });
     };
 
-    useEffect(() => { 
+    useEffect(() => {
         getLatestMaintenances();
     }, []);
 
@@ -94,7 +95,7 @@ export const LastKmFinded = ({onKmUpdate}: LastKmFindedProps) => {
     }, [currentKm, onKmUpdate]);
 
     return (<>
-        <IonCard color='tertiary'>
+        {/* <IonCard color='tertiary'>
             <IonCardHeader style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -107,6 +108,19 @@ export const LastKmFinded = ({onKmUpdate}: LastKmFindedProps) => {
                     <IonIcon icon={pencil} /> Modifica
                 </IonButton>
             </IonCardHeader>
-        </IonCard>
+        </IonCard> */}
+
+        <Card
+            title="Ultimo Kilometro rilevato"
+            subtitle={`${currentKm.data}`}
+            mainNote={`${currentKm.km}`}
+            id={currentKm._id}
+            shadowColor="#3355ff"
+            iconContent={{
+                type: 'icon',
+                source: speedometerOutline
+            }}
+            onEdit={handleEdit}
+        />
     </>)
 }
