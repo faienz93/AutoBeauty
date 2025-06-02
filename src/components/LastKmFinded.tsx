@@ -96,10 +96,10 @@ export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
 
     return (<>
         <Card
+            key={currentKm._id}
             title="Ultimo Kilometro rilevato"
             subtitle={`${currentKm.data}`}
             mainNote={`${currentKm.km}`}
-            id={currentKm._id}
             shadowColor="#3355ff"
             iconContent={{
                 type: 'icon',

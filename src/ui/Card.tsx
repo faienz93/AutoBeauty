@@ -6,18 +6,18 @@ interface CardProps {
     title: string,
     subtitle?: string,
     mainNote?: string,
+    mainNoteColor?: boolean | undefined,
     comment?: string,
-    id: any,
     shadowColor: string,
     iconContent: {
         type: 'image' | 'icon';
         source: string | typeof pencil; // esempio di icona, aggiorna in base alle tue necessità
         alt?: string;
     };
-    daFare?: boolean | undefined,
+    
     onEdit(): void 
 }
-export const Card = ({title, subtitle, mainNote, comment, id, shadowColor, iconContent, daFare, onEdit} : CardProps) => {
+export const Card = ({title, subtitle, mainNote, mainNoteColor: daFare, comment, shadowColor, iconContent, onEdit} : CardProps) => {
 
     const getTextColor = () => {
         if (daFare === undefined) return '#000000';

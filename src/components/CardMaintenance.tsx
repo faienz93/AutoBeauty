@@ -5,6 +5,7 @@ import { parseStringToDate } from "../services/utils";
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceIcon } from "../hooks/useMaitenanceIcon";
 import { pencil } from "ionicons/icons";
+import { Card } from "../ui/Card";
 
 
 export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string, maintenance: Maintenance, currentKm: number }) => {
@@ -44,58 +45,23 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
   const tipoManutenzione = tipo;
   const dataManutenzione = maintenance?.data || 'N/A';
 
-  const statusText = daFare ? 'DA FARE' : 'OK';
-
-  const colorBorder = '#00000014'
-  const shadowColor = '#00000014'; // 0.08 opacity = 14 in hex (0.08 * 255 ≈ 14)
-
 
   return (
-    <div style={{ margin: '16px 0' }}>
-      <IonCard color='light' style={{ borderRadius: 18, boxShadow: `0 4px 12px ${shadowColor}` }}>
-        <IonCardHeader>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <IonCardTitle style={{ fontSize: 22 }}>{tipoManutenzione}</IonCardTitle>
-              <IonCardSubtitle>{dataManutenzione}</IonCardSubtitle>
-            </div>
-            {/* <IonIcon icon={cloudOutline} style={{ fontSize: 38, color: "var(--ion-color-medium)" }} /> */}
-            <IonThumbnail slot="start" style={{ fontSize: 38, color: "var(--ion-color-medium)" }}>
-              {/* <img src={`/assets/${item.image}`} alt={item.name} /> */}
-              <img src={useMaintenanceIcon(maintenance.tipo)} alt={maintenance.tipo} />
-            </IonThumbnail>
-          </div>
-        </IonCardHeader>
-        <IonCardContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 34, fontWeight: 600, color: daFare ? '#FF0000' : '#008000' }}>{statusText}</div>
-            <div style={{ fontSize: 15, color: "#5c5c5c" }}>{maintenance.note}</div>
-          </div>
-          {/* <div style={{ fontSize: 16, color: "#777", minWidth: 54, textAlign: "right" }}>
-            {maintenance?.note && (
-              <div style={{ fontSize: 12, fontStyle: 'italic' }}>{maintenance.note}</div>
-            )}
-          </div> */}
-        </IonCardContent>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', padding: '0 16px 16px' }}>
-            <IonButton
-              fill="outline"
-              style={{
-                '--color': {colorBorder},
-                '--border-color': {colorBorder},
-                '--border-width': '2px',
-                '--border-style': 'solid',  
-                '--border-radius': '50%',
-                '--background': 'light',
-              } as React.CSSProperties}
-              onClick={() => handleEdit(maintenance)}
-            >
-              <IonIcon slot="icon-only" icon={pencil} />
-            </IonButton>
-          </div>
-        </div>
-      </IonCard>
-    </div>
+
+
+    <Card
+      key={maintenance._id}
+      title={tipoManutenzione}
+      subtitle={dataManutenzione}
+      mainNote={daFare ? 'DA FARE' : 'OK'}
+      comment={maintenance?.note || ''}
+      shadowColor='#2f3133'
+      iconContent={{
+        type: 'image',
+        source: useMaintenanceIcon(maintenance.tipo)
+      }}
+      mainNoteColor={daFare}
+      onEdit={() => handleEdit(maintenance)}
+    />
   )
 }
