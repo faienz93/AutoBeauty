@@ -85,7 +85,7 @@ const HomePage = () => {
       <Header title="Home" showBackButton={false} />
       <IonContent>
 
-        <IonCard style={{ flexGrow: 1 }}>
+        <IonCard style={{ flexGlow:1, borderRadius: 18, boxShadow: `0 4px 12px` }}>
           <IonCardHeader>
             <IonCardTitle>Data odierna</IonCardTitle>
             <IonCardSubtitle>{today}</IonCardSubtitle>
