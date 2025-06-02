@@ -6,8 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "copy:sql:wasm": "copyfiles -u 3 node_modules/sql.js/dist/sql-wasm.wasm public/assets",
-    "ionic:serve:before": "npm run copy:sql:wasm",
+    "ionic" : "ionic",
     "ionic:serve": "ionic serve",
     "ionic:info": "ionic info",
     "lint": "eslint .",
