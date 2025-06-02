@@ -60,7 +60,7 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
         type: 'image',
         source: useMaintenanceIcon(maintenance.tipo)
       }}
-      mainNoteColor={daFare}
+      mainNoteColor={daFare ? '#FF0000' : '#008000'}
       onEdit={() => handleEdit(maintenance)}
     />
   )

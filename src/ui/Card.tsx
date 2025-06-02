@@ -6,7 +6,7 @@ interface CardProps {
     title: string,
     subtitle?: string,
     mainNote?: string,
-    mainNoteColor?: boolean | undefined,
+    mainNoteColor?: string,
     comment?: string,
     shadowColor: string,
     iconContent: {
@@ -17,11 +17,11 @@ interface CardProps {
     
     onEdit(): void 
 }
-export const Card = ({title, subtitle, mainNote, mainNoteColor: daFare, comment, shadowColor, iconContent, onEdit} : CardProps) => {
+export const Card = ({title, subtitle, mainNote, mainNoteColor, comment, shadowColor, iconContent, onEdit} : CardProps) => {
 
-    const getTextColor = () => {
-        if (daFare === undefined) return '#000000';
-        return daFare ? '#FF0000' : '#008000';
+    const getMainTextColor = () => {
+        if (mainNoteColor === undefined) return shadowColor;
+        return mainNoteColor;
     };
 
     const renderIcon = () => {
@@ -54,7 +54,7 @@ export const Card = ({title, subtitle, mainNote, mainNoteColor: daFare, comment,
                 </IonCardHeader>
                 <IonCardContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
-                        <div style={{ fontSize: 34, fontWeight: 600, color: getTextColor() }}>{mainNote}</div>
+                        <div style={{ fontSize: 34, fontWeight: 600, color: getMainTextColor() }}>{mainNote}</div>
                         <div style={{ fontSize: 15, color: "#5c5c5c" }}>{comment}</div>
                     </div>
                     {/* <div style={{ fontSize: 16, color: "#777", minWidth: 54, textAlign: "right" }}>
