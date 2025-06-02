@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
@@ -94,7 +94,7 @@ function KmPage() {
 
 
   return (
-    <>
+    <IonPage>
       <Header title="Maintenance" />
       <IonContent color="light">
         <IonList inset={true}>
@@ -129,7 +129,7 @@ function KmPage() {
           <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta del Kilometraggio" duration={1000}></IonToast>
         )}
       </IonContent>
-    </>
+    </IonPage>
   );
 }
 

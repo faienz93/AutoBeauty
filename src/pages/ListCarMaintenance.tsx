@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { IonContent, IonList, IonText} from '@ionic/react';
+import { IonContent, IonList, IonPage, IonText} from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { Header } from '../components/Header';
 import { MaintenanceDbCtx } from '../App';
@@ -45,7 +45,7 @@ function ListCarMaintenance() {
   }, []);
   
   return (
-    <>
+    <IonPage>
       <Header title="List Maintenance" />
       <IonContent color="light" fullscreen={true}>
         {maintenances.length == 0 ? (
@@ -60,7 +60,7 @@ function ListCarMaintenance() {
           </IonList>
         )}
       </IonContent>
-    </>
+    </IonPage>
   );
 }
 

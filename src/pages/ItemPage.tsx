@@ -119,7 +119,7 @@ function ItemPage() {
         note: formData.note || '',
       };
 
-      
+
 
       console.log('newMaintenance', newMaintenance);
 
@@ -135,7 +135,7 @@ function ItemPage() {
 
 
   return (
-    <>
+    <IonPage>
       <Header title="Maintenance" />
       <IonContent color="light">
         <IonList inset={true}>
@@ -212,7 +212,7 @@ function ItemPage() {
           <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta della manutenzione" duration={1000}></IonToast>
         )}
       </IonContent>
-    </>
+    </IonPage>
   );
 }
 
