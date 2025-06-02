@@ -1,9 +1,9 @@
-import { memo, useContext, useState } from 'react';
+import { memo, useState } from 'react';
 import { IonThumbnail, IonItem, IonLabel, IonIcon, IonText, IonButton, IonBadge } from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from '../components/AlertConfirmation';
-import { MaintenanceDbCtx } from '../App';
+import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceIcon } from '../hooks/useMaitenanceIcon';
 
@@ -17,7 +17,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
     console.log("ListItem render", maintenance);
 
     const [confirmDelete, setConfirmDelete] = useState(false);
-    const db = useContext(MaintenanceDbCtx);
+    const db = useMaintenanceDb();
 
     const history = useHistory();
 

@@ -1,10 +1,10 @@
-import { useContext, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useState } from 'react';
 import { Maintenance, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
 import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from '../components/Header';
-import { KilometersDbCtx, MaintenanceDbCtx } from '../App';
+import { useMaintenanceDb, useKilometersDb } from '../hooks/useDbContext';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { useHistory } from 'react-router-dom';
 import { pencil, speedometerOutline } from 'ionicons/icons';
@@ -18,8 +18,8 @@ interface LastKmFindedProps {
 
 export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
 
-    const dbMaitenenance = useContext(MaintenanceDbCtx);
-    const dbKm = useContext(KilometersDbCtx);
+    const dbMaitenenance = useMaintenanceDb();
+    const dbKm = useKilometersDb();
     const [currentKm, setCurrentKm] = useState<Kilometers>({
         data: getDateString(),
         km: 0
