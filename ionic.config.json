@@ -1,5 +1,7 @@
 {
   "name": "car-maitenance-app",
-  "integrations": {},
-  "type": "react"
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
 }

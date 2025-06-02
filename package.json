@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "ionic" : "ionic",
+    "ionic": "ionic",
     "ionic:serve": "ionic serve",
     "ionic:info": "ionic info",
     "lint": "eslint .",
@@ -14,12 +14,12 @@
   },
   "dependencies": {
     "@capacitor/android": "7.0.1",
-    "@capacitor/app": "^7.0.0",
-    "@capacitor/core": "^7.0.0",
-    "@capacitor/haptics": "^7.0.0",
+    "@capacitor/app": "7.0.1",
+    "@capacitor/core": "7.2.0",
+    "@capacitor/haptics": "7.0.1",
     "@capacitor/ios": "7.0.1",
-    "@capacitor/keyboard": "^7.0.0",
-    "@capacitor/status-bar": "^7.0.0",
+    "@capacitor/keyboard": "7.0.1",
+    "@capacitor/status-bar": "7.0.1",
     "@capacitor/toast": "^7.0.1",
     "@ionic/pwa-elements": "^3.3.0",
     "@ionic/react": "^8.4.1",
@@ -42,7 +42,7 @@
     "uuid": "^11.0.5"
   },
   "devDependencies": {
-    "@capacitor/cli": "^7.0.0",
+    "@capacitor/cli": "7.2.0",
     "@eslint/js": "^9.17.0",
     "@ionic/cli": "^7.2.1",
     "@types/react": "^18.3.18",
