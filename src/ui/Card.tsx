@@ -15,14 +15,9 @@ interface CardProps {
         alt?: string;
     };
     daFare?: boolean | undefined,
-    onEdit(id: any): void 
+    onEdit(): void 
 }
 export const Card = ({title, subtitle, mainNote, comment, id, shadowColor, iconContent, daFare, onEdit} : CardProps) => {
-
-    
-    const handleEdit = () => {
-        onEdit(id);
-    };
 
     const getTextColor = () => {
         if (daFare === undefined) return '#000000';
@@ -80,7 +75,7 @@ export const Card = ({title, subtitle, mainNote, comment, id, shadowColor, iconC
                                 '--border-radius': '50%',
                                 '--background': 'light',
                             } as React.CSSProperties}
-                            onClick={handleEdit}
+                            onClick={onEdit}
                         >
                             <IonIcon slot="icon-only" icon={pencil} />
                         </IonButton>

@@ -95,21 +95,6 @@ export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
     }, [currentKm, onKmUpdate]);
 
     return (<>
-        {/* <IonCard color='tertiary'>
-            <IonCardHeader style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'start',
-                // justifyContent: 'space-between' 
-            }}>
-                <IonCardTitle>Ultimo Kilometro rilevato</IonCardTitle>
-                <IonCardSubtitle>{currentKm.data}: <strong>{currentKm.km}</strong></IonCardSubtitle>
-                <IonButton style={{ color: 'white' }} fill="clear" onClick={() => handleEdit(currentKm)}>
-                    <IonIcon icon={pencil} /> Modifica
-                </IonButton>
-            </IonCardHeader>
-        </IonCard> */}
-
         <Card
             title="Ultimo Kilometro rilevato"
             subtitle={`${currentKm.data}`}
@@ -120,7 +105,7 @@ export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
                 type: 'icon',
                 source: speedometerOutline
             }}
-            onEdit={handleEdit}
+            onEdit={() => handleEdit(currentKm)}
         />
     </>)
 }
