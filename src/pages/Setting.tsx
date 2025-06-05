@@ -11,7 +11,7 @@ const Setting = () => {
 
   return (
     <IonPage>
-      <Header title="Setting" />
+      <Header title="Impostazioni" />
       <IonContent color="light">
         <ImportItem />
         <ExportItem />

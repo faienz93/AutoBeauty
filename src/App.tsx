@@ -93,12 +93,12 @@ function App() {
 
               <IonTabButton tab="list" href="/list">
                 <IonIcon icon={listOutline} />
-                <IonLabel>List</IonLabel>
+                <IonLabel>Lista</IonLabel>
               </IonTabButton>
 
               <IonTabButton tab="newItem" href="/newItem">
                 <IonIcon icon={addCircleOutline} />
-                <IonLabel>Add</IonLabel>
+                <IonLabel>Aggiungi</IonLabel>
               </IonTabButton>
 
               <IonTabButton tab="newkm" href="/newkm">
@@ -108,7 +108,7 @@ function App() {
 
               <IonTabButton tab="settings" href="/settings">
                 <IonIcon icon={settingsOutline} />
-                <IonLabel>Setting</IonLabel>
+                <IonLabel>Impostazioni</IonLabel>
               </IonTabButton>
             </IonTabBar>
           </IonTabs>

@@ -46,7 +46,7 @@ function ListCarMaintenance() {
   
   return (
     <IonPage>
-      <Header title="List Maintenance" />
+      <Header title="Lista Manutenzioni" />
       <IonContent color="light" fullscreen={true}>
         {maintenances.length == 0 ? (
           <IonText color="secondary">
