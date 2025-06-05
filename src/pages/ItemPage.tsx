@@ -1,11 +1,11 @@
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage } from '@ionic/react';
 import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
 import { MaintenanceDbCtx } from '../App';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { getDateString, getUUIDKey, parseStringToDate } from '../services/utils';
 
 interface MaintenanceState {
@@ -192,7 +192,7 @@ function ItemPage() {
         </IonNote>
         <IonList inset={true}>
           <IonItem>
-            <IonTextarea label="Comments" label-placement="floating" rows={5} onIonChange={(e) => handleInputChange('note', e.detail.value)}></IonTextarea>
+            <IonTextarea label="Commento" label-placement="floating" value={formData.note} rows={5} onIonChange={(e) => handleInputChange('note', e.detail.value)}></IonTextarea>
           </IonItem>
         </IonList>
 
