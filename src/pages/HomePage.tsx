@@ -1,10 +1,10 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useContext, useEffect } from 'react';
 import { useState } from 'react';
 import { Maintenance, MaintenanceType, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonPage } from '@ionic/react';
 import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from '../components/Header';
-import { useMaintenanceDb } from '../hooks/useDbContext';
+import { MaintenanceDbCtx } from '../App';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getMaintenanceKey, parseStringToDate } from '../services/utils';
@@ -16,7 +16,7 @@ const HomePage = () => {
 
   const [latestMaintenances, setLatestMaintenances] = useState({});
 
-  const dbMaitenenance = useMaintenanceDb();
+  const dbMaitenenance = useContext(MaintenanceDbCtx);
 
   const [lastKm, setLastKm] = useState<Kilometers>({
     data: getDateString(),

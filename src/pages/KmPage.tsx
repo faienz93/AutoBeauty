@@ -3,7 +3,7 @@ import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage } 
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
-import { useKilometersDb } from '../hooks/useDbContext';
+import { KilometersDbCtx } from '../App';
 import { useLocation } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString } from '../services/utils';
@@ -19,7 +19,7 @@ function KmPage() {
   console.log(location.state?.item)
 
   console.log('Rendering NewItem component');
-  const dbKm = useKilometersDb();
+  const dbKm = useContext(KilometersDbCtx);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const currentDate = getDateString();

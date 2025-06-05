@@ -1,15 +1,15 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonToast } from '@ionic/react';
 import { AlertConfirmation } from './AlertConfirmation';
-import { useMaintenanceDb, useKilometersDb } from '../hooks/useDbContext';
+import { KilometersDbCtx, MaintenanceDbCtx } from '../App';
 
 
 
 const DeleteAllItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);
-  const maintenanceDb = useMaintenanceDb();
-  const kmDb = useKilometersDb();
+  const maintenanceDb = useContext(MaintenanceDbCtx);
+  const kmDb = useContext(KilometersDbCtx);
 
   const handleDelete = async () => {
     const deletedMaintenanceDb = maintenanceDb.deleteDatabase();

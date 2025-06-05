@@ -1,16 +1,16 @@
-import React, { useRef, useState } from 'react';
+import React, { useContext, useRef, useState } from 'react';
 
 import { getEnv } from '../services/env';
 import { IonButton, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonToast } from '@ionic/react';
 import { cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
-import { useMaintenanceDb } from '../hooks/useDbContext';
+import { MaintenanceDbCtx } from '../App';
 import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { getDateString, getUUIDKey, parseStringToDate, parseItalianNumber } from '../services/utils';
 import { parse } from 'papaparse';
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
-  const db = useMaintenanceDb();
+  const db = useContext(MaintenanceDbCtx);
 
   const [file, setFile] = useState<File | null>(null);
   const [data, setData] = useState<any[]>([]);

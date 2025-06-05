@@ -4,7 +4,7 @@ import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
-import { useMaintenanceDb } from '../hooks/useDbContext';
+import { MaintenanceDbCtx } from '../App';
 import { useLocation, useParams } from 'react-router-dom';
 import { getDateString, getUUIDKey, parseStringToDate } from '../services/utils';
 
@@ -19,7 +19,7 @@ function ItemPage() {
   console.log(location.state?.item)
 
   console.log('Rendering NewItem component');
-  const db = useMaintenanceDb();
+  const db = useContext(MaintenanceDbCtx);
   const [isSuccess, setIsSuccess] = useState(false);
 
   const currentDate = getDateString();
