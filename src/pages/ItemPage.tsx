@@ -151,8 +151,7 @@ function ItemPage() {
               value={formData.km}
               onIonChange={(e) => handleInputChange('km', e.detail.value)}
               min={0}
-              max={999999}
-              errorText="Il valore deve essere tra 0 e 999.999"
+              max={999999}              
             />
           </IonItem>
           <IonItem>
@@ -165,8 +164,7 @@ function ItemPage() {
               value={formData.costo}
               onIonChange={(e) => handleInputChange('costo', e.detail.value)}
               min={0}
-              max={999999}
-              errorText="Il valore deve essere tra 0 e 999.999"
+              max={999999}              
             />
           </IonItem>
           <IonItem lines="inset" slot="header">
