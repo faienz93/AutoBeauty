@@ -39,13 +39,18 @@ export abstract class PouchDbService implements IPouchDbService {
 
 
     private initDatabase() {
-        if (this.platform === 'web') {
-            console.log('Web platform detected. Using default PouchDB adapter.');
-            this.db = new PouchDB(this.dbName);
-        } else {
-            console.log('Cordova platform detected. Using cordova-sqlite adapter.');
-            this.db = new PouchDB(this.dbName, { adapter: 'cordova-sqlite' });
-        }
+        // if (this.platform === 'web') {
+        //     console.log('Web platform detected. Using default PouchDB adapter.');
+        //     this.db = new PouchDB(this.dbName);
+        // } else if ( this.platform === 'android') {
+        //     console.log('ANDROID - Cordova platform detected. Using cordova-sqlite adapter.');
+        //     this.db = new PouchDB(this.dbName, { adapter: 'cordova-sqlite', location: 'default' });
+        // } else if(this.platform === 'ios' ) {
+        //     console.log('IOS - Cordova platform detected. Using cordova-sqlite adapter.');
+        //     this.db = new PouchDB(this.dbName, { adapter: 'cordova-sqlite', iosDatabaseLocation: 'default' });
+        // }
+
+        this.db = new PouchDB(this.dbName);
 
         this.createSpecificIndexes();
     }
