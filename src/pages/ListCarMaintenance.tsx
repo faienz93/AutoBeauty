@@ -1,5 +1,5 @@
 import { useCallback, useContext, useEffect, useState } from 'react';
-import { IonContent, IonList, IonPage, IonText} from '@ionic/react';
+import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter} from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { Header } from '../components/Header';
 import { MaintenanceDbCtx } from '../App';
@@ -40,9 +40,9 @@ function ListCarMaintenance() {
     }
   }, [db]);
 
-  useEffect(() => { 
+  useIonViewWillEnter(() => { 
       fetchMaintenances();
-  }, []);
+  });
   
   return (
     <IonPage>

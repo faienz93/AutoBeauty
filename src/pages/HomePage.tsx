@@ -1,7 +1,7 @@
 import { useCallback, useContext, useEffect } from 'react';
 import { useState } from 'react';
 import { Maintenance, MaintenanceType, Stats } from '../models/MaintenanceType';
-import { IonContent, IonCard, IonText, IonPage } from '@ionic/react';
+import { IonContent, IonCard, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from '../components/Header';
 import { MaintenanceDbCtx } from '../App';
@@ -73,11 +73,9 @@ const HomePage = () => {
 
   };
 
-  useEffect(() => {
-
+  useIonViewWillEnter(() => {
     countCarMaintenances();
-
-  }, []);
+  });
 
 
   return (
