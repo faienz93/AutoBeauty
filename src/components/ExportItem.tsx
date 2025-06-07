@@ -1,14 +1,14 @@
 import React, { useContext, useRef, useState } from 'react';
 import { IonButton, IonContent, IonIcon, IonInput, IonItem, IonItemDivider, IonLabel, IonList, IonToast } from '@ionic/react';
-import { MaintenanceDbCtx } from '../App';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance } from '../models/MaintenanceType';
+import { useMaintenanceDb } from '../hooks/useDbContext';
 
 
 
 const ExportItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
-  const db = useContext(MaintenanceDbCtx);
+  const db = useMaintenanceDb();
   const csvService = new CsvService();
 
   const handleExport = async () => {

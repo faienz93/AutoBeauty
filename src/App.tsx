@@ -53,25 +53,20 @@ import { Capacitor } from '@capacitor/core';
 
 
 import Setting from './pages/Setting';
-import { getEnv } from './services/env';
 import KmPage from './pages/KmPage';
-import { MaintenanceDbService } from './services/database/MaintenanceDbService';
-import { KilometersDbService } from './services/database/LastKmDbService';
+
 import HomePage from "./pages/HomePage";
+import { DatabaseProvider } from "./services/database/DatabaseProvider";
 
 
 setupIonicReact({ mode: 'md' });
-const envVar = getEnv();
-export const platform = Capacitor.getPlatform();
-export const MaintenanceDbCtx = React.createContext(new MaintenanceDbService(envVar?.car_table));
-export const KilometersDbCtx = React.createContext(new KilometersDbService(envVar?.km_table));
 
+export const platform = Capacitor.getPlatform();
 
 function App() {
   return (
 
-    <MaintenanceDbCtx.Provider value={new MaintenanceDbService(envVar?.car_table)}>
-      <KilometersDbCtx.Provider value={new KilometersDbService(envVar?.km_table)}>
+    <DatabaseProvider>
         <IonApp>
           <IonReactRouter>
             <IonTabs>
@@ -116,8 +111,7 @@ function App() {
           </IonReactRouter>
         </IonApp>
 
-      </KilometersDbCtx.Provider>
-    </MaintenanceDbCtx.Provider>
+      </DatabaseProvider>
 
 
   );

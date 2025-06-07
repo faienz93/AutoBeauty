@@ -4,11 +4,12 @@ import { Maintenance, MaintenanceType, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from '../components/Header';
-import { MaintenanceDbCtx } from '../App';
+
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getMaintenanceKey, parseStringToDate } from '../services/utils';
 import { LastKmFinded } from '../components/LastKmFinded';
+import { MaintenanceDbCtx } from '../services/database/DatabaseProvider';
 
 
 
@@ -31,6 +32,10 @@ const HomePage = () => {
 
 
   const countCarMaintenances = async () => {
+    if (!dbMaitenenance) {
+      console.error('Database context is not available.');
+      return;
+    }
     const res = await dbMaitenenance.allDocs({ include_docs: true });
 
     const maintenance = res.rows.

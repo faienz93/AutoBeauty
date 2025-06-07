@@ -3,9 +3,10 @@ import { IonThumbnail, IonItem, IonLabel, IonIcon, IonText, IonButton, IonBadge 
 import { Maintenance } from '../models/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from '../components/AlertConfirmation';
-import { MaintenanceDbCtx } from '../App';
+
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceIcon } from '../hooks/useMaitenanceIcon';
+import { useMaintenanceDb } from '../hooks/useDbContext';
 
 interface ListItemProps {
     maintenance: Maintenance;
@@ -17,7 +18,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
     console.log("ListItem render", maintenance);
 
     const [confirmDelete, setConfirmDelete] = useState(false);
-    const db = useContext(MaintenanceDbCtx);
+    const db = useMaintenanceDb();
 
     const history = useHistory();
 

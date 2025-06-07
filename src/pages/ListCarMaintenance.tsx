@@ -2,16 +2,16 @@ import { useCallback, useContext, useEffect, useState } from 'react';
 import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter} from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { Header } from '../components/Header';
-import { MaintenanceDbCtx } from '../App';
 import { getMaintenanceKey, parseStringToDate } from '../services/utils';
 import { ListItem } from '../components/ListItem';
+import { useMaintenanceDb } from '../hooks/useDbContext';
 
 
 function ListCarMaintenance() {
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   
-  const db = useContext(MaintenanceDbCtx);
+  const db = useMaintenanceDb();
 
   const fetchMaintenances = useCallback(async () => {
     try {
