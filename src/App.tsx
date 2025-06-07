@@ -1,11 +1,11 @@
-import { scan } from "react-scan"; 
+import { scan } from "react-scan";
 import React from 'react';
 
 scan({
   enabled: true,
 });
 
-import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
+import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet, IonApp } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import '@ionic/react/css/core.css';
 
@@ -71,48 +71,51 @@ function App() {
   return (
 
     <MaintenanceDbCtx.Provider value={new MaintenanceDbService(envVar?.car_table)}>
-      <KilometersDbCtx.Provider value={new KilometersDbService(envVar?.km_table)}> 
+      <KilometersDbCtx.Provider value={new KilometersDbService(envVar?.km_table)}>
+        <IonApp>
           <IonReactRouter>
-          <IonTabs>
-            <IonRouterOutlet>
-              <Redirect exact path="/" to="/home" />
-              <Route path="/home" render={() => <HomePage />} exact={true} />
-              <Route path="/newItem" render={() => <ItemPage />} exact={true} />
-              <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
-              <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-              <Route path="/newkm" render={() => <KmPage />} exact={true} />
-              <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
-              <Route path="/settings" render={() => <Setting />} exact={true} />
-            </IonRouterOutlet>
+            <IonTabs>
+              <IonRouterOutlet>
+                <Redirect exact path="/" to="/home" />
+                <Route path="/home" render={() => <HomePage />} exact={true} />
+                <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+                <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
+                <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+                <Route path="/newkm" render={() => <KmPage />} exact={true} />
+                <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
+                <Route path="/settings" render={() => <Setting />} exact={true} />
+              </IonRouterOutlet>
 
-            <IonTabBar slot="bottom">
-              <IonTabButton tab="home" href="/home">
-                <IonIcon icon={homeOutline} />
-                <IonLabel>Home</IonLabel>
-              </IonTabButton>
+              <IonTabBar slot="bottom">
+                <IonTabButton tab="home" href="/home">
+                  <IonIcon icon={homeOutline} />
+                  <IonLabel>Home</IonLabel>
+                </IonTabButton>
 
-              <IonTabButton tab="list" href="/list">
-                <IonIcon icon={listOutline} />
-                <IonLabel>Lista</IonLabel>
-              </IonTabButton>
+                <IonTabButton tab="list" href="/list">
+                  <IonIcon icon={listOutline} />
+                  <IonLabel>Lista</IonLabel>
+                </IonTabButton>
 
-              <IonTabButton tab="newItem" href="/newItem">
-                <IonIcon icon={addCircleOutline} />
-                <IonLabel>Aggiungi</IonLabel>
-              </IonTabButton>
+                <IonTabButton tab="newItem" href="/newItem">
+                  <IonIcon icon={addCircleOutline} />
+                  <IonLabel>Aggiungi</IonLabel>
+                </IonTabButton>
 
-              <IonTabButton tab="newkm" href="/newkm">
-                <IonIcon icon={speedometerOutline} />
-                <IonLabel>KM</IonLabel>
-              </IonTabButton>
+                <IonTabButton tab="newkm" href="/newkm">
+                  <IonIcon icon={speedometerOutline} />
+                  <IonLabel>KM</IonLabel>
+                </IonTabButton>
 
-              <IonTabButton tab="settings" href="/settings">
-                <IonIcon icon={settingsOutline} />
-                <IonLabel>Impostazioni</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
-        </IonReactRouter>
+                <IonTabButton tab="settings" href="/settings">
+                  <IonIcon icon={settingsOutline} />
+                  <IonLabel>Impostazioni</IonLabel>
+                </IonTabButton>
+              </IonTabBar>
+            </IonTabs>
+          </IonReactRouter>
+        </IonApp>
+
       </KilometersDbCtx.Provider>
     </MaintenanceDbCtx.Provider>
 
