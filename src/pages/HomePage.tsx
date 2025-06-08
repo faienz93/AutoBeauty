@@ -9,7 +9,7 @@ import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getMaintenanceKey, parseStringToDate } from '../services/utils';
 import { LastKmFinded } from '../components/LastKmFinded';
-import { MaintenanceDbCtx } from '../services/database/DatabaseProvider';
+import { useMaintenanceDb } from '../hooks/useDbContext';
 
 
 
@@ -17,7 +17,7 @@ const HomePage = () => {
 
   const [latestMaintenances, setLatestMaintenances] = useState({});
 
-  const dbMaitenenance = useContext(MaintenanceDbCtx);
+  const dbMaitenenance = useMaintenanceDb();
 
   const [lastKm, setLastKm] = useState<Kilometers>({
     data: getDateString(),
@@ -32,10 +32,6 @@ const HomePage = () => {
 
 
   const countCarMaintenances = async () => {
-    if (!dbMaitenenance) {
-      console.error('Database context is not available.');
-      return;
-    }
     const res = await dbMaitenenance.allDocs({ include_docs: true });
 
     const maintenance = res.rows.
@@ -72,7 +68,6 @@ const HomePage = () => {
     }, {} as Stats);
 
     console.log('Fetched docs:', maintenance);
-    console.log(Object.keys(updatedMaintenances))
     setLatestMaintenances(updatedMaintenances);
 
 

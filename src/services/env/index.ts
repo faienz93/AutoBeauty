@@ -20,6 +20,6 @@ export const getEnv = () => {
         collection: import.meta.env[`VITE_${envName}_COLLECTION`],
         sqlitedb: import.meta.env[`VITE_${envName}_SQLITE_DB`],
         car_table: import.meta.env[`VITE_${envName}_CAR_TABLE`],
-        km_table: import.meta.env[`VITE_${envName}_CAR_TABLE`]
+        km_table: import.meta.env[`VITE_${envName}_KM_TABLE`]
     };
 };

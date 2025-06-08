@@ -4,9 +4,10 @@ import { Maintenance } from '../models/MaintenanceType';
 import { useHistory } from 'react-router-dom';
 import { speedometerOutline } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
-import { getDateString } from '../services/utils';
+import { getDateString, parseStringToDate } from '../services/utils';
 import { Card } from '../ui/Card';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
+import { useIonViewWillEnter } from '@ionic/react';
 
 interface LastKmFindedProps {
     onKmUpdate?: (km: Kilometers) => void;
@@ -14,6 +15,7 @@ interface LastKmFindedProps {
 
 export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
 
+    const history = useHistory();
     const dbMaitenenance = useMaintenanceDb();
     const dbKm = useKilometersDb();
     const [currentKm, setCurrentKm] = useState<Kilometers>({
@@ -21,10 +23,12 @@ export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
         km: 0
     });
 
-    const history = useHistory();
+    
 
     // https://stackoverflow.com/a/59464381/4700162
     const handleEdit = (lastKm: Kilometers) => {
+        console.log("--------------------------------------------------------");
+        console.log(lastKm)
         history.push({
             pathname: `/newkm/edit/${lastKm._id}`,
             // search: '?update=true',  // query string
@@ -33,6 +37,12 @@ export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
             },
         })
 
+    };
+
+    const getMax = (km: Kilometers, maintenance: Maintenance) => {
+        if(km.km > maintenance.km)
+            return km;
+        return maintenance;
     };
 
 
@@ -67,24 +77,20 @@ export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
         // 1. Estraggo km e data con default a 0 / stringa odierna
         const lastMaintenance = searchMaintentenanceByKm.docs[0] || {};
         const lastKm = searchLastKm.docs[0] || {};
-        const kmMaint = lastMaintenance.km ?? 0;
-        const kmLast = lastKm.km ?? 0;
-        const dataMaint = lastMaintenance.data ?? getDateString();
-        const dataLast = lastKm.data ?? getDateString();
-        // 2. Calcolo il chilometraggio massimo
-        const maxKm = Math.max(kmMaint, kmLast);
-        // 3. Determino la data corrispondente al massimo
-        const maxData = (kmMaint >= kmLast) ? dataMaint : dataLast;
+
+        const mnt = getMax(lastKm, lastMaintenance);
         // 4. Imposto lo stato con il valore e la data massima
         setCurrentKm({
-            km: maxKm,
-            data: maxData
+            _id: mnt._id || '',
+            _rev: mnt._rev || '',
+            km: mnt.km || 0,
+            data: getDateString(parseStringToDate(mnt.data)),
         });
     };
 
-    useEffect(() => {
+    useIonViewWillEnter(() => {
         getLatestMaintenances();
-    }, []);
+    });
 
     useEffect(() => {
         onKmUpdate?.(currentKm);
