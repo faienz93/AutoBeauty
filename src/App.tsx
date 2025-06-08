@@ -1,10 +1,3 @@
-import { scan } from "react-scan";
-import React from 'react';
-
-scan({
-  enabled: true,
-});
-
 import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet, IonApp } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import '@ionic/react/css/core.css';
