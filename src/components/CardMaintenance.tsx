@@ -8,8 +8,9 @@ import { pencil } from "ionicons/icons";
 import { Card } from "../ui/Card";
 
 
-export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string, maintenance: Maintenance, currentKm: number }) => {
+export const CardMaintenance = ({ tipo, maintenance, maxMaintenanceKm, currentKm }: { tipo: string, maintenance: Maintenance, maxMaintenanceKm: number, currentKm: number }) => {
   console.log('Rendering CardMaintenance component');
+  console.log('CURRRRRRRRRRRRRRRRRRRRRRRRRRRRENT KM:', currentKm, maxMaintenanceKm);
 
 
   const history = useHistory();
@@ -25,8 +26,9 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
 
   };
 
-  const kmUltimoIntervento = maintenance?.km;
-  const diffKm = currentKm - kmUltimoIntervento;
+
+  const maxKm = Math.max(currentKm,maxMaintenanceKm);
+  const diffKm = maxKm - maintenance.km;
 
   let daFare = false;
   if (tipo === 'Gomme') daFare = diffKm >= LimitGomme;
@@ -47,13 +49,12 @@ export const CardMaintenance = ({ tipo, maintenance, currentKm }: { tipo: string
 
 
   return (
-
-
     <Card
       key={maintenance._id}
       title={tipoManutenzione}
       subtitle={dataManutenzione}
       mainNote={daFare ? 'Da fare' : 'Tutto sotto controllo'}
+      detailNote={String(maintenance.km)}
       comment={maintenance?.note || ''}
       shadowColor='#2f3133'
       iconContent={{

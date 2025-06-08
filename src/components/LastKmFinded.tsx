@@ -10,21 +10,15 @@ import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 import { useIonViewWillEnter } from '@ionic/react';
 
 interface LastKmFindedProps {
-    onKmUpdate?: (km: Kilometers) => void;
+    // onKmUpdate?: (km: Kilometers) => void;
+    currentKm: Kilometers;
+
 }
 
-export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
+export const LastKmFinded = ({ currentKm }: LastKmFindedProps) => {
 
-    const history = useHistory();
-    const dbMaitenenance = useMaintenanceDb();
-    const dbKm = useKilometersDb();
-    const [currentKm, setCurrentKm] = useState<Kilometers>({
-        data: getDateString(),
-        km: 0
-    });
-
+    const history = useHistory();   
     
-
     // https://stackoverflow.com/a/59464381/4700162
     const handleEdit = (lastKm: Kilometers) => {
         console.log("--------------------------------------------------------");
@@ -44,57 +38,6 @@ export const LastKmFinded = ({ onKmUpdate }: LastKmFindedProps) => {
             return km;
         return maintenance;
     };
-
-
-    const getLatestMaintenances = async () => {
-
-        const searchMaintentenanceByKm = await dbMaitenenance.find<Maintenance>({
-            selector: {
-                km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-                // _id: { $gt: null }
-            },
-            sort: [{ km: 'desc' }], // ordina per km decrescente
-            limit: 1, // prende solo il primo risultato
-            //fields: ['km', 'data'], // opzionalmente prendo solo specific campi
-            use_index: 'idx-km'
-        });
-
-        console.log('searchMaintentenanceByKm', searchMaintentenanceByKm);
-
-        const searchLastKm = await dbKm.find<Kilometers>({
-            selector: {
-                km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-                //_id: { $gt: null }
-            },
-            sort: [{ km: 'desc' }], // ordina per km decrescente
-            limit: 1, // prende solo il primo risultato
-            //fields: ['km', 'data'],
-            use_index: 'idx-km',
-        });
-
-        console.log('searchLastKm', searchLastKm);
-
-        // 1. Estraggo km e data con default a 0 / stringa odierna
-        const lastMaintenance = searchMaintentenanceByKm.docs[0] || {};
-        const lastKm = searchLastKm.docs[0] || {};
-
-        const mnt = getMax(lastKm, lastMaintenance);
-        // 4. Imposto lo stato con il valore e la data massima
-        setCurrentKm({
-            _id: mnt._id || '',
-            _rev: mnt._rev || '',
-            km: mnt.km || 0,
-            data: getDateString(parseStringToDate(mnt.data)),
-        });
-    };
-
-    useIonViewWillEnter(() => {
-        getLatestMaintenances();
-    });
-
-    useEffect(() => {
-        onKmUpdate?.(currentKm);
-    }, [currentKm, onKmUpdate]);
 
     return (<>
         <Card

@@ -9,7 +9,7 @@ import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getMaintenanceKey, parseStringToDate } from '../services/utils';
 import { LastKmFinded } from '../components/LastKmFinded';
-import { useMaintenanceDb } from '../hooks/useDbContext';
+import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 
 
 
@@ -17,16 +17,14 @@ const HomePage = () => {
 
   const [latestMaintenances, setLatestMaintenances] = useState({});
 
+  const dbKm = useKilometersDb();
   const dbMaitenenance = useMaintenanceDb();
 
+  const [maxKm, setMaxKm] = useState(0);
   const [lastKm, setLastKm] = useState<Kilometers>({
     data: getDateString(),
     km: 0
   });
-
-  const handleKmUpdate = useCallback((km: Kilometers) => {
-    setLastKm(km);
-  }, []);
 
   const today = getDateString();
 
@@ -53,6 +51,9 @@ const HomePage = () => {
       }) as Maintenance[];
 
 
+      setMaxKm(Math.max(...maintenance.map(m => m.km)));
+
+
     const updatedMaintenances = maintenance.reduce((acc, current) => {
       const existing = acc[current.tipo];
 
@@ -70,38 +71,61 @@ const HomePage = () => {
     console.log('Fetched docs:', maintenance);
     setLatestMaintenances(updatedMaintenances);
 
-
   };
 
+
+  const getLatestKilometers = async () => {
+
+    const searchLastKm = await dbKm.find<Kilometers>({
+        selector: {
+            data: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
+            //_id: { $gt: null }
+        },
+        sort: [{ data: 'asc' }], // ordina per km decrescente
+        limit: 1, // prende solo il primo risultato
+        //fields: ['km', 'data'],
+        use_index: 'idx-data',
+    });
+
+    console.log('searchLastKm', searchLastKm);
+
+    
+    const lastKm = searchLastKm.docs[0] || {};
+
+    
+    // 4. Imposto lo stato con il valore e la data massima
+    setLastKm({
+        _id: lastKm._id || '',
+        _rev: lastKm._rev || '',
+        km: lastKm.km || 0,
+        data: getDateString(parseStringToDate(lastKm.data)),
+    });
+};
+
   useIonViewWillEnter(() => {
+    getLatestKilometers()
     countCarMaintenances();
   });
 
 
   return (
     <IonPage>
-
-
       <Header title="Home" showBackButton={false} />
       <IonContent>
-
         <IonCard style={{ flexGlow: 1, borderRadius: 18, boxShadow: `0 4px 12px` }}>
           <IonCardHeader>
             <IonCardTitle>Data odierna</IonCardTitle>
             <IonCardSubtitle>{today}</IonCardSubtitle>
           </IonCardHeader>
         </IonCard>
-
-        <LastKmFinded onKmUpdate={handleKmUpdate} />
-
-
+        <LastKmFinded currentKm={lastKm} />
         {latestMaintenances && Object.keys(latestMaintenances).length == 0 ? (
           <IonText color="secondary">
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
         ) : (
           Object.entries(latestMaintenances).map(([tipo, maintenance]) => (
-            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} currentKm={lastKm.km} />
+            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} maxMaintenanceKm={maxKm} currentKm={lastKm.km} />
           ))
         )}
       </IonContent>

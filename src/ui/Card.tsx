@@ -7,6 +7,7 @@ interface CardProps {
     subtitle?: string,
     mainNote?: string,
     mainNoteColor?: string,
+    detailNote?: string,
     comment?: string,
     shadowColor: string,
     iconContent: {
@@ -17,7 +18,7 @@ interface CardProps {
     
     onEdit(): void 
 }
-export const Card = ({title, subtitle, mainNote, mainNoteColor, comment, shadowColor, iconContent, onEdit} : CardProps) => {
+export const Card = ({title, subtitle, mainNote, mainNoteColor, detailNote, comment, shadowColor, iconContent, onEdit} : CardProps) => {
 
     const getMainTextColor = () => {
         if (mainNoteColor === undefined) return shadowColor;
@@ -57,11 +58,11 @@ export const Card = ({title, subtitle, mainNote, mainNoteColor, comment, shadowC
                         <div style={{ fontSize: 34, fontWeight: 600, color: getMainTextColor() }}>{mainNote}</div>
                         <div style={{ fontSize: 15, color: "#5c5c5c" }}>{comment}</div>
                     </div>
-                    {/* <div style={{ fontSize: 16, color: "#777", minWidth: 54, textAlign: "right" }}>
-                {maintenance?.note && (
-                  <div style={{ fontSize: 12, fontStyle: 'italic' }}>{maintenance.note}</div>
+                    <div style={{ fontSize: 16, color: "#777", minWidth: 54, textAlign: "right" }}>
+                {detailNote && (
+                  <div style={{ fontSize: 12, fontStyle: 'italic' }}>{detailNote}</div>
                 )}
-              </div> */}
+              </div>
                 </IonCardContent>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', padding: '0 16px 16px' }}>
