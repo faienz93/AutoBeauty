@@ -1,17 +1,13 @@
-import { IonBadge, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from "@ionic/react";
 import { Maintenance } from "../models/MaintenanceType";
 import { LimitGomme, LimitTagliando } from "../constant";
 import { parseStringToDate } from "../services/utils";
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceIcon } from "../hooks/useMaitenanceIcon";
-import { pencil } from "ionicons/icons";
 import { Card } from "../ui/Card";
 
 
-export const CardMaintenance = ({ tipo, maintenance, maxMaintenanceKm, currentKm }: { tipo: string, maintenance: Maintenance, maxMaintenanceKm: number, currentKm: number }) => {
+export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, maintenance: Maintenance, maxKm: number}) => {
   console.log('Rendering CardMaintenance component');
-  console.log('CURRRRRRRRRRRRRRRRRRRRRRRRRRRRENT KM:', currentKm, maxMaintenanceKm);
-
 
   const history = useHistory();
   // https://stackoverflow.com/a/59464381/4700162
@@ -27,7 +23,7 @@ export const CardMaintenance = ({ tipo, maintenance, maxMaintenanceKm, currentKm
   };
 
 
-  const maxKm = Math.max(currentKm,maxMaintenanceKm);
+  
   const diffKm = maxKm - maintenance.km;
 
   let daFare = false;

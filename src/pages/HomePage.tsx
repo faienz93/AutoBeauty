@@ -20,8 +20,8 @@ const HomePage = () => {
   const dbKm = useKilometersDb();
   const dbMaitenenance = useMaintenanceDb();
 
-  const [maxKm, setMaxKm] = useState(0);
-  const [lastKm, setLastKm] = useState<Kilometers>({
+  const [maintenanceWithHigherKm, setMaintenanceWithHigherKm] = useState<Maintenance | null>(null);
+  const [lastManualKm, setLastManualKm] = useState<Kilometers>({
     data: getDateString(),
     km: 0
   });
@@ -51,7 +51,15 @@ const HomePage = () => {
       }) as Maintenance[];
 
 
-      setMaxKm(Math.max(...maintenance.map(m => m.km)));
+    setMaintenanceWithHigherKm(
+      maintenance.reduce((acc, current) => {
+        if (!acc || current.km > acc.km) {
+          return current;
+        }
+        return acc;
+      }, null as Maintenance | null)
+    );
+
 
 
     const updatedMaintenances = maintenance.reduce((acc, current) => {
@@ -74,9 +82,16 @@ const HomePage = () => {
   };
 
 
-  const getLatestKilometers = async () => {
+  const getMax = (km: Kilometers, maintenance: Maintenance) => {
+        if(km.km > maintenance.km)
+            return km;
+        return maintenance;
+    };
 
-    const searchLastKm = await dbKm.find<Kilometers>({
+
+  const getLatestManualKilometers = async () => {
+
+    const searchLastManualKm = await dbKm.find<Kilometers>({
         selector: {
             data: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
             //_id: { $gt: null }
@@ -87,23 +102,25 @@ const HomePage = () => {
         use_index: 'idx-data',
     });
 
-    console.log('searchLastKm', searchLastKm);
+    console.log('searchLastManualKm', searchLastManualKm);
 
     
-    const lastKm = searchLastKm.docs[0] || {};
+    const lastKm = searchLastManualKm.docs[0] || {};
 
     
     // 4. Imposto lo stato con il valore e la data massima
-    setLastKm({
+    setLastManualKm({
         _id: lastKm._id || '',
         _rev: lastKm._rev || '',
         km: lastKm.km || 0,
         data: getDateString(parseStringToDate(lastKm.data)),
     });
+
+    
 };
 
   useIonViewWillEnter(() => {
-    getLatestKilometers()
+    getLatestManualKilometers()
     countCarMaintenances();
   });
 
@@ -118,14 +135,14 @@ const HomePage = () => {
             <IonCardSubtitle>{today}</IonCardSubtitle>
           </IonCardHeader>
         </IonCard>
-        <LastKmFinded currentKm={lastKm} />
+        <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm as Maintenance} />
         {latestMaintenances && Object.keys(latestMaintenances).length == 0 ? (
           <IonText color="secondary">
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
         ) : (
           Object.entries(latestMaintenances).map(([tipo, maintenance]) => (
-            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} maxMaintenanceKm={maxKm} currentKm={lastKm.km} />
+            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} maxKm={getMax(lastManualKm,maintenanceWithHigherKm as Maintenance).km} />
           ))
         )}
       </IonContent>

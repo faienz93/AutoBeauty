@@ -11,13 +11,19 @@ import { useIonViewWillEnter } from '@ionic/react';
 
 interface LastKmFindedProps {
     // onKmUpdate?: (km: Kilometers) => void;
-    currentKm: Kilometers;
+    lastManualKm: Kilometers;
+    maintenanceWithHigherKm: Maintenance;
 
 }
 
-export const LastKmFinded = ({ currentKm }: LastKmFindedProps) => {
+export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFindedProps) => {
 
-    const history = useHistory();   
+    const history = useHistory(); 
+    
+    let content = ''
+    if(maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km) {
+        content = `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`
+    }
     
     // https://stackoverflow.com/a/59464381/4700162
     const handleEdit = (lastKm: Kilometers) => {
@@ -33,24 +39,19 @@ export const LastKmFinded = ({ currentKm }: LastKmFindedProps) => {
 
     };
 
-    const getMax = (km: Kilometers, maintenance: Maintenance) => {
-        if(km.km > maintenance.km)
-            return km;
-        return maintenance;
-    };
-
     return (<>
         <Card
-            key={currentKm._id}
+            key={lastManualKm._id}
             title="Ultimo Kilometro rilevato"
-            subtitle={`${currentKm.data}`}
-            mainNote={`${currentKm.km}`}
+            subtitle={`${lastManualKm.data}`}
+            mainNote={`${lastManualKm.km}`}
+            comment={content}
             shadowColor="#3355ff"
             iconContent={{
                 type: 'icon',
                 source: speedometerOutline
             }}
-            onEdit={() => handleEdit(currentKm)}
+            onEdit={() => handleEdit(lastManualKm)}
         />
     </>)
 }
