@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { ReactNode, useEffect } from 'react';
 import { useState } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
 import { useHistory } from 'react-router-dom';
@@ -7,7 +7,7 @@ import { Kilometers } from '../models/KilometersType';
 import { getDateString, parseStringToDate } from '../services/utils';
 import { Card } from '../ui/Card';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
-import { useIonViewWillEnter } from '@ionic/react';
+import { IonText, useIonViewWillEnter } from '@ionic/react';
 
 interface LastKmFindedProps {
     // onKmUpdate?: (km: Kilometers) => void;
@@ -20,9 +20,14 @@ export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFi
 
     const history = useHistory(); 
     
-    let content = ''
+    let content: ReactNode = '';
     if(maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km) {
-        content = `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`
+        let msg = `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`
+        content = (
+            <IonText color="danger" style={{ fontSize: '0.9em', lineHeight: '1.3' }}>
+                {msg}
+            </IonText>
+        );
     }
     
     // https://stackoverflow.com/a/59464381/4700162

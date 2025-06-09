@@ -2,13 +2,14 @@ import { IonBadge, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSub
 import { useMaintenanceIcon } from "../hooks/useMaitenanceIcon";
 import { pencil } from "ionicons/icons";
 import { MaintenanceType } from "../models/MaintenanceType";
+import { ReactNode } from "react";
 interface CardProps {
     title: string,
     subtitle?: string,
     mainNote?: string,
     mainNoteColor?: string,
     detailNote?: string,
-    comment?: string,
+    comment?: string | ReactNode,
     shadowColor: string,
     iconContent: {
         type: 'image' | 'icon';
