@@ -1,4 +1,4 @@
-import { useCallback, useContext} from 'react';
+import { useCallback, useContext } from 'react';
 import { useState } from 'react';
 import { Maintenance, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
@@ -76,48 +76,71 @@ const HomePage = () => {
       return acc;
     }, {} as Stats);
 
-    console.log('Fetched docs:', maintenance);
     setLatestMaintenances(updatedMaintenances);
 
   };
 
 
   const getMax = (km: Kilometers, maintenance: Maintenance) => {
-        if(km.km > maintenance.km)
-            return km;
-        return maintenance;
-    };
+    if (km.km > maintenance.km)
+      return km;
+    return maintenance;
+  };
 
 
   const getLatestManualKilometers = async () => {
 
-    const searchLastManualKm = await dbKm.find<Kilometers>({
-        selector: {
-            data: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-            //_id: { $gt: null }
-        },
-        sort: [{ data: 'asc' }], // ordina per km decrescente
-        limit: 1, // prende solo il primo risultato
-        //fields: ['km', 'data'],
-        use_index: 'idx-data',
-    });
+    // const searchLastManualKm = await dbKm.find<Kilometers>({
+    //     selector: {
+    //         data: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
+    //         //_id: { $gt: null }
+    //     },
+    //     sort: [{ data: 'asc' }], // ordina per km decrescente
+    //     limit: 1, // prende solo il primo risultato
+    //     //fields: ['km', 'data'],
+    //     use_index: 'idx-data',
+    // });
 
-    console.log('searchLastManualKm', searchLastManualKm);
+    // REF: https://pouchdb.com/api.html#create_document
+    let lastKm: Kilometers = {
+      _id: 'manual-km',
+      // _rev: '',
+      data: getDateString(),
+      km: 0
+    };
 
-    
-    const lastKm = searchLastManualKm.docs[0] || {};
+    try {
+      const searchLastManualKm = await dbKm.get('manual-km');
+      if (searchLastManualKm) {
+        lastKm = {
+          _id: searchLastManualKm._id || '',
+          _rev: searchLastManualKm._rev || '',
+          km: searchLastManualKm.km || 0,
+          data: getDateString(parseStringToDate(searchLastManualKm.data)),
+        };
+      }
 
-    
+    } catch (err) {
+      console.log(err);
+    }
+
+
+    console.log('searchLastManualKm', lastKm);
+
+
+    // lastKm = searchLastManualKm.docs[0] || {};
+
+
     // 4. Imposto lo stato con il valore e la data massima
     setLastManualKm({
-        _id: lastKm._id || '',
-        _rev: lastKm._rev || '',
-        km: lastKm.km || 0,
-        data: getDateString(parseStringToDate(lastKm.data)),
+      _id: lastKm._id || '',
+      _rev: lastKm._rev || '',
+      km: lastKm.km || 0,
+      data: getDateString(parseStringToDate(lastKm.data)),
     });
 
-    
-};
+
+  };
 
   useIonViewWillEnter(() => {
     getLatestManualKilometers()
@@ -142,7 +165,7 @@ const HomePage = () => {
           </IonText>
         ) : (
           Object.entries(latestMaintenances).map(([tipo, maintenance]) => (
-            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} maxKm={getMax(lastManualKm,maintenanceWithHigherKm as Maintenance).km} />
+            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} maxKm={getMax(lastManualKm, maintenanceWithHigherKm as Maintenance).km} />
           ))
         )}
       </IonContent>

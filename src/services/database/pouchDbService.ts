@@ -82,8 +82,9 @@ export abstract class PouchDbService implements IPouchDbService {
         try {
             return await this.db.get(id);
         } catch (error) {
-            console.error(`Error getting document with id ${id}:`, error);
-            throw new Error(`Error getting document with id ${id}: ${error}`);
+            // console.error(`Error getting document with id ${id}:`, error);
+            // throw new Error(`Error getting document with id ${id}: ${error}`);
+            console.log(`Error getting document with id ${id}:`, error)
         }
     }
 

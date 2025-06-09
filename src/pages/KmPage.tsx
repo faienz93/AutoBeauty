@@ -28,6 +28,8 @@ function KmPage() {
     if (location.state?.item) {
       // aggiornamento
       return {
+        _id: location.state.item._id,
+        _rev: location.state.item._rev,
         data: location.state.item.data,
         km: location.state.item.km
       };
@@ -44,18 +46,32 @@ function KmPage() {
   const handleAddKm = async (newKm: Kilometers) => {
 
     console.log('Adding new Kilometer:', newKm);
-    const response = await dbKm.put(newKm)
-    if(response.ok) {
+    let newEvent: Kilometers;
+    if (location.state?.item?._rev) {
+        newEvent = {
+            ...newKm,
+            _rev: location.state.item._rev
+        };
+    } else {        
+        newEvent = newKm;
+    }
+
+    try {
+
+      const response = await dbKm.put(newEvent)
+    
       console.log('Kilometer added successfully:', response);
       setIsSuccess(true);
       setFormData({
         data: currentDate,
         km: 0
       });
-    }else {
-      console.error('Error adding Kilometer:', response);
-      setIsSuccess(false);
-    }    
+    }catch (error) {
+        console.error('Error adding Kilometer:', error);
+        setIsSuccess(false);
+    }
+    
+       
   };
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
@@ -74,7 +90,7 @@ function KmPage() {
     try {
       
       const lastKm: Kilometers = {
-        _id: getUUIDKey(),
+        _id: 'manual-km',
         data: getDateString(parseStringToDate(formData.data)), 
         km: parseItalianNumber(formData.km) ,
       };
