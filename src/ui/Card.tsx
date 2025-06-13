@@ -1,10 +1,10 @@
 import { IonBadge, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from "@ionic/react";
-import { useMaintenanceIcon } from "../hooks/useMaitenanceIcon";
 import { pencil } from "ionicons/icons";
-import { MaintenanceType } from "../models/MaintenanceType";
+
 import { ReactNode } from "react";
 interface CardProps {
     title: string,
+    cardHeading?: string,
     subtitle?: string,
     mainNote?: string,
     mainNoteColor?: string,
@@ -16,10 +16,10 @@ interface CardProps {
         source: string | typeof pencil; // esempio di icona, aggiorna in base alle tue necessità
         alt?: string;
     };
-    
-    onEdit(): void 
+
+    onEdit(): void
 }
-export const Card = ({title, subtitle, mainNote, mainNoteColor, detailNote, comment, shadowColor, iconContent, onEdit} : CardProps) => {
+export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, detailNote, comment, shadowColor, iconContent, onEdit }: CardProps) => {
 
     const getMainTextColor = () => {
         if (mainNoteColor === undefined) return shadowColor;
@@ -35,16 +35,37 @@ export const Card = ({title, subtitle, mainNote, mainNoteColor, detailNote, comm
             );
         }
         return (
-            <IonIcon 
-                icon={iconContent.source as typeof pencil} 
-                style={{ fontSize: 38, color: "var(--ion-color-medium)" }} 
+            <IonIcon
+                icon={iconContent.source as typeof pencil}
+                style={{ fontSize: 38, color: "var(--ion-color-medium)" }}
             />
         );
     };
 
+    const renderCardHeading = () => {
+        if (cardHeading) {
+            return (
+                <img
+                        alt="Maintenance"
+                        style={{
+                            display: 'block',
+                            width: '100%',
+                            height: '300px',
+                            objectFit: 'cover',              // Taglia i bordi, ma sempre pieno
+                            objectPosition: 'center'  // Centra l'inquadratura
+                        }}                        
+                        src={cardHeading}
+                    />
+            )
+        }
+
+        return null
+    }
+
     return (
         <div style={{ margin: '16px 0' }}>
             <IonCard color='light' style={{ borderRadius: 18, boxShadow: `0 4px 12px ${shadowColor}` }}>
+                {renderCardHeading()}
                 <IonCardHeader>
                     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                         <div>
@@ -60,18 +81,18 @@ export const Card = ({title, subtitle, mainNote, mainNoteColor, detailNote, comm
                         <div style={{ fontSize: 15, color: "#5c5c5c" }}>{comment}</div>
                     </div>
                     <div style={{ fontSize: 16, color: "#777", minWidth: 54, textAlign: "right" }}>
-                {detailNote && (
-                  <div style={{ fontSize: 12, fontStyle: 'italic' }}>{detailNote}</div>
-                )}
-              </div>
+                        {detailNote && (
+                            <div style={{ fontSize: 12, fontStyle: 'italic' }}>{detailNote}</div>
+                        )}
+                    </div>
                 </IonCardContent>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div style={{ display: 'flex', alignItems: 'center', padding: '0 16px 16px' }}>
                         <IonButton
                             fill="outline"
                             style={{
-                                '--color': shadowColor ,
-                                '--border-color': shadowColor ,
+                                '--color': shadowColor,
+                                '--border-color': shadowColor,
                                 '--border-width': '2px',
                                 '--border-style': 'solid',
                                 '--border-radius': '50%',
