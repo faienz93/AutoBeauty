@@ -2,7 +2,7 @@
 
 A free and open-source application to track your vehicle maintenance history. Keep records of services, tire changes, and inspections all in one place.
 
-Features ✨
+## Features ✨
 - Track Maintenance Events
 	- Regular service (Tagliando)
 	- Tire changes (Gomme)
