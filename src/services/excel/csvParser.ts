@@ -45,7 +45,7 @@ export class CsvService<T> {
 
   }
 
-  exportCsv(data: T[], header: string[]): Blob {
+  exportCsvWithBlob(data: T[], header: string[]): Blob {
 
     try {
       const csv = Papa.unparse(data, {
@@ -55,6 +55,27 @@ export class CsvService<T> {
       });
       const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       return csvData;
+    } catch (error) {
+      console.error('Errore esportazione:', error);
+      throw error;
+    }
+    
+  }
+
+
+  
+
+
+  exportCsv(data: T[], header: string[]): String {
+
+    try {
+      const csv = Papa.unparse(data, {
+        delimiter: '|',
+        header: true,
+        columns: header
+      });
+      
+      return csv;
     } catch (error) {
       console.error('Errore esportazione:', error);
       throw error;
