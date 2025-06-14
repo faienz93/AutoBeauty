@@ -1,31 +1,44 @@
 import { useState } from 'react';
-import { IonButton, IonItemDivider, IonToast } from '@ionic/react';
+import { IonAlert, IonButton, IonIcon, IonItemDivider, IonToast } from '@ionic/react';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance } from '../models/MaintenanceType';
 import { useMaintenanceDb } from '../hooks/useDbContext';
+import { downloadOutline } from 'ionicons/icons';
+import { getMaintenanceKey } from '../services/utils';
 
 
 
 const ExportItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
+  const [noData, setNoData] = useState(false);
+  
   const db = useMaintenanceDb();
   const csvService = new CsvService();
 
   const handleExport = async () => {
 
     try {
-      const info = await db.getInfo();
-      if (info.doc_count === 0) {
-        alert('Non ci sono dati da esportare');
-        return;
-      }
+      
       const result = await db.allDocs({ include_docs: true });
-      console.log('Fetched docs:', result);
-      const data = result.rows.map((row: any) => ({
+      const data = result.rows.
+      filter((value) => {
+        // filtra solo i documenti che hanno une specifica chiave
+        let key = getMaintenanceKey()
+        return value.doc?._id.startsWith(key);
+      })
+      .map((row: any) => ({
         id: row.doc._id,
         ...row.doc
-      }));
-      console.log(data);
+      }))
+      console.log('Fetched docs:', result);
+      
+      if(data.length === 0){
+        setNoData(true);
+        return;
+      }
+        
+      
+
       const csvDataBlob = await csvService.exportCsv(data as Maintenance[], [
         'data',
         'km',
@@ -64,8 +77,20 @@ const ExportItem = () => {
       </IonItemDivider>
 
       <IonButton color="danger" expand="full" className="buttonAddList" onClick={handleExport}>
+        <IonIcon slot="icon-only" ios={downloadOutline}></IonIcon>
         Esporta
       </IonButton>
+
+    
+
+      <IonAlert
+        isOpen={noData}
+        header="Attenzione!"
+        onDidDismiss={() => setNoData(prevValue => !prevValue)}
+        message="Non ci sono dati da esportare."
+        buttons={['Ok!']}
+      ></IonAlert>
+  
 
       {isSuccess ? (
         <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Caricamento avvenuto con successo" duration={1000}></IonToast>
