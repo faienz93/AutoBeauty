@@ -6,10 +6,6 @@ import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { getDateString, getUUIDKey, parseStringToDate, parseItalianNumber } from '../services/utils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 
-interface ToastState {
-  isSuccess: boolean;
-  show: boolean;
-}
 
 
 const ImportItem = () => {
@@ -17,11 +13,8 @@ const ImportItem = () => {
   const db = useMaintenanceDb();
 
   const [file, setFile] = useState<File | null>(null);
-  const [toast, setToast] = useState<ToastState>({
-    isSuccess: false,
-    show: false
-  });
-  const [label, setLabel] = useState('No Value Chosen');
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [label, setLabel] = useState('Nessun File scelto');
   const csvService = new CsvService();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,11 +23,11 @@ const ImportItem = () => {
     if (selectedFile) {
       setLabel(selectedFile.name);
     } else {
-      setLabel('No Value Chosen');
+      setLabel('Nessun File scelto');
     }
   };
 
-  
+
 
   const openFileDialog = () => {
     if (inputRef.current) {
@@ -47,7 +40,7 @@ const ImportItem = () => {
 
     try {
       const importedItemFromCsv = await csvService.importCsv(file) as Maintenance[];
-      
+
       // Parse result   
       const convertedItems: Maintenance[] = importedItemFromCsv.map(item => ({
         _id: getUUIDKey(),
@@ -58,30 +51,30 @@ const ImportItem = () => {
         note: item.note || ''
       }));
 
-      
+
       const result = await db.bulkDocs(convertedItems);
-      if(result) {
-        setToast({ isSuccess: true, show: true });
+      if (result) {
+        setIsSuccess(prevValue => !prevValue);
         setFile(null);
-        setLabel('No Value Chosen');
+        setLabel('Nessun File scelto');
         if (inputRef.current) {
           inputRef.current.value = '';
         }
       }
-      
+
     } catch (error) {
       console.error(error);
-      setToast({ isSuccess: false, show: true });
+      setIsSuccess(false);
       setFile(null);
-      setLabel('No Value Chosen');
+      setLabel('Nessun File scelto');
     }
   };
 
   return (
     <>
       <IonItemDivider color="light" className='buttonAddList'>
-          <h1>Importa</h1>
-        </IonItemDivider>
+        <h1>Importa</h1>
+      </IonItemDivider>
       {/* REF: https://forum.ionicframework.com/t/ioninput-type-file/205203/2 */}
       <input style={{ display: 'none' }} ref={inputRef} type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={handleFileChange} />
 
@@ -99,19 +92,18 @@ const ImportItem = () => {
         Aggiungi a DB
       </IonButton>
 
-      
-        <IonToast
-        isOpen={toast.show}
-        onDidDismiss={() => setToast(() => ({
-          isSuccess: false,
-          show: false,
-        }))}
-        message={toast.isSuccess ? "Caricamento avvenuto con successo" : "Errore durante il caricamentooooooooooooooooooooooooooooooooooooooooo"}
+
+
+
+      <IonToast
+        isOpen={isSuccess}
+        onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
+        message={isSuccess ? "Caricamento avvenuto con successo" : "Errore durante il caricamento"}
         duration={3000}
-        color={toast.isSuccess ? "success" : "danger"}
+        color={isSuccess ? "success" : "danger"}
       />
-      
-      
+
+
 
     </>
   );
