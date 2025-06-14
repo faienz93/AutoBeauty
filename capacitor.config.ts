@@ -2,7 +2,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
   appId: 'car.maintenance.app',
-  appName: 'car-maintenance-app',
+  appName: 'Manutenzione Facile',
   webDir: 'dist',
   server: {
     androidScheme: 'https'

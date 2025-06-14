@@ -7,13 +7,22 @@ import { CsvService } from '../services/excel/csvParser';
 import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { getDateString, getUUIDKey, parseStringToDate, parseItalianNumber } from '../services/utils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
+
+interface ToastState {
+  isSuccess: boolean;
+  show: boolean;
+}
+
+
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const db = useMaintenanceDb();
 
   const [file, setFile] = useState<File | null>(null);
-  const [data, setData] = useState<any[]>([]);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [toast, setToast] = useState<ToastState>({
+    isSuccess: false,
+    show: false
+  });
   const [label, setLabel] = useState('No Value Chosen');
   const csvService = new CsvService();
 
@@ -27,14 +36,7 @@ const ImportItem = () => {
     }
   };
 
-  const handleFileRead = (event: ProgressEvent<FileReader>) => {
-    const content = event.target?.result;
-    if (content) {
-      console.log(content)
-      const jsonData = JSON.parse(content as string);
-      setData(jsonData);
-    }
-  };
+  
 
   const openFileDialog = () => {
     if (inputRef.current) {
@@ -45,19 +47,16 @@ const ImportItem = () => {
   const handleUpload = async () => {
     if (!file) return;
 
-    const reader = new FileReader();
-    // reader.onload = handleFileRead;
-    reader.readAsText(file);
+    // const reader = new FileReader();
+    // // reader.onload = handleFileRead;
+    // reader.readAsText(file);
 
-    const env = getEnv();
-    if (!env) return;
+    // setToast({ isSuccess: false, show: false });
 
     try {
       const importedItemFromCsv = await csvService.importCsv(file) as Maintenance[];
       
-      // Parse result
-      
-
+      // Parse result   
       const convertedItems: Maintenance[] = importedItemFromCsv.map(item => ({
         _id: getUUIDKey(),
         data: getDateString(parseStringToDate(item.data)),
@@ -67,16 +66,15 @@ const ImportItem = () => {
         note: item.note || ''
       }));
 
-      try {
-        await db.bulkDocs(convertedItems);
-        setIsSuccess(true);
-      } catch (error) {
-        console.error('Error during bulk upload:', error);
-        setIsSuccess(false);
+      
+      const result = await db.bulkDocs(convertedItems);
+      if(result) {
+        setToast({ isSuccess: true, show: true });
       }
+      
     } catch (error) {
       console.error(error);
-      setIsSuccess(false);
+      setToast({ isSuccess: false, show: true });
     }
   };
 
@@ -101,11 +99,16 @@ const ImportItem = () => {
         Aggiungi a DB
       </IonButton>
 
-      {isSuccess ? (
-        <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Caricamento avvenuto con successo" duration={1000}></IonToast>
-      ) : (
-        <IonToast trigger="open-toast" color="danger" message="Errore durante il caricamento" duration={1000}></IonToast>
-      )}
+      {toast.isSuccess && ( 
+        <IonToast
+        isOpen={toast.show}
+        onDidDismiss={() => setToast(prev => ({ ...prev, show: false }))}
+        message={toast.isSuccess ? "Caricamento avvenuto con successo" : "Errore durante il caricamento"}
+        duration={3000}
+        color={toast.isSuccess ? "success" : "danger"}
+      /> )}
+      
+      
 
     </>
   );
