@@ -1,4 +1,4 @@
-import { useState} from 'react';
+import { useState } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage, IonIcon } from '@ionic/react';
 import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
@@ -122,7 +122,7 @@ function ItemPage() {
       console.log('newMaintenance', newMaintenance);
 
       handleAddMaintenance(newMaintenance);
-      setIsSuccess(true);
+      setIsSuccess(prevValue => !prevValue)
     } catch (error) {
       setIsSuccess(false);
       console.error('Errore nel salvataggio:', error);
@@ -149,7 +149,7 @@ function ItemPage() {
               value={formData.km}
               onIonChange={(e) => handleInputChange('km', e.detail.value)}
               min={0}
-              max={999999}              
+              max={999999}
             />
           </IonItem>
           <IonItem>
@@ -162,7 +162,7 @@ function ItemPage() {
               value={formData.costo}
               onIonChange={(e) => handleInputChange('costo', e.detail.value)}
               min={0}
-              max={999999}              
+              max={999999}
             />
           </IonItem>
           <IonItem lines="inset" slot="header">
@@ -204,11 +204,15 @@ function ItemPage() {
           </IonButton>
         }
 
-        {isSuccess ? (
-          <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Manutenzione aggiunta con successo!" duration={5000}></IonToast>
-        ) : (
-          <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta della manutenzione" duration={1000}></IonToast>
-        )}
+
+
+        <IonToast
+          isOpen={isSuccess}
+          onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
+          message={isSuccess ? "Manutenzione aggiunta con successo!" : "Errore durante l'aggiunta della manutenzione"}
+          duration={3000}
+          color={isSuccess ? "success" : "danger"}
+        />
       </IonContent>
     </IonPage>
   );

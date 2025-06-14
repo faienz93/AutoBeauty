@@ -63,7 +63,7 @@ function KmPage() {
       const response = await dbKm.put(newEvent)
 
       console.log('Kilometer added successfully:', response);
-      setIsSuccess(true);
+      setIsSuccess(prevValue => !prevValue)
       setFormData({
         data: currentDate,
         km: 0
@@ -132,14 +132,13 @@ function KmPage() {
           Modifica Kilometraggio
         </IonButton>
 
-
-
-
-        {isSuccess ? (
-          <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Kilometraggio aggiunto con successo!" duration={5000}></IonToast>
-        ) : (
-          <IonToast trigger="open-toast" color="danger" message="Errore durante l'aggiunta del Kilometraggio" duration={1000}></IonToast>
-        )}
+        <IonToast
+          isOpen={isSuccess}
+          onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
+          message={isSuccess ? "Kilometraggio aggiunto con successo!" : "Errore durante la modifica del Kilometraggio"}
+          duration={3000}
+          color={isSuccess ? "success" : "danger"}
+        />
       </IonContent>
     </IonPage>
   );
