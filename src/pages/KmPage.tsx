@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
@@ -38,11 +38,12 @@ function KmPage() {
 
     return {
       data: currentDate,
-      km: 0,
+      km: 1,
     }
   });
 
 
+  const kmNotValid = formData.km == 0;
 
   const handleAddKm = async (newKm: Kilometers) => {
 
@@ -64,10 +65,10 @@ function KmPage() {
 
       console.log('Kilometer added successfully:', response);
       setIsSuccess(prevValue => !prevValue)
-      setFormData({
-        data: currentDate,
-        km: 0
-      });
+      // setFormData({
+      //   data: currentDate,
+      //   km: 1
+      // });
     } catch (error) {
       console.error('Error adding Kilometer:', error);
       setIsSuccess(false);
@@ -104,6 +105,16 @@ function KmPage() {
   };
 
 
+  useIonViewWillLeave(() => {
+    setFormData({
+      data: currentDate,
+      km: 1
+    });
+    setIsSuccess(false);
+  });
+
+
+
 
 
   return (
@@ -125,6 +136,14 @@ function KmPage() {
               min={0}
             />
           </IonItem>
+          <div style={{ padding: '0 16px' }}>
+            <IonText color="danger" style={{ fontSize: '0.8em' }}>
+              {kmNotValid && <p style={{ margin: '4px 0' }}>
+                Per favore inserisci un kilometraggio diverso da 0.
+              </p>}
+            </IonText>
+          </div>
+
         </IonList>
 
         <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>

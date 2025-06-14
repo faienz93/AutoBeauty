@@ -204,8 +204,6 @@ function ItemPage() {
           </IonButton>
         }
 
-
-
         <IonToast
           isOpen={isSuccess}
           onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
