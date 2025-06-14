@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage, IonIcon } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage, IonIcon, IonText } from '@ionic/react';
 import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
@@ -51,13 +51,16 @@ function ItemPage() {
     return value.replace('.', ',');
   };
 
-  const validateKm = (value: number): boolean => {
-    return value >= 0 && value <= 999999;
-  };
+  // const validateKm = (value: number): boolean => {
+  //   return value >= 0 && value <= 999999;
+  // };
 
-  const validateCost = (value: number): boolean => {
-    return value >= 0 && value <= 999999;
-  };
+  // const validateCost = (value: number): boolean => {
+  //   return value >= 0 && value <= 999999;
+  // };
+
+  const kmValidation = formData.km >= 0 && formData.km <= 999999
+  const costoValidation = formData.costo >= 0 && formData.costo <= 999999
 
 
 
@@ -87,18 +90,7 @@ function ItemPage() {
       newValue = getDateString(newValue as Date);
     }
 
-    if (inputIdentifier === 'km') {
-      const kmValue = Number(newValue);
-      if (!validateKm(kmValue)) {
-        return; // Non aggiorna il valore se non è valido
-      }
-    }
-
     if (inputIdentifier === 'costo') {
-      const costValue = Number(newValue.replace(',', '.'));
-      if (!validateCost(costValue)) {
-        return; // Non aggiorna il valore se non è valido
-      }
       newValue = formatCost(newValue);
     }
 
@@ -130,6 +122,17 @@ function ItemPage() {
   };
 
 
+  useIonViewWillLeave(() => {
+    setFormData({
+      data: currentDate,
+      km: 0,
+      tipo: 'Tagliando' as MaintenanceType,
+      costo: 0,
+      note: '',
+    });
+    setIsSuccess(false);
+  });
+
 
 
   return (
@@ -152,6 +155,13 @@ function ItemPage() {
               max={999999}
             />
           </IonItem>
+          <div style={{ padding: '0 16px' }}>
+                      <IonText color="danger" style={{ fontSize: '0.8em' }}>
+                        {kmValidation && <p style={{ margin: '4px 0' }}>
+                          Per favore inserisci un costo superiore a 0.
+                        </p>}
+                      </IonText>
+                    </div>
           <IonItem>
             <IonInput
               labelPlacement="floating"
@@ -165,6 +175,13 @@ function ItemPage() {
               max={999999}
             />
           </IonItem>
+          <div style={{ padding: '0 16px' }}>
+                      <IonText color="danger" style={{ fontSize: '0.8em' }}>
+                        {costoValidation && <p style={{ margin: '4px 0' }}>
+                          Per favore inserisci un costo superiore a 0.
+                        </p>}
+                      </IonText>
+                    </div>
           <IonItem lines="inset" slot="header">
             <IonSelect
               labelPlacement="floating"
