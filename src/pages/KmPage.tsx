@@ -65,10 +65,10 @@ function KmPage() {
 
       console.log('Kilometer added successfully:', response);
       setIsSuccess(prevValue => !prevValue)
-      // setFormData({
-      //   data: currentDate,
-      //   km: 1
-      // });
+      setFormData({
+        data: currentDate,
+        km: 1
+      });
     } catch (error) {
       console.error('Error adding Kilometer:', error);
       setIsSuccess(false);
