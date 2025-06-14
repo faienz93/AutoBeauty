@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
@@ -7,6 +7,7 @@ import { useLocation } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getUUIDKey, parseItalianNumber, parseStringToDate } from '../services/utils';
 import { useKilometersDb } from '../hooks/useDbContext';
+import { pencilOutline } from 'ionicons/icons';
 
 interface KmState {
   item: Kilometers;
@@ -48,31 +49,31 @@ function KmPage() {
     console.log('Adding new Kilometer:', newKm);
     let newEvent: Kilometers;
     if (location.state?.item?._rev) {
-        console.log(location.state)
-        newEvent = {
-            ...newKm,
-            _rev: location.state.item._rev
-        };
-    } else {        
-        newEvent = newKm;
+      console.log(location.state)
+      newEvent = {
+        ...newKm,
+        _rev: location.state.item._rev
+      };
+    } else {
+      newEvent = newKm;
     }
 
     try {
 
       const response = await dbKm.put(newEvent)
-    
+
       console.log('Kilometer added successfully:', response);
       setIsSuccess(true);
       setFormData({
         data: currentDate,
         km: 0
       });
-    }catch (error) {
-        console.error('Error adding Kilometer:', error);
-        setIsSuccess(false);
+    } catch (error) {
+      console.error('Error adding Kilometer:', error);
+      setIsSuccess(false);
     }
-    
-       
+
+
   };
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
@@ -89,14 +90,14 @@ function KmPage() {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
     try {
-      
+
       const lastKm: Kilometers = {
         _id: 'manual-km',
-        data: getDateString(parseStringToDate(formData.data)), 
-        km: parseItalianNumber(formData.km) ,
+        data: getDateString(parseStringToDate(formData.data)),
+        km: parseItalianNumber(formData.km),
       };
       await handleAddKm(lastKm);
-      
+
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
     }
@@ -125,15 +126,14 @@ function KmPage() {
             />
           </IonItem>
         </IonList>
-        {location.state?.item ?
-          <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
-            Modifica Kilometraggio
-          </IonButton>
-          :
-          <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
-            Aggiungi Kilometraggio
-          </IonButton>
-        }
+
+        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+          <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
+          Modifica Kilometraggio
+        </IonButton>
+
+
+
 
         {isSuccess ? (
           <IonToast trigger="open-toast" color="success" style={{ text: 'white' }} message="Kilometraggio aggiunto con successo!" duration={5000}></IonToast>

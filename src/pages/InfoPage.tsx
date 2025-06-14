@@ -1,5 +1,5 @@
 import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonButton } from '@ionic/react';
-import { informationCircle, cloudUpload, create, list, speedometer, calculator, cafe } from 'ionicons/icons';
+import { informationCircle, cloudUpload, create, list, speedometer, calculator, cafe, build, time, car } from 'ionicons/icons';
 
 const InfoPage: React.FC = () => {
   const openDonationLink = (platform: 'buymeacoffee' | 'paypal') => {
@@ -51,17 +51,39 @@ const InfoPage: React.FC = () => {
 
         <IonCard>
           <IonCardHeader>
-            <IonCardTitle>Come Vengono Calcolati i Costi</IonCardTitle>
+            <IonCardTitle>Calcolo Manutenzioni</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <IonItem>
-              <IonIcon icon={calculator} slot="start" />
+              <IonIcon icon={car} slot="start" />
               <IonLabel className="ion-text-wrap">
-                <h2>Calcolo dei Costi</h2>
-                <p>• Costo totale: somma di tutti gli interventi</p>
-                <p>• Costo mensile: media delle spese negli ultimi 30 giorni</p>
-                <p>• Costo annuale: totale spese degli ultimi 12 mesi</p>
-                <p>• Costo per km: totale spese diviso km percorsi</p>
+                <h2>Gomme</h2>
+                <p>Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo cambio supera 40.000 km</p>
+              </IonLabel>
+            </IonItem>
+
+            <IonItem>
+              <IonIcon icon={build} slot="start" />
+              <IonLabel className="ion-text-wrap">
+                <h2>Tagliando</h2>
+                <p>Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo tagliando supera 15.000 km</p>
+              </IonLabel>
+            </IonItem>
+
+            <IonItem>
+              <IonIcon icon={time} slot="start" />
+              <IonLabel className="ion-text-wrap">
+                <h2>Revisione</h2>
+                <p>Viene segnalato quando sono trascorsi 24 mesi (2 anni) dall'ultima revisione</p>
+              </IonLabel>
+            </IonItem>
+
+            <IonItem lines="none">
+              <IonLabel className="ion-text-wrap">
+                <p className="ion-padding-top">
+                  Il sistema mostra "Da fare" in rosso quando è necessario effettuare la manutenzione,
+                  altrimenti viene mostrato "Tutto sotto controllo" in verde.
+                </p>
               </IonLabel>
             </IonItem>
           </IonCardContent>

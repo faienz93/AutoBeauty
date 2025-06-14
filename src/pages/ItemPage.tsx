@@ -1,5 +1,5 @@
 import { useState} from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage, IonIcon } from '@ionic/react';
 import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
@@ -8,6 +8,7 @@ import { Header } from '../components/Header';
 import { useLocation } from 'react-router-dom';
 import { getDateString, getUUIDKey, parseStringToDate } from '../services/utils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
+import { add, pencilOutline } from 'ionicons/icons';
 
 interface MaintenanceState {
   item: Maintenance;
@@ -193,10 +194,12 @@ function ItemPage() {
 
         {location.state?.item ?
           <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+            <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
             Modifica Manutenzione
           </IonButton>
           :
           <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+            <IonIcon slot="icon-only" ios={add} md={add}></IonIcon>
             Aggiungi Manutenzione
           </IonButton>
         }
