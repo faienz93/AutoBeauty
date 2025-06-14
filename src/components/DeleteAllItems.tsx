@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { IonButton, IonItemDivider, IonToast } from '@ionic/react';
+import { IonButton, IonIcon, IonItemDivider, IonToast } from '@ionic/react';
 import { AlertConfirmation } from './AlertConfirmation';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
+import { trashOutline } from 'ionicons/icons';
 
 
 
@@ -28,6 +29,7 @@ const DeleteAllItem = () => {
       </IonItemDivider>
 
       <IonButton color="danger" expand="full" id="delete-allitem" className="buttonAddList" onClick={() => setConfirmDelete(true)}>
+        <IonIcon slot="icon-only" ios={trashOutline} md={trashOutline}></IonIcon>
         Cancella tutto
       </IonButton>
 

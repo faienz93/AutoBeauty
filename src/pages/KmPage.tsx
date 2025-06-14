@@ -48,6 +48,7 @@ function KmPage() {
     console.log('Adding new Kilometer:', newKm);
     let newEvent: Kilometers;
     if (location.state?.item?._rev) {
+        console.log(location.state)
         newEvent = {
             ...newKm,
             _rev: location.state.item._rev
