@@ -1,80 +1,60 @@
-# React + TypeScript + Vite
+# Car Maintenance App 🚗
 
+A free and open-source application to track your vehicle maintenance history. Keep records of services, tire changes, and inspections all in one place.
 
-https://ionicframework.com/docs/react/adding-ionic-react-to-an-existing-react-project
+Features ✨
+- Track Maintenance Events
+	- Regular service (Tagliando)
+	- Tire changes (Gomme)
+	- Vehicle inspections (Revisione)
+	- Add notes and costs for each maintenance
+	- Track mileage for each service
+- Data Management
+	- Import maintenance records from CSV
+	- Export your data for backup
+	- Cross-platform data persistence using PouchDB
+	- Works offline on web and mobile devices
+- User Interface
+	- Clean and intuitive Ionic React interface
+	- Mobile-first design
+	- Dark mode support
+	- Responsive layout
+## Getting Started 🚀
 
+1. Clone the repository
+2. Install dependencies:
+```
+npm install
+```
+Run the development server:
 ```
 npm run dev
 ```
+## Built With 🛠️
+- React + TypeScript
+- Ionic Framework
+- PouchDB for data storage
+- Vite for build tooling
 
+## Support the Project ☕
 
-Create .env file in the root of project
-```
-VITE_TEST_ENV_NAME=TEST
-VITE_TEST_API_KEY=xxx
-VITE_TEST_AUTH_DOMAIN=xxx
-VITE_TEST_PROJECT_ID=xxx
-VITE_TEST_STORAGE_BUCKET=xxx
-VITE_TEST_MESSAGING_SENDER_ID=xxx
-VITE_TEST_APP_ID=xxx
-VITE_TEST_COLLECTION=dev-maintenances
-```
+If you find this app useful, consider supporting its development:
 
-# Icons
-https://www.svgrepo.com/
+<img alt="&quot;Buy Me A Coffee&quot;" src="https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png">
 
-# SQLite
-https://jepiqueau.github.io/2023/08/31/Ionic7React-SQLite-CRUD-App.html
-Quando si dovrà deployare l'applicazione usare questo https://jepiqueau.github.io/2023/08/31/Ionic7React-SQLite-CRUD-App.html#install-native-required-packages
+Other ways to support:
+- Star the repository ⭐
+- Report bugs 🐛
+- Submit feature requests 💡
+- Contribute to the code 👨‍💻
+## License 📝
 
-- questo dovrebbe essere quello corretto https://github.com/capacitor-community/sqlite/blob/master/docs/Ionic-React-Usage.md#ionic/react-app.
-Per quando ci si sposta sui dispositivi si dovrebbero cancellare dei file e per questo si puà vedere questo https://jepiqueau.github.io/2023/08/31/Ionic7React-SQLite-CRUD-App.html (PARTE 2)
+This project is completely free and open source. Feel free to use it, modify it, and share it!
+## Contributing 🤝
 
-In questo progetto viene utilizzato PouchDb perchè offre ottime prestazioni. E' cross platform e ha la possibilità di sincronizzarsi con CouchDb o PouchDb Server.
-Al fine di garantre un esperienza d'uso ottimale si è scelto di usare IndexDB per il web e SQLite su dispositivi mobile
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## Utilizzo di AdapterSQLite
-REF: https://github.com/nolanlawson/pouchdb-ionic-2-hello-world-with-sqlite
-
-> Then I installed PouchDB:
-
-> npm install pouchdb-browser --save
-> (I used the pouchdb-browser package because we don't need Node/LevelDB dependencies to run in Ionic, so we can skip installing the Node dependencies. You could also use the pouchdb package.)
-> Then I installed pouchdb-adapter-cordova-sqlite:
-
->npm install pouchdb-adapter-cordova-sqlite --save
->Then I added the native SQLite plugin (I'm using cordova-plugin-sqlite-2, but there are others):
-
-(Infatti io uso cordova-sqlite-storage perchè da local storage di ionic si usa questo https://github.com/ionic-team/ionic-storage#sqlite-installation)
-
->cordova plugin add cordova-plugin-sqlite-2 --save
->Then I imported PouchDB in JavaScript, and registered the plugin:
-
->import * as PouchDB from 'pouchdb-browser';
->import * as cordovaSqlitePlugin from 'pouchdb-adapter-cordova-sqlite';
->PouchDB.plugin(cordovaSqlitePlugin);
-
-poi ho installato usando typescript, come dice la documentazione i tipi
-https://pouchdb.com/guides/setup-pouchdb.html#typescript
-
-npm install pouchdb @types/pouchdb
-
-In your tsconfig.json activate allowSyntheticDefaultImports:
-
-{
-  "compilerOptions": {
-    "allowSyntheticDefaultImports": true
-  }
-}
-
-siccome ottenevo un errore https://stackoverflow.com/a/75819381/4700162 alla fine ho dovuto fare questo per la mia app react
-
-## TODO
-
-- [x] aggiungere il campo note quando si inserisce un un nuovo item
-- [x] fixare problema della data
-- [x] aggiungere salvataggio su firebase
-- [ ] sqitchare su SQLite
-- [ ] dare la possibilità di modificare item
-- [ ] visualizzare nella home quello che è l'ultimo intervento fatto
-- [ ] fare una sezione con il grafico
+  
+---
+Made with ❤️ by car enthusiasts for car enthusiasts
+Keep your car running smoothly! 🚗✨
