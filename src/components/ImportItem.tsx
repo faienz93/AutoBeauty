@@ -1,8 +1,6 @@
 import React, { useRef, useState } from 'react';
-
-import { getEnv } from '../services/env';
 import { IonButton, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonToast } from '@ionic/react';
-import { cloudUpload } from 'ionicons/icons';
+import { addOutline, cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { getDateString, getUUIDKey, parseStringToDate, parseItalianNumber } from '../services/utils';
@@ -47,12 +45,6 @@ const ImportItem = () => {
   const handleUpload = async () => {
     if (!file) return;
 
-    // const reader = new FileReader();
-    // // reader.onload = handleFileRead;
-    // reader.readAsText(file);
-
-    // setToast({ isSuccess: false, show: false });
-
     try {
       const importedItemFromCsv = await csvService.importCsv(file) as Maintenance[];
       
@@ -70,11 +62,18 @@ const ImportItem = () => {
       const result = await db.bulkDocs(convertedItems);
       if(result) {
         setToast({ isSuccess: true, show: true });
+        setFile(null);
+        setLabel('No Value Chosen');
+        if (inputRef.current) {
+          inputRef.current.value = '';
+        }
       }
       
     } catch (error) {
       console.error(error);
       setToast({ isSuccess: false, show: true });
+      setFile(null);
+      setLabel('No Value Chosen');
     }
   };
 
@@ -96,17 +95,21 @@ const ImportItem = () => {
       </IonList>
 
       <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleUpload}>
+        <IonIcon slot="icon-only" ios={addOutline}></IonIcon>
         Aggiungi a DB
       </IonButton>
 
-      {toast.isSuccess && ( 
+      
         <IonToast
         isOpen={toast.show}
-        onDidDismiss={() => setToast(prev => ({ ...prev, show: false }))}
-        message={toast.isSuccess ? "Caricamento avvenuto con successo" : "Errore durante il caricamento"}
+        onDidDismiss={() => setToast(() => ({
+          isSuccess: false,
+          show: false,
+        }))}
+        message={toast.isSuccess ? "Caricamento avvenuto con successo" : "Errore durante il caricamentooooooooooooooooooooooooooooooooooooooooo"}
         duration={3000}
         color={toast.isSuccess ? "success" : "danger"}
-      /> )}
+      />
       
       
 
