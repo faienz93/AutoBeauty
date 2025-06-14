@@ -35,7 +35,7 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline, informationOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 
@@ -50,6 +50,7 @@ import KmPage from './pages/KmPage';
 
 import HomePage from "./pages/HomePage";
 import { DatabaseProvider } from "./services/database/DatabaseProvider";
+import InfoPage from './pages/InfoPage';
 
 
 setupIonicReact({ mode: 'md' });
@@ -69,9 +70,9 @@ function App() {
                 <Route path="/newItem" render={() => <ItemPage />} exact={true} />
                 <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
                 <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-                <Route path="/newkm" render={() => <KmPage />} exact={true} />
                 <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
                 <Route path="/settings" render={() => <Setting />} exact={true} />
+                <Route path="/info" render={() => <InfoPage />} exact={true} />
               </IonRouterOutlet>
 
               <IonTabBar slot="bottom">
@@ -90,14 +91,14 @@ function App() {
                   <IonLabel>Aggiungi</IonLabel>
                 </IonTabButton>
 
-                <IonTabButton tab="newkm" href="/newkm">
-                  <IonIcon icon={speedometerOutline} />
-                  <IonLabel>KM</IonLabel>
-                </IonTabButton>
-
                 <IonTabButton tab="settings" href="/settings">
                   <IonIcon icon={settingsOutline} />
                   <IonLabel>Impostazioni</IonLabel>
+                </IonTabButton>
+
+                <IonTabButton tab="info" href="/info">
+                  <IonIcon icon={informationOutline} />
+                  <IonLabel>Info</IonLabel>
                 </IonTabButton>
               </IonTabBar>
             </IonTabs>
