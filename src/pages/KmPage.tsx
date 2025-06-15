@@ -1,9 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
-import { useLocation } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getUUIDKey, parseItalianNumber, parseStringToDate } from '../services/utils';
 import { useKilometersDb } from '../hooks/useDbContext';
@@ -14,6 +14,8 @@ interface KmState {
 }
 
 function KmPage() {
+
+  const history = useHistory();
 
   // https://stackoverflow.com/a/59464381/4700162
   const location = useLocation<KmState>();
@@ -36,7 +38,7 @@ function KmPage() {
   });
 
 
-  const kmNotValid = didEdit.km && formData.km === 0;
+  const kmNotValid = didEdit.km && (formData.km === 0 || formData.km === null || formData.km === undefined);
 
   const handleAddKm = async (newKm: Kilometers) => {
 
@@ -89,8 +91,15 @@ function KmPage() {
   const handleSubmit = async (event: any) => {
     event.preventDefault();
 
-    if(kmNotValid)
+    setDidEdit(prev => ({
+      ...prev,
+      km: true
+    }));
+
+    if(kmNotValid){
+      setIsSuccess(false);
       return;
+    }
 
 
     try {
@@ -116,7 +125,7 @@ function KmPage() {
   }
 
 
-  useIonViewWillEnter(() => {
+  useEffect(() => {
     if (location.state?.item) {
       setFormData({
         _id: location.state.item._id,
@@ -125,10 +134,12 @@ function KmPage() {
         km: location.state.item.km
       });
     }
-  });
+    // eslint-disable-next-line
+  }, [location.state]);
 
 
   useIonViewWillLeave(() => {
+    
     setFormData({
       data: currentDate,
       km: 0
@@ -138,6 +149,8 @@ function KmPage() {
       data: false,
       km: false,
     })
+
+    // history.replace({ ...location, state: undefined });
   });
 
   return (
