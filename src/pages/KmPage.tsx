@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, getUUIDKey, parseItalianNumber, parseStringToDate } from '../services/utils';
 import { useKilometersDb } from '../hooks/useDbContext';
@@ -14,38 +14,32 @@ interface KmState {
 }
 
 function KmPage() {
-
-  const history = useHistory();
-
   // https://stackoverflow.com/a/59464381/4700162
   const location = useLocation<KmState>();
-  console.log(location.state)
-
+  const currentDate = getDateString();
   console.log('Rendering NewItem component');
   const dbKm = useKilometersDb();
   const [isSuccess, setIsSuccess] = useState(false);
-
-  const currentDate = getDateString();
   const [formData, setFormData] = useState<Kilometers>({
     data: currentDate,
     km: 0,
   });
-
-
   const [didEdit, setDidEdit] = useState({
     data: false,
     km: false,
   });
 
+  const buttonRef = useRef<HTMLIonButtonElement>(null); 
 
-  const kmNotValid = didEdit.km && (formData.km === 0 || formData.km === null || formData.km === undefined);
+  const kmNotValid = didEdit.km && formData.km === 0;
 
-  const handleAddKm = async (newKm: Kilometers) => {
+  
+
+  const updateKm = async (newKm: Kilometers) => {
 
     console.log('Adding new Kilometer:', newKm);
     let newEvent: Kilometers;
     if (location.state?.item?._rev) {
-      console.log(location.state)
       newEvent = {
         ...newKm,
         _rev: location.state.item._rev
@@ -57,7 +51,6 @@ function KmPage() {
     try {
 
       const response = await dbKm.put(newEvent)
-
       console.log('Kilometer added successfully:', response);
       setIsSuccess(prevValue => !prevValue)
       setFormData({
@@ -68,8 +61,6 @@ function KmPage() {
       console.error('Error adding Kilometer:', error);
       setIsSuccess(false);
     }
-
-
   };
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
@@ -84,23 +75,20 @@ function KmPage() {
 
     setDidEdit((prevEdit) => ({
       ...prevEdit,
-      [inputIdentifier]: false,
+      [inputIdentifier]: true,
     }));
+
+    if (buttonRef.current) {
+
+      if(kmNotValid)
+        buttonRef.current.disabled = true;
+      else
+        buttonRef.current.disabled = false;
+    }
   };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-
-    setDidEdit(prev => ({
-      ...prev,
-      km: true
-    }));
-
-    if(kmNotValid){
-      setIsSuccess(false);
-      return;
-    }
-
 
     try {
 
@@ -109,7 +97,7 @@ function KmPage() {
         data: getDateString(parseStringToDate(formData.data)),
         km: parseItalianNumber(formData.km),
       };
-      await handleAddKm(lastKm);
+      await updateKm(lastKm);
 
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
@@ -149,8 +137,6 @@ function KmPage() {
       data: false,
       km: false,
     })
-
-    // history.replace({ ...location, state: undefined });
   });
 
   return (
@@ -183,7 +169,7 @@ function KmPage() {
 
         </IonList>
 
-        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit} disabled={kmNotValid}>
+        <IonButton ref={buttonRef} id="open-toast" type="submit"  expand="full" className="buttonAddList" onClick={handleSubmit}>
           <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
           Modifica Kilometraggio
         </IonButton>
