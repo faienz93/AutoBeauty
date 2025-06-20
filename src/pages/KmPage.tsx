@@ -49,13 +49,9 @@ function KmPage() {
 
       const response = await dbKm.put(newEvent)
       console.log('Kilometer added successfully:', response);
-
       location.state.item._rev = response.rev;
       setIsSuccess(prevValue => !prevValue)
-      setFormData({
-        data: currentDate,
-        km: 0
-      });
+      
     } catch (error) {
       console.error('Error adding Kilometer:', error);
       setIsSuccess(false);
