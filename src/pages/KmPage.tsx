@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
 import { useLocation } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';
-import { getDateString, getUUIDKey, parseItalianNumber, parseStringToDate } from '../services/utils';
+import { getDateString, parseItalianNumber, parseStringToDate } from '../services/utils';
 import { useKilometersDb } from '../hooks/useDbContext';
 import { pencilOutline } from 'ionicons/icons';
 
@@ -17,7 +17,7 @@ function KmPage() {
   // https://stackoverflow.com/a/59464381/4700162
   const location = useLocation<KmState>();
   const currentDate = getDateString();
-  console.log('Rendering NewItem component');
+  console.log('Rendering KmPage component');
   const dbKm = useKilometersDb();
   const [isSuccess, setIsSuccess] = useState(false);
   const [formData, setFormData] = useState<Kilometers>({
@@ -27,18 +27,15 @@ function KmPage() {
   const [didEdit, setDidEdit] = useState({
     data: false,
     km: false,
-  });
-
-  const buttonRef = useRef<HTMLIonButtonElement>(null); 
-
-  const kmNotValid = didEdit.km && formData.km === 0;
-
+  }); 
   
+  const isKmInvalid = didEdit.km && Number(formData.km) === 0;
 
   const updateKm = async (newKm: Kilometers) => {
 
     console.log('Adding new Kilometer:', newKm);
     let newEvent: Kilometers;
+    console.log(location.state?.item)
     if (location.state?.item?._rev) {
       newEvent = {
         ...newKm,
@@ -52,6 +49,8 @@ function KmPage() {
 
       const response = await dbKm.put(newEvent)
       console.log('Kilometer added successfully:', response);
+
+      location.state.item._rev = response.rev;
       setIsSuccess(prevValue => !prevValue)
       setFormData({
         data: currentDate,
@@ -65,7 +64,13 @@ function KmPage() {
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
     if (inputIdentifier === 'data') {
-      newValue = getDateString(newValue);
+      newValue = getDateString(parseStringToDate(newValue as string));
+    }
+
+    if (inputIdentifier === 'km') {
+      // IonInput type="number" restituisce stringa, convertiamo
+      const numericValue = parseFloat(newValue as string);
+      newValue = isNaN(numericValue) ? '' : numericValue; // Mantieni stringa vuota se non è un numero, o gestisci come preferisci
     }
 
     setFormData((prevState) => ({
@@ -78,17 +83,13 @@ function KmPage() {
       [inputIdentifier]: true,
     }));
 
-    if (buttonRef.current) {
-
-      if(kmNotValid)
-        buttonRef.current.disabled = true;
-      else
-        buttonRef.current.disabled = false;
-    }
+    
   };
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+
+    if (didEdit.km && Number(formData.km) === 0) return;
 
     try {
 
@@ -117,13 +118,13 @@ function KmPage() {
     if (location.state?.item) {
       setFormData({
         _id: location.state.item._id,
-        _rev: location.state.item._rev,
+        _rev: location.state.item._rev || undefined,
         data: location.state.item.data,
         km: location.state.item.km
       });
     }
     // eslint-disable-next-line
-  }, [location.state]);
+  }, [location.state?.item]);
 
 
   useIonViewWillLeave(() => {
@@ -161,15 +162,23 @@ function KmPage() {
           </IonItem>
           <div style={{ padding: '0 16px' }}>
             <IonText color="danger" style={{ fontSize: '0.8em' }}>
-              {kmNotValid && <p style={{ margin: '4px 0' }}>
-                Per favore inserisci un kilometraggio diverso da 0.
-              </p>}
+              {isKmInvalid && (
+                <p style={{ margin: '4px 0' }}>
+                  Per favore inserisci un kilometraggio diverso da 0.
+                </p>
+              )}
             </IonText>
           </div>
 
         </IonList>
 
-        <IonButton ref={buttonRef} id="open-toast" type="submit"  expand="full" className="buttonAddList" onClick={handleSubmit}>
+        <IonButton 
+          id="open-toast" 
+          type="submit"  
+          expand="full" 
+          className="buttonAddList" 
+          onClick={handleSubmit}
+          disabled={isKmInvalid}>
           <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
           Modifica Kilometraggio
         </IonButton>
