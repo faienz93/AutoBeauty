@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage, IonIcon, IonText } from '@ionic/react';
 import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
@@ -25,42 +25,28 @@ function ItemPage() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   const currentDate = getDateString();
-  const [formData, setFormData] = useState(() => {
+  const [formData, setFormData] = useState<Maintenance>({
+    data: currentDate,
+    km: 0,
+    tipo: 'Tagliando' as MaintenanceType,
+    costo: 0,
+    note: '',
+  });
 
-    if (location.state?.item) {
-      // aggiornamento
-      return {
-        data: location.state.item.data,
-        km: location.state.item.km,
-        tipo: location.state.item.tipo as MaintenanceType,
-        costo: location.state.item.costo,
-        note: location.state.item.note || ''
-      };
-    }
-
-    return {
-      data: currentDate,
-      km: 0,
-      tipo: 'Tagliando' as MaintenanceType,
-      costo: 0,
-      note: '',
-    }
+  const [didEdit, setDidEdit] = useState({
+    data: false,
+    km: false,
+    tipo: false,
+    costo: false,
+    note: false,
   });
 
   const formatCost = (value: string): string => {
     return value.replace('.', ',');
   };
 
-  // const validateKm = (value: number): boolean => {
-  //   return value >= 0 && value <= 999999;
-  // };
-
-  // const validateCost = (value: number): boolean => {
-  //   return value >= 0 && value <= 999999;
-  // };
-
-  const kmValidation = formData.km >= 0 && formData.km <= 999999
-  const costoValidation = formData.costo >= 0 && formData.costo <= 999999
+  const isKmInvalid = didEdit.km && (Number(formData.km) === 0 || Number(formData.km) > 999999);
+  const isCostoInvalid = didEdit.costo && (Number(formData.costo) === 0 || Number(formData.costo) > 999999);
 
 
 
@@ -72,13 +58,6 @@ function ItemPage() {
       console.error('Error adding maintenance:', error);
     });
 
-    setFormData({
-      data: currentDate,
-      km: 0,
-      tipo: 'Tagliando',
-      costo: 0,
-      note: '',
-    });
   };
 
 
@@ -97,6 +76,11 @@ function ItemPage() {
     setFormData((prevState) => ({
       ...prevState,
       [inputIdentifier]: newValue,
+    }));
+
+    setDidEdit((prevEdit) => ({
+      ...prevEdit,
+      [inputIdentifier]: true,
     }));
   };
 
@@ -121,6 +105,13 @@ function ItemPage() {
     }
   };
 
+  const handleInputBlur = (identifier: any) => {
+    setDidEdit((prevEdit) => ({
+      ...prevEdit,
+      [identifier]: true,
+    }));
+  }
+
 
   useIonViewWillLeave(() => {
     setFormData({
@@ -131,7 +122,29 @@ function ItemPage() {
       note: '',
     });
     setIsSuccess(false);
+    setDidEdit({
+      data: false,
+      km: false,
+      tipo: false,
+      costo: false,
+      note: false,
+    })
   });
+
+
+  useEffect(() => {
+    if (location.state?.item) {
+      setFormData({
+        _id: location.state.item._id,
+        _rev: location.state.item._rev || undefined,
+        data: location.state.item.data,
+        km: location.state.item.km,
+        tipo: location.state.item.tipo as MaintenanceType,
+        costo: location.state.item.costo,
+        note: location.state.item.note || ''
+      });
+    }
+  }, [location.state?.item])
 
 
 
@@ -149,6 +162,7 @@ function ItemPage() {
               label="KM"
               type="number"
               name="km"
+              onBlur={() => handleInputBlur('km')}
               value={formData.km}
               onIonChange={(e) => handleInputChange('km', e.detail.value)}
               min={0}
@@ -156,12 +170,12 @@ function ItemPage() {
             />
           </IonItem>
           <div style={{ padding: '0 16px' }}>
-                      <IonText color="danger" style={{ fontSize: '0.8em' }}>
-                        {kmValidation && <p style={{ margin: '4px 0' }}>
-                          Per favore inserisci un costo superiore a 0.
-                        </p>}
-                      </IonText>
-                    </div>
+            <IonText color="danger" style={{ fontSize: '0.8em' }}>
+              {isKmInvalid && <p style={{ margin: '4px 0' }}>
+                Per favore inserisci un costo superiore a 0.
+              </p>}
+            </IonText>
+          </div>
           <IonItem>
             <IonInput
               labelPlacement="floating"
@@ -169,6 +183,7 @@ function ItemPage() {
               type="text"
               inputmode="decimal"
               name="costo"
+              onBlur={() => handleInputBlur('costo')}
               value={formData.costo}
               onIonChange={(e) => handleInputChange('costo', e.detail.value)}
               min={0}
@@ -176,12 +191,12 @@ function ItemPage() {
             />
           </IonItem>
           <div style={{ padding: '0 16px' }}>
-                      <IonText color="danger" style={{ fontSize: '0.8em' }}>
-                        {costoValidation && <p style={{ margin: '4px 0' }}>
-                          Per favore inserisci un costo superiore a 0.
-                        </p>}
-                      </IonText>
-                    </div>
+            <IonText color="danger" style={{ fontSize: '0.8em' }}>
+              {isCostoInvalid && <p style={{ margin: '4px 0' }}>
+                Per favore inserisci un costo superiore a 0.
+              </p>}
+            </IonText>
+          </div>
           <IonItem lines="inset" slot="header">
             <IonSelect
               labelPlacement="floating"
@@ -191,6 +206,7 @@ function ItemPage() {
               placeholder="Select Maintenance"
               name="type"
               value={formData.tipo}
+              onBlur={() => handleInputBlur('tipo')}
               onIonChange={(e) => handleInputChange('tipo', e.detail.value)}>
               {maintenanceTypes.map((type) => (
                 <IonSelectOption key={type} value={type}>
@@ -210,12 +226,12 @@ function ItemPage() {
         </IonList>
 
         {location.state?.item ?
-          <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+          <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit} disabled={isCostoInvalid || isCostoInvalid}>
             <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
             Modifica Manutenzione
           </IonButton>
           :
-          <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit}>
+          <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit} disabled={isCostoInvalid || isCostoInvalid}>
             <IonIcon slot="icon-only" ios={add} md={add}></IonIcon>
             Aggiungi Manutenzione
           </IonButton>
