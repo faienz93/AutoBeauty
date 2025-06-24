@@ -66,13 +66,13 @@ function App() {
             <IonTabs>
               <IonRouterOutlet>
                 <Redirect exact path="/" to="/home" />
-                <Route path="/home" component={HomePage} exact={true} />
-                <Route path="/newItem" component={ItemPage} exact={true} />
-                <Route path="/newItem/edit/:id" component={ItemPage} exact={true} />
-                <Route path="/list" component={ListCarMaintenance} exact={true} />
-                <Route path="/newkm/edit/:id" component={KmPage} exact={true} />
-                <Route path="/settings" component={Setting} exact={true} />
-                <Route path="/info" component={InfoPage} exact={true} />
+                <Route path="/home" render={() => <HomePage />} exact={true} />
+                <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+                <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
+                <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+                <Route path="/newkm/edit/:id" component={KmPage} />
+                <Route path="/settings" render={() => <Setting />} exact={true} />
+                <Route path="/info" render={() => <InfoPage />} exact={true} />
               </IonRouterOutlet>
 
               <IonTabBar slot="bottom">
