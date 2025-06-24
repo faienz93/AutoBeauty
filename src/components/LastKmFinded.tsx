@@ -39,8 +39,7 @@ export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFi
             data: lastKm.data,
             km: lastKm.km
         };
-        console.log("--------------------------------------------------------");
-        console.log(lastKm)
+        
         history.push({
             pathname: `/newkm/edit/${lastKm._id}`,
             // search: '?update=true',  // query string
