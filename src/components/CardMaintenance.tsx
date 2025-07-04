@@ -13,11 +13,7 @@ export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, ma
   // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (item: Maintenance) => {
     history.push({
-      pathname: `/newItem/edit/${item._id}`,
-      // search: '?update=true',  // query string
-      state: {  // location state
-        item: item,
-      },
+      pathname: `/newItem/edit/${item._id}`
     })
 
   };

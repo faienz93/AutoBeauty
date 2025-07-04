@@ -4,21 +4,17 @@ import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
-
-import { useLocation } from 'react-router-dom';
 import { getDateString, getUUIDKey, parseStringToDate } from '../services/utils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { add, pencilOutline } from 'ionicons/icons';
 
-interface MaintenanceState {
-  item: Maintenance;
+interface EditItem {
+  editingItem?: Maintenance;
 }
 
-function ItemPage() {
+function ItemPage({ editingItem }: EditItem) {
 
-  // https://stackoverflow.com/a/59464381/4700162
-  const location = useLocation<MaintenanceState>();
-  console.log(location.state?.item)
+  
 
   console.log('Rendering NewItem component');
   const db = useMaintenanceDb();
@@ -133,18 +129,18 @@ function ItemPage() {
 
 
   useEffect(() => {
-    if (location.state?.item) {
+    if (editingItem) {
       setFormData({
-        _id: location.state.item._id,
-        _rev: location.state.item._rev || undefined,
-        data: location.state.item.data,
-        km: location.state.item.km,
-        tipo: location.state.item.tipo as MaintenanceType,
-        costo: location.state.item.costo,
-        note: location.state.item.note || ''
+        _id: editingItem._id,
+        _rev: editingItem._rev || undefined,
+        data: editingItem.data,
+        km: editingItem.km,
+        tipo: editingItem.tipo as MaintenanceType,
+        costo: editingItem.costo,
+        note: editingItem.note || ''
       });
     }
-  }, [location.state?.item])
+  }, [editingItem])
 
 
 
@@ -225,7 +221,7 @@ function ItemPage() {
           </IonItem>
         </IonList>
 
-        {location.state?.item ?
+        {editingItem ?
           <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit} disabled={isCostoInvalid || isCostoInvalid}>
             <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
             Modifica Manutenzione

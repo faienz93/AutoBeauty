@@ -25,11 +25,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
     // // https://stackoverflow.com/a/59464381/4700162
     const handleEdit = (item: any) => {
         history.push({
-            pathname: `/newItem/edit/${item._id}`,
-            // search: '?update=true',  // query string
-            state: {  // location state
-                item,
-            },
+            pathname: `/newItem/edit/${item._id}`
         })
 
     };
