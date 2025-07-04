@@ -70,7 +70,7 @@ function App() {
                 <Route path="/newItem" render={() => <ItemPage />} exact={true} />
                 <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
                 <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-                <Route path="/newkm/edit/:id" component={KmPage} />
+                <Route path="/newkm/edit/:id" render={() => <KmPage /> } exact={true}/>
                 <Route path="/settings" render={() => <Setting />} exact={true} />
                 <Route path="/info" render={() => <InfoPage />} exact={true} />
               </IonRouterOutlet>
