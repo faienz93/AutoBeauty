@@ -5,9 +5,11 @@ import { Header } from '../components/Header';
 import { getMaintenanceKey, parseStringToDate } from '../services/utils';
 import { ListItem } from '../components/ListItem';
 import { useMaintenanceDb } from '../hooks/useDbContext';
+import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 
 
 function ListCarMaintenance() {
+  const fetchMaintenancesData = useFetchMaintenances(); 
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
   
@@ -15,25 +17,7 @@ function ListCarMaintenance() {
 
   const fetchMaintenances = useCallback(async () => {
     try {
-      const result = await db.allDocs({ include_docs: true });
-      console.log('Fetched docs ----->:', result);
-      const data = result.rows.
-      filter((value) => {
-        // filtra solo i documenti che hanno une specifica chiave
-        let key = getMaintenanceKey()
-        return value.doc?._id.startsWith(key);
-      })
-      .map((row: any) => ({
-        id: row.doc._id,
-        ...row.doc
-      }))
-      .sort((a: Maintenance, b: Maintenance) => {
-        // Ordina per data decrescente
-        return new Date(parseStringToDate(b.data)).getTime() - new Date(parseStringToDate(a.data)).getTime();
-        
-        // Oppure per km decrescente
-        // return b.km - a.km;
-      });
+      const data = await fetchMaintenancesData()
       setMaintenances(data);
     } catch (error) {
       console.error('Error fetching maintenances:', error);
