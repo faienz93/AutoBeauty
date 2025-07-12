@@ -27,7 +27,7 @@ const HomePage = () => {
     return getMaintenanceWithHigherKm(maintenances);
   }, [maintenances]) as Maintenance;
 
-  const latestMaintenances = useMemo(() => {
+  const groupedMaintenance = useMemo(() => {
     return getGroupByMaintenanceByKm(maintenances);
   }, [maintenances]) as Stats;
 
@@ -121,12 +121,12 @@ const HomePage = () => {
           </IonCardHeader>
         </IonCard>
         <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
-        {latestMaintenances && Object.keys(latestMaintenances).length == 0 ? (
+        {groupedMaintenance && Object.keys(groupedMaintenance).length == 0 ? (
           <IonText color="secondary">
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
         ) : (
-          Object.entries(latestMaintenances).map(([tipo, maintenance]) => (
+          Object.entries(groupedMaintenance).map(([tipo, maintenance]) => (
             <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km} />
           ))
         )}
