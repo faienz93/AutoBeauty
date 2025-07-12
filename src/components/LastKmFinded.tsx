@@ -1,11 +1,11 @@
-import { ReactNode, useEffect } from 'react';
+import { ReactNode } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
 import { useHistory } from 'react-router-dom';
 import { speedometerOutline } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
 import cartImage from '../assets/chad-kirchoff-xe-e69j6-Ds-unsplash.jpg';
 import { Card } from '../ui/Card';
-import { IonText, useIonViewWillEnter } from '@ionic/react';
+import { IonText } from '@ionic/react';
 
 interface LastKmFindedProps {
     // onKmUpdate?: (km: Kilometers) => void;
