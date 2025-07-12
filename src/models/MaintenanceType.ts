@@ -14,11 +14,12 @@ export interface Maintenance extends PouchDbType {
 export const maintenanceTypes: MaintenanceType[] = ['Tagliando', 'Gomme', 'Revisione'];
 
 
-export interface Stats {
-  Tagliando: Maintenance;
-  Gomme: Maintenance;
-  Revisione: Maintenance;
-  Chilometraggio: Maintenance;
-};
+// export interface Stats {
+//   Tagliando?: Maintenance;
+//   Gomme?: Maintenance;
+//   Revisione?: Maintenance;
+//   Chilometraggio?: Maintenance;
+// };
 
+export type Stats = Partial<Record<MaintenanceType, Maintenance>>;
 

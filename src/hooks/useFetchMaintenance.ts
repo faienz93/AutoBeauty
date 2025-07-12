@@ -9,7 +9,6 @@ export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
 
     const fetchMaintenances = async (): Promise<Maintenance[]> => {
         const res = await dbMaitenenance.allDocs({ include_docs: true });
-        console.log('Fetched docs ----->:', res);
         const maintenance = res.rows.
             filter((value) => {
                 // filtra solo i documenti che hanno une specifica chiave
@@ -28,7 +27,7 @@ export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
                 // return b.km - a.km;
             }) as Maintenance[];
 
-        console.log("Vediamo cosa stampiamo")
+        console.log("Fetched Maintenances ----->")
         console.log(maintenance)
 
         return maintenance

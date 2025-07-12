@@ -1,76 +1,52 @@
-import { useCallback, useContext } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useState } from 'react';
 import { Maintenance, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from '../components/Header';
-
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, parseStringToDate } from '../services/utils';
 import { LastKmFinded } from '../components/LastKmFinded';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
+import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/utils';
 
 
 
 
 const HomePage = () => {
 
-  const [latestMaintenances, setLatestMaintenances] = useState({});
-  const fetchMaintenances = useFetchMaintenances(); 
-
+  const today = getDateString();
+  const maintenancesData = useFetchMaintenances();
+  const db = useMaintenanceDb();
   const dbKm = useKilometersDb();
-  const dbMaitenenance = useMaintenanceDb();
+  const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 
-  const [maintenanceWithHigherKm, setMaintenanceWithHigherKm] = useState<Maintenance | null>(null);
+  const maintenanceWithHigherKm = useMemo(() => {
+    return getMaintenanceWithHigherKm(maintenances);
+  }, [maintenances]) as Maintenance;
+
+  const latestMaintenances = useMemo(() => {
+    return getGroupByMaintenanceByKm(maintenances);
+  }, [maintenances]) as Stats;
+
   const [lastManualKm, setLastManualKm] = useState<Kilometers>({
     data: getDateString(),
     km: 0
   });
 
-  const today = getDateString();
-
-
-  const countCarMaintenances = async () => {
-    
-    const maintenance = await fetchMaintenances()
-
-    setMaintenanceWithHigherKm(
-      maintenance.reduce((acc, current) => {
-        if (!acc || current.km > acc.km) {
-          return current;
-        }
-        return acc;
-      }, null as Maintenance | null)
-    );
+  const fetchMaintenances = useCallback(async () => {
+    try {
+      const data = await maintenancesData()
+      setMaintenances(data);
+    } catch (error) {
+      console.error('Error fetching maintenances:', error);
+    }
+  }, [db]);
 
 
 
-    const updatedMaintenances = maintenance.reduce((acc, current) => {
-      const existing = acc[current.tipo];
-
-      // Se non esiste una manutenzione per questo tipo O
-      // se la manutenzione corrente è più recente, aggiorna
-      if (!existing ||
-        new Date(parseStringToDate(current.data)).getTime() >
-        new Date(parseStringToDate(existing.data)).getTime()) {
-        acc[current.tipo] = current;
-      }
-
-      return acc;
-    }, {} as Stats);
-
-    setLatestMaintenances(updatedMaintenances);
-
-  };
-
-
-  const getMax = (km: Kilometers, maintenance: Maintenance) => {
-    if (km.km > maintenance.km)
-      return km;
-    return maintenance;
-  };
 
 
   const getLatestManualKilometers = async () => {
@@ -128,8 +104,9 @@ const HomePage = () => {
   };
 
   useIonViewWillEnter(() => {
-    getLatestManualKilometers()
-    countCarMaintenances();
+    fetchMaintenances();
+    getLatestManualKilometers();
+    
   });
 
 
@@ -143,14 +120,14 @@ const HomePage = () => {
             <IonCardSubtitle>{today}</IonCardSubtitle>
           </IonCardHeader>
         </IonCard>
-        <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm as Maintenance} />
+        <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
         {latestMaintenances && Object.keys(latestMaintenances).length == 0 ? (
           <IonText color="secondary">
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
         ) : (
           Object.entries(latestMaintenances).map(([tipo, maintenance]) => (
-            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} maxKm={getMax(lastManualKm, maintenanceWithHigherKm as Maintenance).km} />
+            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km} />
           ))
         )}
       </IonContent>

@@ -1,13 +1,10 @@
 import { ReactNode, useEffect } from 'react';
-import { useState } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
 import { useHistory } from 'react-router-dom';
 import { speedometerOutline } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
-import { getDateString, parseStringToDate } from '../services/utils';
 import cartImage from '../assets/chad-kirchoff-xe-e69j6-Ds-unsplash.jpg';
 import { Card } from '../ui/Card';
-import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 import { IonText, useIonViewWillEnter } from '@ionic/react';
 
 interface LastKmFindedProps {
