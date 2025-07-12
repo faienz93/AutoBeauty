@@ -11,6 +11,7 @@ import { LastKmFinded } from '../components/LastKmFinded';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/utils';
+import { useFetchManualKm } from '../hooks/useFetchManualKm';
 
 
 
@@ -19,6 +20,7 @@ const HomePage = () => {
 
   const today = getDateString();
   const maintenancesData = useFetchMaintenances();
+  const manualKm = useFetchManualKm();
   const db = useMaintenanceDb();
   const dbKm = useKilometersDb();
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -49,47 +51,9 @@ const HomePage = () => {
 
 
 
-  const getLatestManualKilometers = async () => {
+  const getLatestManualKilometers = useCallback(async () => {
 
-    // const searchLastManualKm = await dbKm.find<Kilometers>({
-    //     selector: {
-    //         data: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-    //         //_id: { $gt: null }
-    //     },
-    //     sort: [{ data: 'asc' }], // ordina per km decrescente
-    //     limit: 1, // prende solo il primo risultato
-    //     //fields: ['km', 'data'],
-    //     use_index: 'idx-data',
-    // });
-
-    // REF: https://pouchdb.com/api.html#create_document
-    let lastKm: Kilometers = {
-      _id: 'manual-km',
-      // _rev: '',
-      data: getDateString(),
-      km: 0
-    };
-
-    try {
-      const searchLastManualKm = await dbKm.get('manual-km');
-      if (searchLastManualKm) {
-        lastKm = {
-          _id: searchLastManualKm._id || '',
-          _rev: searchLastManualKm._rev || '',
-          km: searchLastManualKm.km || 0,
-          data: getDateString(parseStringToDate(searchLastManualKm.data)),
-        };
-      }
-
-    } catch (err) {
-      console.log(err);
-    }
-
-
-    console.log('searchLastManualKm', lastKm);
-
-
-    // lastKm = searchLastManualKm.docs[0] || {};
+    const lastKm = await manualKm();
 
 
     // 4. Imposto lo stato con il valore e la data massima
@@ -101,7 +65,7 @@ const HomePage = () => {
     });
 
 
-  };
+  }, [dbKm]);
 
   useIonViewWillEnter(() => {
     fetchMaintenances();
