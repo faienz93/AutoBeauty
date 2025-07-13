@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+
 
 
 export const getDateString = (date?: Date) => {
@@ -35,14 +35,7 @@ export const parseStringToDate = (dateStr: string): Date => {
     return new Date(parseInt(year), month, parseInt(day));
 }
 
-export const getMaintenanceKey = () => {
-  return 'mnt-';
-}
 
-export const getUUIDKey = () => {
-  // return 'mnt-' + Date.now();
-  return getMaintenanceKey() + uuidv4();
-}
 
 /**
  * Converte una stringa numerica in formato italiano (con virgola) in un numero

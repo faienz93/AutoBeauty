@@ -5,7 +5,7 @@ import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
 import { useLocation } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';
-import { getDateString, parseItalianNumber, parseStringToDate } from '../services/utils';
+import { getDateString, parseItalianNumber, parseStringToDate } from '../utils/dateUtils';
 import { useKilometersDb } from '../hooks/useDbContext';
 import { pencilOutline } from 'ionicons/icons';
 

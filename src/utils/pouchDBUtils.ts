@@ -1,8 +1,16 @@
 import { Kilometers } from "../models/KilometersType";
 import { Maintenance, Stats } from "../models/MaintenanceType";
-import { parseStringToDate } from "../services/utils";
+import { parseStringToDate } from "./dateUtils";
+import { v4 as uuidv4 } from 'uuid';
 
+export const getMaintenanceKey = () => {
+    return 'mnt-';
+}
 
+export const getUUIDKey = () => {
+    // return 'mnt-' + Date.now();
+    return getMaintenanceKey() + uuidv4();
+}
 
 export const getMaintenanceWithHigherKm = (maintenance: Maintenance[]): Maintenance | null => {
 
@@ -48,6 +56,8 @@ export const getGroupByMaintenanceByKm = (maintenance: Maintenance[]): Stats | n
 
 export const getMaxKmBetween = (km: Kilometers, maintenance: Maintenance) => {
     if (km.km > maintenance.km)
-      return km;
+        return km;
     return maintenance;
-  };
+};
+
+

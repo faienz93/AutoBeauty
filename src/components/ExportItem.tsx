@@ -4,9 +4,8 @@ import { CsvService } from '../services/excel/csvParser';
 import { Maintenance } from '../models/MaintenanceType';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { downloadOutline } from 'ionicons/icons';
-import { getMaintenanceKey } from '../services/utils';
+import { getMaintenanceKey } from '../utils/pouchDBUtils';
 import { Capacitor } from '@capacitor/core';
-import { FileTransfer } from '@capacitor/file-transfer';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 
 

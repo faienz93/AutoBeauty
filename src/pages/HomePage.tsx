@@ -6,10 +6,10 @@ import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
-import { getDateString, parseStringToDate } from '../services/utils';
+import { getDateString, parseStringToDate } from '../utils/dateUtils';
 import { LastKmFinded } from '../components/LastKmFinded';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
-import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/utils';
+import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
 
 

@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillEnter, useIonViewWillLeave, IonPage, IonIcon, IonText } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonSelect, IonTextarea, IonNote, IonSelectOption, useIonViewWillLeave, IonPage, IonIcon, IonText } from '@ionic/react';
 import './ItemPage.css';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
-import { getDateString, getUUIDKey, parseStringToDate } from '../services/utils';
+import { getDateString, parseStringToDate } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { add, pencilOutline } from 'ionicons/icons';
+import { getUUIDKey } from '../utils/pouchDBUtils';
 
 interface EditItem {
   editingItem?: Maintenance;
@@ -155,6 +156,8 @@ function ItemPage({ editingItem }: EditItem) {
 
   useEffect(() => {
     if (editingItem) {
+      console.log("<<<<<<<<<<<<<<<<<<<<<<<<<")
+      console.log(editingItem)
       setFormData({
         _id: editingItem._id,
         _rev: editingItem._rev || undefined,
