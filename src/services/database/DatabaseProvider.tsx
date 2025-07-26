@@ -16,12 +16,12 @@ export const DatabaseProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   
   const maintenanceDb = useMemo(() => 
     new MaintenanceDbService(envVar?.car_table), 
-    []
+    [envVar?.car_table]
   );
   
   const kilometersDb = useMemo(() => 
     new KilometersDbService(envVar?.km_table), 
-    []
+    [envVar?.km_table]
   );
 
   return (
