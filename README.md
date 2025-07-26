@@ -2,6 +2,29 @@
 
 A free and open-source application to track your vehicle maintenance history. Keep records of services, tire changes, and inspections all in one place.
 
+## Getting Started 🚀
+
+## Getting Started 🚀
+
+1. Clone the repository
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Crea un file `.env` nella root del progetto. Esempio di configurazione:
+   ```
+   # .env example
+   VITE_API_URL=http://localhost:3000/api
+   VITE_DB_NAME=car-maintenance
+   ```
+   Modifica i valori secondo le tue esigenze.
+
+4. Avvia il server di sviluppo:
+   ```
+   npm run dev
+   ```
+   L'app sarà disponibile su [http://localhost:5173](http://localhost:5173) (o la porta indicata da Vite).
+
 ## Features ✨
 - Track Maintenance Events
 	- Regular service (Tagliando)
