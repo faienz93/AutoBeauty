@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IonAlert, IonButton, IonIcon, IonItemDivider, IonToast } from '@ionic/react';
+import { IonAlert, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonToast } from '@ionic/react';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance } from '../models/MaintenanceType';
 import { useMaintenanceDb } from '../hooks/useDbContext';
@@ -34,10 +34,10 @@ const ExportItem = () => {
         // REF: https://dev.to/graciesharma/implementing-csv-data-export-in-react-without-external-libraries-3030
         const url = window.URL.createObjectURL(data);
         const link = document.createElement('a');
-        
+
         link.href = url;
         link.setAttribute('download', filename);
-        
+
         // Add event listeners to track success/failure
         link.addEventListener('click', () => {
           setTimeout(() => {
@@ -47,14 +47,14 @@ const ExportItem = () => {
             resolve(true);
           }, 100);
         });
-  
+
         link.addEventListener('error', (error) => {
           // Cleanup
           document.body.removeChild(link);
           window.URL.revokeObjectURL(url);
           reject(error);
         });
-  
+
         document.body.appendChild(link);
         link.click();
       } catch (error) {
@@ -111,7 +111,7 @@ const ExportItem = () => {
             data: base64Data,
             directory: Directory.Data,
           });
-  
+
           setIsSuccess(prevValue => !prevValue);
         }
         catch (error) {
@@ -123,9 +123,9 @@ const ExportItem = () => {
         downloadFile(filename, csvDataBlob).then(() => {
           setIsSuccess(prevValue => !prevValue);
         });
-        
+
       }
-      
+
     } catch (error) {
       console.error('Error fetching maintenances:', error);
       setIsSuccess(false);
@@ -135,18 +135,23 @@ const ExportItem = () => {
 
   return (
     <>
-
-      <IonItemDivider color="light" className='buttonAddList'>
-        <h1>Esporta</h1>
-      </IonItemDivider>
-
-      <IonButton color="danger" expand="full" className="buttonAddList" onClick={handleExport}>
-        <IonIcon slot="icon-only" ios={downloadOutline}></IonIcon>
-        Esporta
-      </IonButton>
-
-
-
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Esporta</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <p className="ion-padding-bottom">
+            Esporta tutti i dati in formato csv.
+          </p>
+          <IonButton
+            expand="block"
+            onClick={() => handleExport()}
+            className="ion-margin-bottom">
+            <IonIcon icon={downloadOutline} slot="start" />
+            Esporta
+          </IonButton>
+        </IonCardContent>
+      </IonCard>
       <IonAlert
         isOpen={noData}
         header="Attenzione!"
@@ -154,8 +159,6 @@ const ExportItem = () => {
         message="Non ci sono dati da esportare."
         buttons={['Ok!']}
       ></IonAlert>
-
-
       <IonToast
         isOpen={isSuccess}
         onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
@@ -163,7 +166,6 @@ const ExportItem = () => {
         duration={3000}
         color={isSuccess ? "success" : "danger"}
       />
-
     </>
   );
 };

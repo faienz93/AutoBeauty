@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { IonButton, IonIcon, IonInput, IonItem, IonItemDivider, IonList, IonToast } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonInput, IonItem, IonLabel, IonList, IonToast } from '@ionic/react';
 import { addOutline, cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
@@ -73,29 +73,38 @@ const ImportItem = () => {
 
   return (
     <>
-      <IonItemDivider color="light" className='buttonAddList'>
-        <h1>Importa</h1>
-      </IonItemDivider>
-      {/* REF: https://forum.ionicframework.com/t/ioninput-type-file/205203/2 */}
-      <input style={{ display: 'none' }} ref={inputRef} type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={handleFileChange} />
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Importa</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <p className="ion-padding-bottom">
+            Seleziona un file per importare i tuoi dati preesistenti
+          </p>
+          <IonButton
+            expand="block"
+            color={'secondary'}
+            onClick={() => openFileDialog()}
+            className="ion-margin-bottom">
+            <IonIcon icon={cloudUpload} slot="start" />
+          </IonButton>
+          {/* REF: https://forum.ionicframework.com/t/ioninput-type-file/205203/2 */}
+          <input style={{ display: 'none' }} ref={inputRef} type="file" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" onChange={handleFileChange} />
+          <IonItem lines="none" className="ion-margin-bottom">
+            <IonLabel>
+              <strong>File Selezionato:</strong> {label}
+            </IonLabel>
+          </IonItem>
 
-      <IonButton onClick={openFileDialog} expand="full" className="buttonAddList">
-        <IonIcon slot="icon-only" icon={cloudUpload}></IonIcon>
-      </IonButton>
-      <IonList inset={true}>
-        <IonItem lines="inset">
-          <IonInput disabled={true} clearInput={true} label={label}></IonInput>
-        </IonItem>
-      </IonList>
-
-      <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleUpload}>
-        <IonIcon slot="icon-only" ios={addOutline}></IonIcon>
-        Aggiungi a DB
-      </IonButton>
-
-
-
-
+          <IonButton
+            expand="block"
+            onClick={() => handleUpload()}
+            className="ion-margin-bottom">
+            <IonIcon icon={addOutline} slot="start" />
+            Aggiungi a Db
+          </IonButton>
+        </IonCardContent>
+      </IonCard>
       <IonToast
         isOpen={isSuccess}
         onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
@@ -103,9 +112,6 @@ const ImportItem = () => {
         duration={3000}
         color={isSuccess ? "success" : "danger"}
       />
-
-
-
     </>
   );
 };

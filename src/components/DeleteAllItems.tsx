@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IonButton, IonIcon, IonItemDivider, IonToast } from '@ionic/react';
+import { IonAlert, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonToast } from '@ionic/react';
 import { AlertConfirmation } from './AlertConfirmation';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 import { trashOutline } from 'ionicons/icons';
@@ -32,16 +32,25 @@ const DeleteAllItem = () => {
 
   return (
     <>
+      <IonCard>
+        <IonCardHeader>
+          <IonCardTitle>Cancella tutto</IonCardTitle>
+        </IonCardHeader>
+        <IonCardContent>
+          <p className="ion-padding-bottom">
+            Cancella tutti i dati dal database.
+          </p>
 
-      <IonItemDivider color="light" className='buttonAddList'>
-        <h1>Cancella tutto</h1>
-      </IonItemDivider>
-
-      <IonButton color="danger" expand="full" id="delete-allitem" className="buttonAddList" onClick={() => setConfirmDelete(true)}>
-        <IonIcon slot="icon-only" ios={trashOutline} md={trashOutline}></IonIcon>
-        Cancella tutto
-      </IonButton>
-
+          <IonButton
+            expand="block"
+            color={'danger'}
+            onClick={() => setConfirmDelete(true)}
+            className="ion-margin-bottom">
+            <IonIcon icon={trashOutline} slot="start" />
+            Cancella
+          </IonButton>
+        </IonCardContent>
+      </IonCard>
 
       <AlertConfirmation
         msg="Sei sicuro di voler cancellare tutto? Questa azione non può essere annullata."
