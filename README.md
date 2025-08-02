@@ -77,6 +77,14 @@ This project is completely free and open source. Feel free to use it, modify it,
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 
+
+## TODO
+
+- [ ] Fix when update item routing
+- [ ] Fix when download file
+- [ ] Simplyfy the Hoe Page with only one page
+- [ ] Fix Link of support
+- [ ] Add sentry for bug
   
 ---
 Made with ❤️ by car enthusiasts for car enthusiasts
