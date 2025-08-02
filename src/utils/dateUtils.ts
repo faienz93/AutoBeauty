@@ -1,6 +1,15 @@
 
 
 
+/**
+ * Returns a formatted date string in the 'it-IT' locale.
+ *
+ * If no date is provided, the current date is used.
+ * The returned string includes the year (numeric), month (short), and day (numeric).
+ *
+ * @param date - Optional `Date` object to format. Defaults to the current date if not provided.
+ * @returns The formatted date string in 'it-IT' locale.
+ */
 export const getDateString = (date?: Date) => {
   const d = date || new Date();
   return d.toLocaleDateString('it-IT', {
@@ -11,6 +20,22 @@ export const getDateString = (date?: Date) => {
 }
 
 
+/**
+ * Parses a date string in either "DD/MM/YY" or "DD MMM YYYY" format and returns a JavaScript Date object.
+ *
+ * - For "DD/MM/YY", the year is interpreted as 2000 + YY if YY < 100.
+ * - For "DD MMM YYYY", the month must be in Italian short form (e.g., "mag" for May).
+ *
+ * @param dateStr - The date string to parse.
+ * @returns A Date object representing the parsed date.
+ * @throws {Error} If the date string format is invalid or the month is not recognized.
+ *
+ * @example
+ * ```typescript
+ * parseStringToDate("10/05/25"); // May 10, 2025
+ * parseStringToDate("10 mag 2025"); // May 10, 2025
+ * ```
+ */
 export const parseStringToDate = (dateStr: string): Date => {
     // Prova prima il formato "DD/MM/YY"
     if (dateStr.includes('/')) {
