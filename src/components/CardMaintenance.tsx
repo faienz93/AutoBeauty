@@ -4,9 +4,10 @@ import { parseStringToDate } from "../utils/dateUtils";
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceIcon } from "../hooks/useMaitenanceIcon";
 import { Card } from "../ui/Card";
+import { isMaintenanceNeeded } from "../utils/carUtils";
 
 
-export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, maintenance: Maintenance, maxKm: number}) => {
+export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maintenanceType: string, maintenance: Maintenance, maxKm: number}) => {
   console.log('Rendering CardMaintenance component');
 
   const history = useHistory();
@@ -15,28 +16,16 @@ export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, ma
     history.push({
       pathname: `/newItem/edit/${item._id}`
     })
-
   };
 
 
   
   const diffKm = maxKm - maintenance.km;
 
-  let todo = false;
-  if (tipo === 'Gomme') todo = diffKm >= LimitGomme;
-  if (tipo === 'Tagliando') todo = diffKm >= LimitTagliando;
-  if (tipo === 'Revisione') {
-    const dataUltimaRevisione = parseStringToDate(maintenance?.data);
-    const dataAttuale = new Date();
-    const mesiPassati =
-      (dataAttuale.getFullYear() - dataUltimaRevisione.getFullYear()) * 12 +
-      (dataAttuale.getMonth() - dataUltimaRevisione.getMonth());
-
-    todo = mesiPassati >= 24; // 24 mesi = 2 anni
-  }
+  let todo = isMaintenanceNeeded(maintenanceType, diffKm, maintenance?.data);
 
   // Calcolo dei dati reali per la manutenzione
-  const tipoManutenzione = tipo;
+  const tipoManutenzione = maintenanceType;
   const dataManutenzione = maintenance?.data || 'N/A';
 
 
@@ -57,4 +46,6 @@ export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, ma
       onEdit={() => handleEdit(maintenance)}
     />
   )
+
+  
 }

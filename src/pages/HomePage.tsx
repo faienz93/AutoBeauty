@@ -81,7 +81,7 @@ const HomePage = () => {
           </IonText>
         ) : (
           Object.entries(groupedMaintenance ?? {}).map(([tipo, maintenance]) => (
-            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km} />
+            <CardMaintenance key={tipo} maintenanceType={tipo} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km} />
           ))
         )}
       </IonContent>
