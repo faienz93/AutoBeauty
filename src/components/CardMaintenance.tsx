@@ -22,9 +22,9 @@ export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, ma
   
   const diffKm = maxKm - maintenance.km;
 
-  let daFare = false;
-  if (tipo === 'Gomme') daFare = diffKm >= LimitGomme;
-  if (tipo === 'Tagliando') daFare = diffKm >= LimitTagliando;
+  let todo = false;
+  if (tipo === 'Gomme') todo = diffKm >= LimitGomme;
+  if (tipo === 'Tagliando') todo = diffKm >= LimitTagliando;
   if (tipo === 'Revisione') {
     const dataUltimaRevisione = parseStringToDate(maintenance?.data);
     const dataAttuale = new Date();
@@ -32,7 +32,7 @@ export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, ma
       (dataAttuale.getFullYear() - dataUltimaRevisione.getFullYear()) * 12 +
       (dataAttuale.getMonth() - dataUltimaRevisione.getMonth());
 
-    daFare = mesiPassati >= 24; // 24 mesi = 2 anni
+    todo = mesiPassati >= 24; // 24 mesi = 2 anni
   }
 
   // Calcolo dei dati reali per la manutenzione
@@ -45,7 +45,7 @@ export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, ma
       key={maintenance._id}
       title={tipoManutenzione}
       subtitle={dataManutenzione}
-      mainNote={daFare ? 'Da fare' : 'Tutto sotto controllo'}
+      mainNote={todo ? 'Da fare' : 'Tutto sotto controllo'}
       detailNote={String(maintenance.km)}
       comment={maintenance?.note || ''}
       shadowColor='#2f3133'
@@ -53,7 +53,7 @@ export const CardMaintenance = ({ tipo, maintenance, maxKm }: { tipo: string, ma
         type: 'image',
         source: useMaintenanceIcon(maintenance.tipo)
       }}
-      mainNoteColor={daFare ? '#FF0000' : '#008000'}
+      mainNoteColor={todo ? '#FF0000' : '#008000'}
       onEdit={() => handleEdit(maintenance)}
     />
   )
