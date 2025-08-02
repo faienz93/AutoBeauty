@@ -24,16 +24,11 @@ export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maint
 
   let todo = isMaintenanceNeeded(maintenanceType, diffKm, maintenance?.data);
 
-  // Calcolo dei dati reali per la manutenzione
-  const tipoManutenzione = maintenanceType;
-  const dataManutenzione = maintenance?.data || 'N/A';
-
-
   return (
     <Card
       key={maintenance._id}
-      title={tipoManutenzione}
-      subtitle={dataManutenzione}
+      title={maintenanceType}
+      subtitle={maintenance?.data || 'N/A'}
       mainNote={todo ? 'Da fare' : 'Tutto sotto controllo'}
       detailNote={String(maintenance.km)}
       comment={maintenance?.note || ''}
