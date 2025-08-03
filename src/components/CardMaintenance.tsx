@@ -1,6 +1,4 @@
 import { Maintenance } from '../models/MaintenanceType';
-import { LimitGomme, LimitTagliando } from '../constant';
-import { parseStringToDate } from '../utils/dateUtils';
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceIcon } from '../hooks/useMaitenanceIcon';
 import { Card } from '../ui/Card';

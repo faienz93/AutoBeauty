@@ -1,4 +1,4 @@
-import { IonBadge, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
 import { pencil } from 'ionicons/icons';
 
 import { ReactNode } from 'react';
@@ -46,15 +46,15 @@ export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, de
         if (cardHeading) {
             return (
                 <img
-                        alt="Maintenance"
-                        style={{
-                            display: 'block',
-                            width: '100%',
-                            height: '300px',
-                            objectFit: 'cover',              // Taglia i bordi, ma sempre pieno
-                            objectPosition: 'center'  // Centra l'inquadratura
-                        }}
-                        src={cardHeading}
+                  alt="Maintenance"
+                  style={{
+                      display: 'block',
+                      width: '100%',
+                      height: '300px',
+                      objectFit: 'cover',              // Taglia i bordi, ma sempre pieno
+                      objectPosition: 'center'  // Centra l'inquadratura
+                  }}
+                  src={cardHeading}
                     />
             )
         }
