@@ -15,7 +15,7 @@ interface ListItemProps {
 
 export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
 
-    console.log("ListItem render", maintenance);
+    console.log('ListItem render', maintenance);
 
     const [confirmDelete, setConfirmDelete] = useState(false);
     const db = useMaintenanceDb();

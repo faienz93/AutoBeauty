@@ -12,9 +12,6 @@ import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
 
-
-
-
 const HomePage = () => {
 
   const today = getDateString();
@@ -63,12 +60,11 @@ const HomePage = () => {
     loadData();
   });
 
-
   return (
     <IonPage>
       <Header title="Home" showBackButton={false} />
       <IonContent>
-        <IonCard style={{ flexGlow: 1, borderRadius: 18, boxShadow: `0 4px 12px` }}>
+        <IonCard style={{ flexGlow: 1, borderRadius: 18, boxShadow: '0 4px 12px' }}>
           <IonCardHeader>
             <IonCardTitle>Data odierna</IonCardTitle>
             <IonCardSubtitle>{today}</IonCardSubtitle>

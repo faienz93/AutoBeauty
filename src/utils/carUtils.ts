@@ -1,5 +1,5 @@
-import { parseStringToDate } from "./dateUtils";
-import { LimitGomme, LimitTagliando } from "../constant";
+import { parseStringToDate } from './dateUtils';
+import { LimitGomme, LimitTagliando } from '../constant';
 
 export function isMaintenanceNeeded(maintenanceType: string, diffKm: number, maintenanceDate: string) {
     let todo = false;

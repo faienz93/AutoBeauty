@@ -1,7 +1,7 @@
-import { IonBadge, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from "@ionic/react";
-import { pencil } from "ionicons/icons";
+import { IonBadge, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
+import { pencil } from 'ionicons/icons';
 
-import { ReactNode } from "react";
+import { ReactNode } from 'react';
 interface CardProps {
     title: string,
     cardHeading?: string,
@@ -29,7 +29,7 @@ export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, de
     const renderIcon = () => {
         if (iconContent.type === 'image') {
             return (
-                <IonThumbnail slot="start" style={{ fontSize: 38, color: "var(--ion-color-medium)" }}>
+                <IonThumbnail slot="start" style={{ fontSize: 38, color: 'var(--ion-color-medium)' }}>
                     <img src={iconContent.source as string} alt={iconContent.alt || ''} />
                 </IonThumbnail>
             );
@@ -37,7 +37,7 @@ export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, de
         return (
             <IonIcon
                 icon={iconContent.source as typeof pencil}
-                style={{ fontSize: 38, color: "var(--ion-color-medium)" }}
+                style={{ fontSize: 38, color: 'var(--ion-color-medium)' }}
             />
         );
     };
@@ -53,7 +53,7 @@ export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, de
                             height: '300px',
                             objectFit: 'cover',              // Taglia i bordi, ma sempre pieno
                             objectPosition: 'center'  // Centra l'inquadratura
-                        }}                        
+                        }}
                         src={cardHeading}
                     />
             )
@@ -78,9 +78,9 @@ export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, de
                 <IonCardContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                     <div>
                         <div style={{ fontSize: 34, fontWeight: 600, color: getMainTextColor() }}>{mainNote}</div>
-                        <div style={{ fontSize: 15, color: "#5c5c5c" }}>{comment}</div>
+                        <div style={{ fontSize: 15, color: '#5c5c5c' }}>{comment}</div>
                     </div>
-                    <div style={{ fontSize: 16, color: "#777", minWidth: 54, textAlign: "right" }}>
+                    <div style={{ fontSize: 16, color: '#777', minWidth: 54, textAlign: 'right' }}>
                         {detailNote && (
                             <div style={{ fontSize: 12, fontStyle: 'italic' }}>{detailNote}</div>
                         )}

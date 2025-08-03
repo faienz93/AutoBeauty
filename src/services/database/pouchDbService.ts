@@ -6,13 +6,11 @@ import { PouchDbType } from '../../models/PouchDbType';
 PouchDB.plugin(PouchFind);
 PouchDB.plugin(cordovaSqlitePlugin);
 
-
 export interface PouchDbInfo extends PouchDB.Core.DatabaseInfo {
     db_name: string;
     doc_count: number;
     update_seq: number | string;
 }
-
 
 export interface IPouchDbService {
     getInfo(): Promise<PouchDbInfo>;
@@ -37,7 +35,6 @@ export abstract class PouchDbService implements IPouchDbService {
         this.initDatabase();
     }
 
-
     private initDatabase() {
         // if (this.platform === 'web') {
         //     console.log('Web platform detected. Using default PouchDB adapter.');
@@ -56,7 +53,6 @@ export abstract class PouchDbService implements IPouchDbService {
     }
 
     protected abstract createSpecificIndexes(): Promise<void>;
-    
 
     async getInfo(): Promise<PouchDbInfo> {
         try {
@@ -67,7 +63,6 @@ export abstract class PouchDbService implements IPouchDbService {
             throw new Error(`Error getting database info: ${error}`);
         }
     }
-
 
     async put(doc: PouchDbType): Promise<PouchDB.Core.Response> {
         try {

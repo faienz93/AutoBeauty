@@ -43,16 +43,13 @@ import ItemPage from './pages/ItemPage';
 
 import { Capacitor } from '@capacitor/core';
 
-
-
 import Setting from './pages/Setting';
 import KmPage from './pages/KmPage';
 
-import HomePage from "./pages/HomePage";
-import { DatabaseProvider } from "./services/database/DatabaseProvider";
+import HomePage from './pages/HomePage';
+import { DatabaseProvider } from './services/database/DatabaseProvider';
 import InfoPage from './pages/InfoPage';
 import ItemPageUpdate from './pages/ItemPageUpdate';
-
 
 setupIonicReact({ mode: 'md' });
 
@@ -107,7 +104,6 @@ function App() {
         </IonApp>
 
       </DatabaseProvider>
-
 
   );
 }

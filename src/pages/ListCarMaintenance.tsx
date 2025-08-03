@@ -7,12 +7,11 @@ import { ListItem } from '../components/ListItem';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 
-
 function ListCarMaintenance() {
-  const fetchMaintenancesData = useFetchMaintenances(); 
+  const fetchMaintenancesData = useFetchMaintenances();
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
-  
+
   const db = useMaintenanceDb();
 
   const fetchMaintenances = useCallback(async () => {
@@ -24,10 +23,10 @@ function ListCarMaintenance() {
     }
   }, [db]);
 
-  useIonViewWillEnter(() => { 
+  useIonViewWillEnter(() => {
       fetchMaintenances();
   });
-  
+
   return (
     <IonPage>
       <Header title="Lista Manutenzioni" />

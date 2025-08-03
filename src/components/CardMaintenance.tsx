@@ -1,11 +1,10 @@
-import { Maintenance } from "../models/MaintenanceType";
-import { LimitGomme, LimitTagliando } from "../constant";
-import { parseStringToDate } from "../utils/dateUtils";
+import { Maintenance } from '../models/MaintenanceType';
+import { LimitGomme, LimitTagliando } from '../constant';
+import { parseStringToDate } from '../utils/dateUtils';
 import { useHistory } from 'react-router-dom';
-import { useMaintenanceIcon } from "../hooks/useMaitenanceIcon";
-import { Card } from "../ui/Card";
-import { isMaintenanceNeeded } from "../utils/carUtils";
-
+import { useMaintenanceIcon } from '../hooks/useMaitenanceIcon';
+import { Card } from '../ui/Card';
+import { isMaintenanceNeeded } from '../utils/carUtils';
 
 export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maintenanceType: string, maintenance: Maintenance, maxKm: number}) => {
   console.log('Rendering CardMaintenance component');
@@ -18,11 +17,9 @@ export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maint
     })
   };
 
-
-  
   const diffKm = maxKm - maintenance.km;
 
-  let todo = isMaintenanceNeeded(maintenanceType, diffKm, maintenance?.data);
+  const todo = isMaintenanceNeeded(maintenanceType, diffKm, maintenance?.data);
 
   return (
     <Card
@@ -42,5 +39,4 @@ export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maint
     />
   )
 
-  
 }

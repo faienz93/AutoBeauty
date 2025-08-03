@@ -1,9 +1,8 @@
-import { useParams } from "react-router-dom";
-import ItemPage from "./ItemPage"
-import { useMaintenanceDb } from "../hooks/useDbContext";
-import { useState, useEffect } from "react";
-import { Maintenance } from "../models/MaintenanceType";
-
+import { useParams } from 'react-router-dom';
+import ItemPage from './ItemPage'
+import { useMaintenanceDb } from '../hooks/useDbContext';
+import { useState, useEffect } from 'react';
+import { Maintenance } from '../models/MaintenanceType';
 
 const ItemPageUpdate = () => {
     const { id } = useParams<{ id: string }>();

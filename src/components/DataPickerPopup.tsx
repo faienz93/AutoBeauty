@@ -1,9 +1,9 @@
-import { IonInput, IonDatetime, IonPopover, IonContent } from "@ionic/react";
+import { IonInput, IonDatetime, IonPopover, IonContent } from '@ionic/react';
 
 interface DataPickerPopouProps {
-    title: string, 
-    currentDate: string, 
-    onChange(inputIdentifier: any, newValue: any): void 
+    title: string,
+    currentDate: string,
+    onChange(inputIdentifier: any, newValue: any): void
 }
 // https://www.damirscorner.com/blog/posts/20220107-DatePickerPopupInIonic6.html
 const DataPickerPopup: React.FC<DataPickerPopouProps> = ({ title, currentDate, onChange }) => {

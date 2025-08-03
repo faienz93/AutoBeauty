@@ -1,8 +1,6 @@
-import Papa from "papaparse";
-
+import Papa from 'papaparse';
 
 export class CsvService<T> {
-
 
   async importCsv(file: File, columnHeader: boolean = true): Promise<T[]> {
 
@@ -59,14 +57,10 @@ export class CsvService<T> {
       console.error('Errore esportazione:', error);
       throw error;
     }
-    
+
   }
 
-
-  
-
-
-  exportCsv(data: T[], header: string[]): String {
+  exportCsv(data: T[], header: string[]): string {
 
     try {
       const csv = Papa.unparse(data, {
@@ -74,12 +68,12 @@ export class CsvService<T> {
         header: true,
         columns: header
       });
-      
+
       return csv;
     } catch (error) {
       console.error('Errore esportazione:', error);
       throw error;
     }
-    
+
   }
 }

@@ -1,9 +1,8 @@
-import { IonAlert } from "@ionic/react";
-import { memo } from "react";
-
+import { IonAlert } from '@ionic/react';
+import { memo } from 'react';
 
 export const AlertConfirmation = memo(({ msg, trigger, isOpen, onClose, onConfirm }: { msg: string, trigger: string, isOpen: boolean, onClose: () => void, onConfirm: () => void }) => {
-  console.log("Confirmation")
+  console.log('Confirmation')
 
   const buttons = [
     {

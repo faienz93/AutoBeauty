@@ -4,8 +4,6 @@ import { AlertConfirmation } from './AlertConfirmation';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 import { trashOutline } from 'ionicons/icons';
 
-
-
 const DeleteAllItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [confirmDelete, setConfirmDelete] = useState(false);

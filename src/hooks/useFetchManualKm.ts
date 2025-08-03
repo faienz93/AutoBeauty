@@ -1,8 +1,6 @@
-import { Kilometers } from "../models/KilometersType";
-import { getDateString, parseStringToDate } from "../utils/dateUtils";
-import { useKilometersDb } from "./useDbContext";
-
-
+import { Kilometers } from '../models/KilometersType';
+import { getDateString, parseStringToDate } from '../utils/dateUtils';
+import { useKilometersDb } from './useDbContext';
 
 export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
     const dbKm = useKilometersDb();

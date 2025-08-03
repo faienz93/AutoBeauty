@@ -16,18 +16,18 @@ interface LastKmFindedProps {
 
 export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFindedProps) => {
 
-    const history = useHistory(); 
-    
+    const history = useHistory();
+
     let content: ReactNode = '';
     if(maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km) {
-        let msg = `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`
+        const msg = `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`
         content = (
             <IonText color="danger" style={{ fontSize: '0.9em', lineHeight: '1.3' }}>
                 {msg}
             </IonText>
         );
     }
-    
+
     // https://stackoverflow.com/a/59464381/4700162
     const handleEdit = (lastKm: Kilometers) => {
         const cleanItem = {
@@ -36,7 +36,7 @@ export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFi
             data: lastKm.data,
             km: lastKm.km
         };
-        
+
         history.push({
             pathname: `/newkm/edit/${lastKm._id}`,
             // search: '?update=true',  // query string

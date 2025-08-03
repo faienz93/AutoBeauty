@@ -1,8 +1,7 @@
-import { useMaintenanceDb } from "./useDbContext";
-import { Maintenance } from "../models/MaintenanceType";
-import { parseStringToDate } from "../utils/dateUtils";
-import { getMaintenanceKey } from "../utils/pouchDBUtils";
-
+import { useMaintenanceDb } from './useDbContext';
+import { Maintenance } from '../models/MaintenanceType';
+import { parseStringToDate } from '../utils/dateUtils';
+import { getMaintenanceKey } from '../utils/pouchDBUtils';
 
 export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
 
@@ -13,7 +12,7 @@ export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
         const maintenance = res.rows.
             filter((value) => {
                 // filtra solo i documenti che hanno une specifica chiave
-                let key = getMaintenanceKey()
+                const key = getMaintenanceKey()
                 return value.doc?._id.startsWith(key);
             })
             .map((row: any) => ({
@@ -28,7 +27,7 @@ export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
                 // return b.km - a.km;
             }) as Maintenance[];
 
-        console.log("Fetched Maintenances ----->")
+        console.log('Fetched Maintenances ----->')
         console.log(maintenance)
 
         return maintenance

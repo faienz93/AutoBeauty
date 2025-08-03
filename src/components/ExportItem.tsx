@@ -8,8 +8,6 @@ import { getMaintenanceKey } from '../utils/pouchDBUtils';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 
-
-
 const ExportItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [noData, setNoData] = useState(false);
@@ -26,7 +24,6 @@ const ExportItem = () => {
       };
       reader.readAsDataURL(blob);
     });
-
 
   const downloadFile = (filename: string, data: Blob): Promise<boolean> => {
     return new Promise((resolve, reject) => {
@@ -71,7 +68,7 @@ const ExportItem = () => {
       const data = result.rows.
         filter((value) => {
           // filtra solo i documenti che hanno une specifica chiave
-          let key = getMaintenanceKey()
+          const key = getMaintenanceKey()
           return value.doc?._id.startsWith(key);
         })
         .map((row: any) => ({
@@ -162,9 +159,9 @@ const ExportItem = () => {
       <IonToast
         isOpen={isSuccess}
         onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
-        message={isSuccess ? "Esportazione avvenuto con successo" : "Errore durante l'esportazione"}
+        message={isSuccess ? 'Esportazione avvenuto con successo' : 'Errore durante l\'esportazione'}
         duration={3000}
-        color={isSuccess ? "success" : "danger"}
+        color={isSuccess ? 'success' : 'danger'}
       />
     </>
   );

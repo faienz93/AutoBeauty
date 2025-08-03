@@ -97,8 +97,8 @@ const InfoPage: React.FC = () => {
             <p className="ion-padding-bottom">
               Car Maintenance App è completamente gratuita e open source. Se trovi l'app utile, puoi supportare lo sviluppo con una donazione:
             </p>
-            
-            <IonButton 
+
+            <IonButton
               expand="block"
               onClick={() => openDonationLink('buymeacoffee')}
               className="ion-margin-bottom">
@@ -106,7 +106,7 @@ const InfoPage: React.FC = () => {
               Offrimi un caffè
             </IonButton>
 
-            <IonButton 
+            <IonButton
               expand="block"
               color="secondary"
               onClick={() => openDonationLink('paypal')}>

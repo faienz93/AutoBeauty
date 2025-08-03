@@ -4,13 +4,9 @@ import { getEnv } from './services/env';
 
 const envVar = getEnv();
 
-
-
 if (!envVar) {
-  throw new Error("Environment variables are not set correctly.");
+  throw new Error('Environment variables are not set correctly.');
 }
-
-
 
 const firebaseConfig = {
   // Copia qui le tue credenziali dalla Firebase Console

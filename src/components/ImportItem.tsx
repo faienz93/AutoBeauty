@@ -7,8 +7,6 @@ import { getDateString, parseStringToDate, parseItalianNumber } from '../utils/d
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { getUUIDKey } from '../utils/pouchDBUtils';
 
-
-
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const db = useMaintenanceDb();
@@ -28,8 +26,6 @@ const ImportItem = () => {
     }
   };
 
-
-
   const openFileDialog = () => {
     if (inputRef.current) {
       inputRef.current.click();
@@ -42,7 +38,7 @@ const ImportItem = () => {
     try {
       const importedItemFromCsv = await csvService.importCsv(file) as Maintenance[];
 
-      // Parse result   
+      // Parse result
       const convertedItems: Maintenance[] = importedItemFromCsv.map(item => ({
         _id: getUUIDKey(),
         data: getDateString(parseStringToDate(item.data)),
@@ -51,7 +47,6 @@ const ImportItem = () => {
         costo: parseItalianNumber(item.costo),  // gestisce numeri con virgola italiana
         note: item.note || ''
       }));
-
 
       const result = await db.bulkDocs(convertedItems);
       if (result) {
@@ -108,9 +103,9 @@ const ImportItem = () => {
       <IonToast
         isOpen={isSuccess}
         onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
-        message={isSuccess ? "Caricamento avvenuto con successo" : "Errore durante il caricamento"}
+        message={isSuccess ? 'Caricamento avvenuto con successo' : 'Errore durante il caricamento'}
         duration={3000}
-        color={isSuccess ? "success" : "danger"}
+        color={isSuccess ? 'success' : 'danger'}
       />
     </>
   );

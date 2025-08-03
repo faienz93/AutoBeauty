@@ -27,8 +27,8 @@ function KmPage() {
   const [didEdit, setDidEdit] = useState({
     data: false,
     km: false,
-  }); 
-  
+  });
+
   const isKmInvalid = didEdit.km && Number(formData.km) === 0;
 
   const updateKm = async (newKm: Kilometers) => {
@@ -51,7 +51,7 @@ function KmPage() {
       console.log('Kilometer added successfully:', response);
       location.state.item._rev = response.rev;
       setIsSuccess(prevValue => !prevValue)
-      
+
     } catch (error) {
       console.error('Error adding Kilometer:', error);
       setIsSuccess(false);
@@ -79,7 +79,6 @@ function KmPage() {
       [inputIdentifier]: true,
     }));
 
-    
   };
 
   const handleSubmit = async (event: any) => {
@@ -101,14 +100,12 @@ function KmPage() {
     }
   };
 
-
   const handleInputBlur = (identifier: any) => {
     setDidEdit((prevEdit) => ({
       ...prevEdit,
       [identifier]: true,
     }));
   }
-
 
   useEffect(() => {
     if (location.state?.item) {
@@ -119,12 +116,11 @@ function KmPage() {
         km: location.state.item.km
       });
     }
-    // eslint-disable-next-line
+
   }, [location.state?.item]);
 
-
   useIonViewWillLeave(() => {
-    
+
     setFormData({
       data: currentDate,
       km: 0
@@ -168,11 +164,11 @@ function KmPage() {
 
         </IonList>
 
-        <IonButton 
-          id="open-toast" 
-          type="submit"  
-          expand="full" 
-          className="buttonAddList" 
+        <IonButton
+          id="open-toast"
+          type="submit"
+          expand="full"
+          className="buttonAddList"
           onClick={handleSubmit}
           disabled={isKmInvalid}>
           <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
@@ -182,9 +178,9 @@ function KmPage() {
         <IonToast
           isOpen={isSuccess}
           onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
-          message={isSuccess ? "Kilometraggio aggiunto con successo!" : "Errore durante la modifica del Kilometraggio"}
+          message={isSuccess ? 'Kilometraggio aggiunto con successo!' : 'Errore durante la modifica del Kilometraggio'}
           duration={3000}
-          color={isSuccess ? "success" : "danger"}
+          color={isSuccess ? 'success' : 'danger'}
         />
       </IonContent>
     </IonPage>
