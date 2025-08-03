@@ -28,4 +28,19 @@ export default tseslint.config(
       'quotes': ['error', 'single']
     },
   },
+
+  // File generic (vite.config.js, ecc.)
+  {
+    files: ['**/*.{js,jsx}'],
+    languageOptions: {
+      ecmaVersion: 2020,
+      sourceType: 'module',
+    },
+    rules: {
+      'no-trailing-spaces': 'error',
+      'no-multiple-empty-lines': ['error', { max: 1 }],
+      'quotes': ['error', 'single'],
+    },
+    extends: [js.configs.recommended],
+  }
 )
