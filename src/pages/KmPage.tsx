@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';

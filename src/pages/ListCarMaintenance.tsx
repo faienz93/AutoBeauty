@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react';
 import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter} from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { Header } from '../components/Header';
-import { getMaintenanceKey, parseStringToDate } from '../utils/dateUtils';
 import { ListItem } from '../components/ListItem';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
