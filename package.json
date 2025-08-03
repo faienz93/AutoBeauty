@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "npm run lint && tsc -b && vite build",
     "ionic": "ionic",
     "ionic:serve": "ionic serve",
     "ionic:info": "ionic info",
