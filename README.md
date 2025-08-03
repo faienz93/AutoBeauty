@@ -2,7 +2,10 @@
 
 A free and open-source application to track your vehicle maintenance history. Keep records of services, tire changes, and inspections all in one place.
 
-## Getting Started 🚀
+## Node version
+```
+v22.13.1
+```
 
 ## Getting Started 🚀
 
@@ -85,7 +88,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [ ] Simplyfy the Hoe Page with only one page
 - [ ] Fix Link of support
 - [ ] Add sentry for bug
-  
+
 ---
 Made with ❤️ by car enthusiasts for car enthusiasts
 Keep your car running smoothly! 🚗✨
