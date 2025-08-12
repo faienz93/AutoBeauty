@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import NewMaintenance from './ItemPage';
+import NewMaintenance from './NewMaintenance';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useState, useEffect } from 'react';
 import { Maintenance } from '../models/MaintenanceType';

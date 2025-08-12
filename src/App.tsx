@@ -39,7 +39,7 @@ import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedomete
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 
-import NewMaintenance from './pages/ItemPage';
+import NewMaintenance from './pages/NewMaintenance';
 
 import { Capacitor } from '@capacitor/core';
 
