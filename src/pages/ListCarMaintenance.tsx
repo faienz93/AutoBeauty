@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter} from '@ionic/react';
+import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter } from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { Header } from '../components/Header';
 import { ListItem } from '../components/ListItem';
@@ -15,7 +15,7 @@ function ListCarMaintenance() {
 
   const fetchMaintenances = useCallback(async () => {
     try {
-      const data = await fetchMaintenancesData()
+      const data = await fetchMaintenancesData();
       setMaintenances(data);
     } catch (error) {
       console.error('Error fetching maintenances:', error);
@@ -23,7 +23,7 @@ function ListCarMaintenance() {
   }, [db]);
 
   useIonViewWillEnter(() => {
-      fetchMaintenances();
+    fetchMaintenances();
   });
 
   return (

@@ -4,15 +4,15 @@ import { useMaintenanceIcon } from '../hooks/useMaitenanceIcon';
 import { Card } from '../ui/Card';
 import { isMaintenanceNeeded } from '../utils/carUtils';
 
-export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maintenanceType: string, maintenance: Maintenance, maxKm: number}) => {
+export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maintenanceType: string; maintenance: Maintenance; maxKm: number }) => {
   console.log('Rendering CardMaintenance component');
 
   const history = useHistory();
   // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (item: Maintenance) => {
     history.push({
-      pathname: `/newItem/edit/${item._id}`
-    })
+      pathname: `/newItem/edit/${item._id}`,
+    });
   };
 
   const diffKm = maxKm - maintenance.km;
@@ -27,14 +27,13 @@ export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maint
       mainNote={todo ? 'Da fare' : 'Tutto sotto controllo'}
       detailNote={String(maintenance.km)}
       comment={maintenance?.note || ''}
-      shadowColor='#2f3133'
+      shadowColor="#2f3133"
       iconContent={{
         type: 'image',
-        source: useMaintenanceIcon(maintenance.tipo)
+        source: useMaintenanceIcon(maintenance.tipo),
       }}
       mainNoteColor={todo ? '#FF0000' : '#008000'}
       onEdit={() => handleEdit(maintenance)}
     />
-  )
-
-}
+  );
+};

@@ -20,4 +20,3 @@ export const maintenanceTypes: MaintenanceType[] = ['Tagliando', 'Gomme', 'Revis
 // };
 
 export type Stats = Partial<Record<MaintenanceType, Maintenance>>;
-

@@ -1,4 +1,3 @@
-
 /**
  * Returns a formatted date string in the 'it-IT' locale.
  *
@@ -15,7 +14,7 @@ export const getDateString = (date?: Date) => {
     month: 'short',
     day: 'numeric',
   });
-}
+};
 
 /**
  * Parses a date string in either "DD/MM/YY" or "DD MMM YYYY" format and returns a JavaScript Date object.
@@ -34,28 +33,38 @@ export const getDateString = (date?: Date) => {
  * ```
  */
 export const parseStringToDate = (dateStr: string): Date => {
-    // Prova prima il formato "DD/MM/YY"
-    if (dateStr.includes('/')) {
-        const [day, month, year] = dateStr.split('/').map(Number);
-        const fullYear = year < 100 ? 2000 + year : year;
-        return new Date(fullYear, month - 1, day);
-    }
+  // Prova prima il formato "DD/MM/YY"
+  if (dateStr.includes('/')) {
+    const [day, month, year] = dateStr.split('/').map(Number);
+    const fullYear = year < 100 ? 2000 + year : year;
+    return new Date(fullYear, month - 1, day);
+  }
 
-    // Gestisce il formato "DD MMM YYYY" (es: "10 mag 2025")
-    const months: { [key: string]: number } = {
-        'gen': 0, 'feb': 1, 'mar': 2, 'apr': 3, 'mag': 4, 'giu': 5,
-        'lug': 6, 'ago': 7, 'set': 8, 'ott': 9, 'nov': 10, 'dic': 11
-    };
+  // Gestisce il formato "DD MMM YYYY" (es: "10 mag 2025")
+  const months: { [key: string]: number } = {
+    gen: 0,
+    feb: 1,
+    mar: 2,
+    apr: 3,
+    mag: 4,
+    giu: 5,
+    lug: 6,
+    ago: 7,
+    set: 8,
+    ott: 9,
+    nov: 10,
+    dic: 11,
+  };
 
-    const [day, monthStr, year] = dateStr.split(' ');
-    const month = months[monthStr.toLowerCase()];
+  const [day, monthStr, year] = dateStr.split(' ');
+  const month = months[monthStr.toLowerCase()];
 
-    if (month === undefined) {
-        throw new Error('Formato data non valido');
-    }
+  if (month === undefined) {
+    throw new Error('Formato data non valido');
+  }
 
-    return new Date(parseInt(year), month, parseInt(day));
-}
+  return new Date(parseInt(year), month, parseInt(day));
+};
 
 /**
  * Converte una stringa numerica in formato italiano (con virgola) in un numero
@@ -79,4 +88,4 @@ export const parseItalianNumber = (value: string | number): number => {
 
   // Restituisce 0 se la conversione fallisce
   return isNaN(result) ? 0 : result;
-}
+};

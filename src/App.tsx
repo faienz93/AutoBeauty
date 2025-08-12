@@ -57,54 +57,51 @@ export const platform = Capacitor.getPlatform();
 
 function App() {
   return (
-
     <DatabaseProvider>
-        <IonApp>
-          <IonReactRouter>
-            <IonTabs>
-              <IonRouterOutlet>
-                <Redirect exact path="/" to="/home" />
-                <Route path="/home" render={() => <HomePage />} exact={true} />
-                <Route path="/newItem" render={() => <ItemPage />} exact={true} />
-                <Route path="/newItem/edit/:id" render={() => <ItemPageUpdate />} exact={true} />
-                <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-                <Route path="/newkm/edit/:id" render={() => <KmPage /> } exact={true}/>
-                <Route path="/settings" render={() => <Setting />} exact={true} />
-                <Route path="/info" render={() => <InfoPage />} exact={true} />
-              </IonRouterOutlet>
+      <IonApp>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Redirect exact path="/" to="/home" />
+              <Route path="/home" render={() => <HomePage />} exact={true} />
+              <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+              <Route path="/newItem/edit/:id" render={() => <ItemPageUpdate />} exact={true} />
+              <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
+              <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
+              <Route path="/settings" render={() => <Setting />} exact={true} />
+              <Route path="/info" render={() => <InfoPage />} exact={true} />
+            </IonRouterOutlet>
 
-              <IonTabBar slot="bottom">
-                <IonTabButton tab="home" href="/home">
-                  <IonIcon icon={homeOutline} />
-                  <IonLabel>Home</IonLabel>
-                </IonTabButton>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="home" href="/home">
+                <IonIcon icon={homeOutline} />
+                <IonLabel>Home</IonLabel>
+              </IonTabButton>
 
-                <IonTabButton tab="list" href="/list">
-                  <IonIcon icon={listOutline} />
-                  <IonLabel>Lista</IonLabel>
-                </IonTabButton>
+              <IonTabButton tab="list" href="/list">
+                <IonIcon icon={listOutline} />
+                <IonLabel>Lista</IonLabel>
+              </IonTabButton>
 
-                <IonTabButton tab="newItem" href="/newItem">
-                  <IonIcon icon={addCircleOutline} />
-                  <IonLabel>Aggiungi</IonLabel>
-                </IonTabButton>
+              <IonTabButton tab="newItem" href="/newItem">
+                <IonIcon icon={addCircleOutline} />
+                <IonLabel>Aggiungi</IonLabel>
+              </IonTabButton>
 
-                <IonTabButton tab="settings" href="/settings">
-                  <IonIcon icon={settingsOutline} />
-                  <IonLabel>Impostazioni</IonLabel>
-                </IonTabButton>
+              <IonTabButton tab="settings" href="/settings">
+                <IonIcon icon={settingsOutline} />
+                <IonLabel>Impostazioni</IonLabel>
+              </IonTabButton>
 
-                <IonTabButton tab="info" href="/info">
-                  <IonIcon icon={informationOutline} />
-                  <IonLabel>Info</IonLabel>
-                </IonTabButton>
-              </IonTabBar>
-            </IonTabs>
-          </IonReactRouter>
-        </IonApp>
-
-      </DatabaseProvider>
-
+              <IonTabButton tab="info" href="/info">
+                <IonIcon icon={informationOutline} />
+                <IonLabel>Info</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp>
+    </DatabaseProvider>
   );
 }
 

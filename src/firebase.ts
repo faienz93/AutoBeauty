@@ -11,12 +11,12 @@ if (!envVar) {
 const firebaseConfig = {
   // Copia qui le tue credenziali dalla Firebase Console
   // Project Settings -> General -> Your apps -> Web app (</>)
-    apiKey: envVar?.apiKey,
-    authDomain: envVar?.authDomain,
-    projectId: envVar?.projectId,
-    storageBucket: envVar?.storageBucket,
-    messagingSenderId: envVar?.messagingSenderId,
-    appId: envVar?.appId,
+  apiKey: envVar?.apiKey,
+  authDomain: envVar?.authDomain,
+  projectId: envVar?.projectId,
+  storageBucket: envVar?.storageBucket,
+  messagingSenderId: envVar?.messagingSenderId,
+  appId: envVar?.appId,
 };
 
 const app = initializeApp(firebaseConfig);

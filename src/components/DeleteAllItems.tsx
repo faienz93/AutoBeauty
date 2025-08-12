@@ -16,16 +16,15 @@ const DeleteAllItem = () => {
       const deletedMaintenanceDb = maintenanceDb.deleteDatabase();
       const deletedKmDb = kmDb.deleteDatabase();
 
-      console.log(deletedMaintenanceDb)
-      console.log(deletedKmDb)
+      console.log(deletedMaintenanceDb);
+      console.log(deletedKmDb);
       setIsSuccess(true);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       setIsSuccess(false);
     } finally {
       setToastOpen(true);
     }
-
   };
 
   return (
@@ -35,15 +34,9 @@ const DeleteAllItem = () => {
           <IonCardTitle>Cancella tutto</IonCardTitle>
         </IonCardHeader>
         <IonCardContent>
-          <p className="ion-padding-bottom">
-            Cancella tutti i dati dal database.
-          </p>
+          <p className="ion-padding-bottom">Cancella tutti i dati dal database.</p>
 
-          <IonButton
-            expand="block"
-            color={'danger'}
-            onClick={() => setConfirmDelete(true)}
-            className="ion-margin-bottom">
+          <IonButton expand="block" color={'danger'} onClick={() => setConfirmDelete(true)} className="ion-margin-bottom">
             <IonIcon icon={trashOutline} slot="start" />
             Cancella
           </IonButton>
@@ -73,7 +66,6 @@ const DeleteAllItem = () => {
         message="Errore durante la cancellazione"
         duration={1000}
       />
-
     </>
   );
 };
