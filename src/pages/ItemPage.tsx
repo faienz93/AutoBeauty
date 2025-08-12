@@ -28,7 +28,7 @@ interface EditItem {
   editingItem?: Maintenance;
 }
 
-function ItemPage({ editingItem }: EditItem) {
+function NewMaintenance({ editingItem }: EditItem) {
   console.log('Rendering NewItem component');
   const db = useMaintenanceDb();
   const [toastOpen, setToastOpen] = useState(false);
@@ -279,4 +279,4 @@ function ItemPage({ editingItem }: EditItem) {
   );
 }
 
-export default ItemPage;
+export default NewMaintenance;

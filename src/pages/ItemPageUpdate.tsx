@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom';
-import ItemPage from './ItemPage';
+import NewMaintenance from './ItemPage';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useState, useEffect } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
@@ -26,7 +26,7 @@ const ItemPageUpdate = () => {
   if (loading) return <div>Caricamento…</div>;
   if (!item) return <div>Item non trovato</div>;
 
-  return <ItemPage editingItem={item} key={id} />;
+  return <NewMaintenance editingItem={item} key={id} />;
 };
 
 export default ItemPageUpdate;

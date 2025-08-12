@@ -39,7 +39,7 @@ import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedomete
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 
-import ItemPage from './pages/ItemPage';
+import NewMaintenance from './pages/ItemPage';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -64,7 +64,7 @@ function App() {
             <IonRouterOutlet>
               <Redirect exact path="/" to="/home" />
               <Route path="/home" render={() => <HomePage />} exact={true} />
-              <Route path="/newItem" render={() => <ItemPage />} exact={true} />
+              <Route path="/newItem" render={() => <NewMaintenance />} exact={true} />
               <Route path="/newItem/edit/:id" render={() => <ItemPageUpdate />} exact={true} />
               <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
               <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
