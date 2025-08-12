@@ -101,6 +101,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [ ] Simplyfy the Hoe Page with only one page
 - [ ] Fix Link of support
 - [ ] Add sentry for bug
+- [ ] Aggiungere le icone fatte bene su android
 
 ---
 

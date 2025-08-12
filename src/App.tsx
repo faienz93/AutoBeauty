@@ -35,7 +35,7 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline, informationOutline } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, informationOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 

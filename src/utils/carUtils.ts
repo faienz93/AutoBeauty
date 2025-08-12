@@ -14,3 +14,7 @@ export function isMaintenanceNeeded(maintenanceType: string, diffKm: number, mai
   }
   return todo;
 }
+
+export const formatCost = (value: string): string => {
+  return value.replace('.', ',');
+};
