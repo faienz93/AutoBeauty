@@ -12,11 +12,7 @@ import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
 
-
-
-
 const HomePage = () => {
-
   const today = getDateString();
   const maintenancesData = useFetchMaintenances();
   const manualKm = useFetchManualKm();
@@ -32,12 +28,12 @@ const HomePage = () => {
 
   const [lastManualKm, setLastManualKm] = useState<Kilometers>({
     data: getDateString(),
-    km: 0
+    km: 0,
   });
 
   const fetchMaintenances = async () => {
     try {
-      const data = await maintenancesData()
+      const data = await maintenancesData();
       setMaintenances(data);
     } catch (error) {
       console.error('Error fetching maintenances:', error);
@@ -63,12 +59,11 @@ const HomePage = () => {
     loadData();
   });
 
-
   return (
     <IonPage>
       <Header title="Home" showBackButton={false} />
       <IonContent>
-        <IonCard style={{ flexGlow: 1, borderRadius: 18, boxShadow: `0 4px 12px` }}>
+        <IonCard style={{ flexGlow: 1, borderRadius: 18, boxShadow: '0 4px 12px' }}>
           <IonCardHeader>
             <IonCardTitle>Data odierna</IonCardTitle>
             <IonCardSubtitle>{today}</IonCardSubtitle>
@@ -81,7 +76,12 @@ const HomePage = () => {
           </IonText>
         ) : (
           Object.entries(groupedMaintenance ?? {}).map(([tipo, maintenance]) => (
-            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km} />
+            <CardMaintenance
+              key={tipo}
+              maintenanceType={tipo}
+              maintenance={maintenance}
+              maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km}
+            />
           ))
         )}
       </IonContent>

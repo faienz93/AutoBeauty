@@ -1,11 +1,7 @@
-import Papa from "papaparse";
-
+import Papa from 'papaparse';
 
 export class CsvService<T> {
-
-
   async importCsv(file: File, columnHeader: boolean = true): Promise<T[]> {
-
     try {
       const text = await file.text();
 
@@ -34,24 +30,21 @@ export class CsvService<T> {
             } catch (error) {
               reject(new Error(`Error converting data: ${error}`));
             }
-          }
+          },
         });
       });
-
     } catch (error) {
       console.error('Error reading file:', error);
       throw new Error(`Error reading file: ${error}`);
     }
-
   }
 
   exportCsvWithBlob(data: T[], header: string[]): Blob {
-
     try {
       const csv = Papa.unparse(data, {
         delimiter: '|',
         header: true,
-        columns: header
+        columns: header,
       });
       const csvData = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       return csvData;
@@ -59,27 +52,20 @@ export class CsvService<T> {
       console.error('Errore esportazione:', error);
       throw error;
     }
-    
   }
 
-
-  
-
-
-  exportCsv(data: T[], header: string[]): String {
-
+  exportCsv(data: T[], header: string[]): string {
     try {
       const csv = Papa.unparse(data, {
         delimiter: '|',
         header: true,
-        columns: header
+        columns: header,
       });
-      
+
       return csv;
     } catch (error) {
       console.error('Errore esportazione:', error);
       throw error;
     }
-    
   }
 }

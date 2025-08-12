@@ -1,33 +1,31 @@
 import { useCallback, useState } from 'react';
-import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter} from '@ionic/react';
+import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter } from '@ionic/react';
 import { Maintenance } from '../models/MaintenanceType';
 import { Header } from '../components/Header';
-import { getMaintenanceKey, parseStringToDate } from '../utils/dateUtils';
 import { ListItem } from '../components/ListItem';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 
-
 function ListCarMaintenance() {
-  const fetchMaintenancesData = useFetchMaintenances(); 
+  const fetchMaintenancesData = useFetchMaintenances();
   // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
-  
+
   const db = useMaintenanceDb();
 
   const fetchMaintenances = useCallback(async () => {
     try {
-      const data = await fetchMaintenancesData()
+      const data = await fetchMaintenancesData();
       setMaintenances(data);
     } catch (error) {
       console.error('Error fetching maintenances:', error);
     }
   }, [db]);
 
-  useIonViewWillEnter(() => { 
-      fetchMaintenances();
+  useIonViewWillEnter(() => {
+    fetchMaintenances();
   });
-  
+
   return (
     <IonPage>
       <Header title="Lista Manutenzioni" />

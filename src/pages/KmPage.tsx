@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
@@ -27,31 +27,28 @@ function KmPage() {
   const [didEdit, setDidEdit] = useState({
     data: false,
     km: false,
-  }); 
-  
+  });
+
   const isKmInvalid = didEdit.km && Number(formData.km) === 0;
 
   const updateKm = async (newKm: Kilometers) => {
-
     console.log('Adding new Kilometer:', newKm);
     let newEvent: Kilometers;
-    console.log(location.state?.item)
+    console.log(location.state?.item);
     if (location.state?.item?._rev) {
       newEvent = {
         ...newKm,
-        _rev: location.state.item._rev
+        _rev: location.state.item._rev,
       };
     } else {
       newEvent = newKm;
     }
 
     try {
-
-      const response = await dbKm.put(newEvent)
+      const response = await dbKm.put(newEvent);
       console.log('Kilometer added successfully:', response);
       location.state.item._rev = response.rev;
-      setIsSuccess(prevValue => !prevValue)
-      
+      setIsSuccess((prevValue) => !prevValue);
     } catch (error) {
       console.error('Error adding Kilometer:', error);
       setIsSuccess(false);
@@ -78,8 +75,6 @@ function KmPage() {
       ...prevEdit,
       [inputIdentifier]: true,
     }));
-
-    
   };
 
   const handleSubmit = async (event: any) => {
@@ -88,27 +83,23 @@ function KmPage() {
     if (didEdit.km && Number(formData.km) === 0) return;
 
     try {
-
       const lastKm: Kilometers = {
         _id: 'manual-km',
         data: getDateString(parseStringToDate(formData.data)),
         km: parseItalianNumber(formData.km),
       };
       await updateKm(lastKm);
-
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
     }
   };
-
 
   const handleInputBlur = (identifier: any) => {
     setDidEdit((prevEdit) => ({
       ...prevEdit,
       [identifier]: true,
     }));
-  }
-
+  };
 
   useEffect(() => {
     if (location.state?.item) {
@@ -116,24 +107,21 @@ function KmPage() {
         _id: location.state.item._id,
         _rev: location.state.item._rev || undefined,
         data: location.state.item.data,
-        km: location.state.item.km
+        km: location.state.item.km,
       });
     }
-    // eslint-disable-next-line
   }, [location.state?.item]);
 
-
   useIonViewWillLeave(() => {
-    
     setFormData({
       data: currentDate,
-      km: 0
+      km: 0,
     });
     setIsSuccess(false);
     setDidEdit({
       data: false,
       km: false,
-    })
+    });
   });
 
   return (
@@ -158,33 +146,22 @@ function KmPage() {
           </IonItem>
           <div style={{ padding: '0 16px' }}>
             <IonText color="danger" style={{ fontSize: '0.8em' }}>
-              {isKmInvalid && (
-                <p style={{ margin: '4px 0' }}>
-                  Per favore inserisci un kilometraggio diverso da 0.
-                </p>
-              )}
+              {isKmInvalid && <p style={{ margin: '4px 0' }}>Per favore inserisci un kilometraggio diverso da 0.</p>}
             </IonText>
           </div>
-
         </IonList>
 
-        <IonButton 
-          id="open-toast" 
-          type="submit"  
-          expand="full" 
-          className="buttonAddList" 
-          onClick={handleSubmit}
-          disabled={isKmInvalid}>
+        <IonButton id="open-toast" type="submit" expand="full" className="buttonAddList" onClick={handleSubmit} disabled={isKmInvalid}>
           <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
           Modifica Kilometraggio
         </IonButton>
 
         <IonToast
           isOpen={isSuccess}
-          onDidDismiss={() => setIsSuccess(prevValue => !prevValue)}
-          message={isSuccess ? "Kilometraggio aggiunto con successo!" : "Errore durante la modifica del Kilometraggio"}
+          onDidDismiss={() => setIsSuccess((prevValue) => !prevValue)}
+          message={isSuccess ? 'Kilometraggio aggiunto con successo!' : 'Errore durante la modifica del Kilometraggio'}
           duration={3000}
-          color={isSuccess ? "success" : "danger"}
+          color={isSuccess ? 'success' : 'danger'}
         />
       </IonContent>
     </IonPage>
