@@ -1,4 +1,5 @@
 ## Firebase
+
 Prima crea un progetto Firebase:
 
 Vai su https://console.firebase.google.com/
@@ -6,7 +7,6 @@ Clicca "Create Project" o "Add Project"
 Dai un nome al tuo progetto
 Disabilita Google Analytics se non ti serve
 Clicca "Create Project"
-
 
 Installa Firebase nel tuo progetto:
 
@@ -231,6 +231,7 @@ useEffect(() => {
   fetchMaintenances();
 }, []);
 ```
+
 Questo setup ti dà:
 
 Persistenza dei dati in cloud

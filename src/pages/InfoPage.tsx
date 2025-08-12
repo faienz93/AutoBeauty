@@ -1,11 +1,25 @@
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonButton } from '@ionic/react';
+import {
+  IonContent,
+  IonHeader,
+  IonPage,
+  IonTitle,
+  IonToolbar,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardTitle,
+  IonIcon,
+  IonItem,
+  IonLabel,
+  IonButton,
+} from '@ionic/react';
 import { informationCircle, cloudUpload, create, list, speedometer, calculator, cafe, build, time, car } from 'ionicons/icons';
 
 const InfoPage: React.FC = () => {
   const openDonationLink = (platform: 'buymeacoffee' | 'paypal') => {
     const links = {
       buymeacoffee: 'https://www.buymeacoffee.com/faienz93',
-      paypal: 'https://www.paypal.com/paypalme/afaienza93'
+      paypal: 'https://www.paypal.com/paypalme/afaienza93',
     };
     window.open(links[platform], '_blank');
   };
@@ -81,8 +95,8 @@ const InfoPage: React.FC = () => {
             <IonItem lines="none">
               <IonLabel className="ion-text-wrap">
                 <p className="ion-padding-top">
-                  Il sistema mostra "Da fare" in rosso quando è necessario effettuare la manutenzione,
-                  altrimenti viene mostrato "Tutto sotto controllo" in verde.
+                  Il sistema mostra "Da fare" in rosso quando è necessario effettuare la manutenzione, altrimenti viene mostrato "Tutto sotto controllo" in
+                  verde.
                 </p>
               </IonLabel>
             </IonItem>
@@ -97,24 +111,17 @@ const InfoPage: React.FC = () => {
             <p className="ion-padding-bottom">
               Car Maintenance App è completamente gratuita e open source. Se trovi l'app utile, puoi supportare lo sviluppo con una donazione:
             </p>
-            
-            <IonButton 
-              expand="block"
-              onClick={() => openDonationLink('buymeacoffee')}
-              className="ion-margin-bottom">
+
+            <IonButton expand="block" onClick={() => openDonationLink('buymeacoffee')} className="ion-margin-bottom">
               <IonIcon icon={cafe} slot="start" />
               Offrimi un caffè
             </IonButton>
 
-            <IonButton 
-              expand="block"
-              color="secondary"
-              onClick={() => openDonationLink('paypal')}>
+            <IonButton expand="block" color="secondary" onClick={() => openDonationLink('paypal')}>
               Dona con PayPal
             </IonButton>
           </IonCardContent>
         </IonCard>
-
       </IonContent>
     </IonPage>
   );
