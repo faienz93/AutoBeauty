@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IonAlert, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonToast } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonToast } from '@ionic/react';
 import { AlertConfirmation } from './AlertConfirmation';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 import { trashOutline } from 'ionicons/icons';

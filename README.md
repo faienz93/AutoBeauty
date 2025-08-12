@@ -95,6 +95,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## TODO
 
+- [ ] Simplyfy form entry
 - [ ] Fix when update item routing
 - [ ] Fix when download file
 - [ ] Simplyfy the Hoe Page with only one page
