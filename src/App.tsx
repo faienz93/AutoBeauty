@@ -49,7 +49,7 @@ import KmPage from './pages/KmPage';
 import HomePage from './pages/HomePage';
 import { DatabaseProvider } from './services/database/DatabaseProvider';
 import InfoPage from './pages/InfoPage';
-import ItemPageUpdate from './pages/ItemPageUpdate';
+import UpdateMaitenance from './pages/UpdateMaitenance';
 
 setupIonicReact({ mode: 'md' });
 
@@ -65,7 +65,7 @@ function App() {
               <Redirect exact path="/" to="/home" />
               <Route path="/home" render={() => <HomePage />} exact={true} />
               <Route path="/newItem" render={() => <NewMaintenance />} exact={true} />
-              <Route path="/newItem/edit/:id" render={() => <ItemPageUpdate />} exact={true} />
+              <Route path="/newItem/edit/:id" render={() => <UpdateMaitenance />} exact={true} />
               <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
               <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
               <Route path="/settings" render={() => <Setting />} exact={true} />

@@ -4,7 +4,7 @@ import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useState, useEffect } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
 
-const ItemPageUpdate = () => {
+const UpdateMaintenance = () => {
   const { id } = useParams<{ id: string }>();
   console.log(id);
   const db = useMaintenanceDb();
@@ -29,4 +29,4 @@ const ItemPageUpdate = () => {
   return <NewMaintenance editingItem={item} key={id} />;
 };
 
-export default ItemPageUpdate;
+export default UpdateMaintenance;
