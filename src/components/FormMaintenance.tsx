@@ -10,15 +10,30 @@ import {
   IonSelectOption,
   IonIcon,
   IonText,
+  useIonViewDidEnter,
+  useIonViewDidLeave,
+  useIonViewWillEnter,
   useIonViewWillLeave,
 } from '@ionic/react';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { add, pencilOutline } from 'ionicons/icons';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
-import { MouseEventHandler, useState } from 'react';
+import { useState } from 'react';
 import { formatCost } from '../utils/carUtils';
 import { getDateString, parseStringToDate } from '../utils/dateUtils';
 import { getUUIDKey } from '../utils/pouchDBUtils';
+
+const getInitialState = (editData?: Maintenance) => {
+  return {
+    _id: editData?._id ?? getUUIDKey(),
+    _rev: editData?._rev ?? undefined,
+    data: editData?.data ?? getDateString(),
+    km: editData?.km ?? 0,
+    tipo: (editData?.tipo as MaintenanceType) ?? 'Tagliando',
+    costo: editData?.costo ?? 0,
+    note: editData?.note ?? '',
+  };
+};
 
 interface FormMaintenanceProps {
   editData?: Maintenance;
@@ -27,14 +42,40 @@ interface FormMaintenanceProps {
 }
 
 export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanceProps) => {
-  const [formData, setFormData] = useState<Maintenance>({
-    _id: editData?._id ?? getUUIDKey(),
-    _rev: editData?._rev ?? undefined,
-    data: editData?.data ?? getDateString(),
-    km: editData?.km ?? 0,
-    tipo: (editData?.tipo as MaintenanceType) ?? 'Tagliando',
-    costo: editData?.costo ?? 0,
-    note: editData?.note ?? '',
+  const [formData, setFormData] = useState<Maintenance>(getInitialState(editData));
+
+  useIonViewWillEnter(() => {
+    console.log('ionViewWillEnter event fired');
+    setFormData(getInitialState(editData));
+  }, [editData]);
+
+  useIonViewDidEnter(() => {
+    console.log('ionViewDidEnter event fired');
+  });
+
+  useIonViewDidLeave(() => {
+    console.log('ionViewDidLeave event fired');
+  });
+
+  useIonViewWillLeave(() => {
+    console.log('ionViewWillLeave event fired');
+    setFormData({
+      _id: undefined,
+      _rev: undefined,
+      data: getDateString(),
+      km: 0,
+      tipo: 'Tagliando' as MaintenanceType,
+      costo: 0,
+      note: '',
+    });
+
+    setDidEdit({
+      data: false,
+      km: false,
+      tipo: false,
+      costo: false,
+      note: false,
+    });
   });
 
   console.log(formData);
@@ -78,26 +119,6 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
     }));
   };
 
-  useIonViewWillLeave(() => {
-    setFormData({
-      _id: undefined,
-      _rev: undefined,
-      data: getDateString(),
-      km: 0,
-      tipo: 'Tagliando' as MaintenanceType,
-      costo: 0,
-      note: '',
-    });
-
-    setDidEdit({
-      data: false,
-      km: false,
-      tipo: false,
-      costo: false,
-      note: false,
-    });
-  });
-
   function handleSubmit(event: any) {
     console.log('xxxxxxxxxxxxxxxxxxxx');
     console.log(typeof event);
@@ -113,6 +134,9 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
       costo: Number(formData.costo) || 0,
       note: formData.note || '',
     };
+
+    console.log('yyyyyyyyyyyyyyy');
+    console.log(mnt);
 
     onSubmit({ ...mnt });
   }
