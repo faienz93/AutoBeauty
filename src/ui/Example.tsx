@@ -7,7 +7,7 @@ import './Example.css';
 export const Example = () => {
   return (
     <>
-      <IonCard color="warning" className="my-ion-card">
+      <IonCard color="light" className="my-ion-card" data-stato="urgente">
         <IonCardHeader>
           <IonCardTitle className="my-ion-card-title">Revisione</IonCardTitle>
           <IonCardSubtitle className="my-ion-card-subtitle">10 mag 2025</IonCardSubtitle>
