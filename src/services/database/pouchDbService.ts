@@ -36,13 +36,13 @@ export abstract class PouchDbService implements IPouchDbService {
 
   private initDatabase() {
     // if (this.platform === 'web') {
-    //     console.log('Web platform detected. Using default PouchDB adapter.');
+    //
     //     this.db = new PouchDB(this.dbName);
     // } else if ( this.platform === 'android') {
-    //     console.log('ANDROID - Cordova platform detected. Using cordova-sqlite adapter.');
+    //
     //     this.db = new PouchDB(this.dbName, { adapter: 'cordova-sqlite', location: 'default' });
     // } else if(this.platform === 'ios' ) {
-    //     console.log('IOS - Cordova platform detected. Using cordova-sqlite adapter.');
+    //
     //     this.db = new PouchDB(this.dbName, { adapter: 'cordova-sqlite', iosDatabaseLocation: 'default' });
     // }
 
@@ -77,7 +77,6 @@ export abstract class PouchDbService implements IPouchDbService {
     } catch (error) {
       // console.error(`Error getting document with id ${id}:`, error);
       // throw new Error(`Error getting document with id ${id}: ${error}`);
-      console.log(`Error getting document with id ${id}:`, error);
     }
   }
 
@@ -111,7 +110,6 @@ export abstract class PouchDbService implements IPouchDbService {
   async closeDatabase(): Promise<void> {
     try {
       await this.db.close();
-      console.log(`Database ${this.db.name} closed successfully.`);
     } catch (error) {
       console.error(`Error closing database ${this.db.name}:`, error);
       throw new Error(`Error closing database ${this.db.name}: ${error}`);
@@ -121,7 +119,6 @@ export abstract class PouchDbService implements IPouchDbService {
   async deleteDatabase(): Promise<void> {
     try {
       await this.db.destroy();
-      console.log(`Database ${this.db.name} closed successfully.`);
 
       this.initDatabase();
     } catch (error) {

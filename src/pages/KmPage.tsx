@@ -18,7 +18,7 @@ import { pencilOutline } from 'ionicons/icons';
 
 const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   const currentDate = getDateString();
-  console.log('Rendering KmPage component');
+
   const dbKm = useKilometersDb();
   const id = match.params.id;
   const [isSuccess, setIsSuccess] = useState(false);
@@ -33,8 +33,6 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   });
 
   useIonViewWillEnter(() => {
-    console.log('ionViewWillEnter event fired');
-
     dbKm
       .get(id)
       .then((fetched) => {
@@ -64,7 +62,6 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   const isKmInvalid = didEdit.km && Number(formData.km) === 0;
 
   const updateKm = async (newKm: Kilometers) => {
-    console.log('Adding new Kilometer:', newKm);
     let newEvent: Kilometers;
 
     if (formData._rev) {
@@ -78,7 +75,7 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
     try {
       const response = await dbKm.put(newEvent);
-      console.log('Kilometer added successfully:', response);
+
       // location.state.item._rev = response.rev;
       setIsSuccess((prevValue) => !prevValue);
     } catch (error) {

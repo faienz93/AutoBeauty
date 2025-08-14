@@ -11,13 +11,11 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
   const [isSuccess, setIsSuccess] = useState(false);
   const db = useMaintenanceDb();
   const id = match.params.id;
-  console.log(id);
 
   const [item, setItem] = useState<Maintenance | null>(null);
   const [loading, setLoading] = useState(true);
 
   useIonViewWillEnter(() => {
-    console.log('ionViewWillEnter event fired');
     db.get(id)
       .then((fetched) => {
         setItem(fetched);
@@ -30,15 +28,14 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
   }, [id, db]);
 
   // useIonViewDidEnter(() => {
-  //   console.log('ionViewDidEnter event fired');
+  //
   // });
 
   // useIonViewDidLeave(() => {
-  //   console.log('ionViewDidLeave event fired');
+  //
   // });
 
   useIonViewWillLeave(() => {
-    console.log('ionViewWillLeave event fired');
     setIsSuccess(false);
   });
 
@@ -47,9 +44,7 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
 
   const handleUpdateMaintenance = async (maintenance: Maintenance) => {
     db.put(maintenance)
-      .then((response) => {
-        console.log('Maintenance added successfully:', response);
-      })
+      .then((response) => {})
       .catch((error) => {
         console.error('Error adding maintenance:', error);
       });

@@ -26,9 +26,6 @@ export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
         // return b.km - a.km;
       }) as Maintenance[];
 
-    console.log('Fetched Maintenances ----->');
-    console.log(maintenance);
-
     return maintenance;
   };
 

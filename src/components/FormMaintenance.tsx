@@ -43,20 +43,18 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
   const [formData, setFormData] = useState<Maintenance>(getInitialState(editData));
 
   useIonViewWillEnter(() => {
-    console.log('FormMaintenance - ionViewWillEnter event fired');
     setFormData(getInitialState(editData));
   }, [editData]);
 
   // useIonViewDidEnter(() => {
-  //   console.log('ionViewDidEnter event fired');
+  //
   // });
 
   // useIonViewDidLeave(() => {
-  //   console.log('ionViewDidLeave event fired');
+  //
   // });
 
   useIonViewWillLeave(() => {
-    console.log('ionViewWillLeave event fired');
     setFormData({
       _id: undefined,
       _rev: undefined,
@@ -76,8 +74,6 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
     });
   });
 
-  console.log(formData);
-
   const [didEdit, setDidEdit] = useState({
     data: false,
     km: false,
@@ -91,7 +87,6 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
 
   const onInputChange = (inputIdentifier: 'data' | 'km' | 'tipo' | 'costo' | 'note', newValue: any) => {
     if (inputIdentifier === 'data') {
-      console.log('handleInputChange data', newValue);
       newValue = getDateString(newValue as Date);
     }
 

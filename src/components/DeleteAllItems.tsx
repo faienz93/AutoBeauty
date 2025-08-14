@@ -16,11 +16,8 @@ const DeleteAllItem = () => {
       const deletedMaintenanceDb = maintenanceDb.deleteDatabase();
       const deletedKmDb = kmDb.deleteDatabase();
 
-      console.log(deletedMaintenanceDb);
-      console.log(deletedKmDb);
       setIsSuccess(true);
     } catch (error) {
-      console.log(error);
       setIsSuccess(false);
     } finally {
       setToastOpen(true);

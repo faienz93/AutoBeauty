@@ -73,7 +73,6 @@ const ExportItem = () => {
           id: row.doc._id,
           ...row.doc,
         }));
-      console.log('Fetched docs:', result);
 
       if (data.length === 0) {
         setNoData(true);
@@ -81,7 +80,7 @@ const ExportItem = () => {
       }
 
       const csvDataBlob = await csvService.exportCsvWithBlob(data as Maintenance[], ['data', 'km', 'tipo', 'costo', 'note']);
-      console.log(csvDataBlob);
+
       const base64Data = (await convertBlobToBase64(csvDataBlob)) as string;
 
       const filename = `maintenance_${new Date().toISOString().slice(0, 10)}.csv`;

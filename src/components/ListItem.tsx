@@ -14,8 +14,6 @@ interface ListItemProps {
 }
 
 export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
-  console.log('ListItem render', maintenance);
-
   const [confirmDelete, setConfirmDelete] = useState(false);
   const db = useMaintenanceDb();
 
@@ -32,12 +30,9 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
     try {
       const doc = await db.get(maintenanceId.toString());
       const response = await db.remove(doc);
-      console.log('Maintenance deleted successfully:');
-      console.log(response);
+
       onDelete();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   return (
