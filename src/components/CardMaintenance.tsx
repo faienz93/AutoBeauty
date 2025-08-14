@@ -5,8 +5,6 @@ import { Card } from '../ui/Card';
 import { isMaintenanceNeeded } from '../utils/carUtils';
 
 export const CardMaintenance = ({ maintenanceType, maintenance, maxKm }: { maintenanceType: string; maintenance: Maintenance; maxKm: number }) => {
-  console.log('Rendering CardMaintenance component');
-
   const history = useHistory();
   // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (item: Maintenance) => {

@@ -24,10 +24,8 @@ export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
           data: getDateString(parseStringToDate(searchLastManualKm.data)),
         };
       }
-    } catch (err) {
-      console.log(err);
-    }
-    console.log('searchLastManualKm', lastKm);
+    } catch (err) {}
+
     return lastKm;
   };
 

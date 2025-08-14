@@ -14,15 +14,13 @@ interface ListItemProps {
 }
 
 export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
-  console.log('ListItem render', maintenance);
-
   const [confirmDelete, setConfirmDelete] = useState(false);
   const db = useMaintenanceDb();
 
   const history = useHistory();
 
   // // https://stackoverflow.com/a/59464381/4700162
-  const handleEdit = (item: any) => {
+  const handleEdit = (item: Maintenance) => {
     history.push({
       pathname: `/newItem/edit/${item._id}`,
     });
@@ -32,12 +30,9 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
     try {
       const doc = await db.get(maintenanceId.toString());
       const response = await db.remove(doc);
-      console.log('Maintenance deleted successfully:');
-      console.log(response);
+
       onDelete();
-    } catch (err) {
-      console.log(err);
-    }
+    } catch (err) {}
   };
 
   return (

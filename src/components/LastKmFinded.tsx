@@ -28,20 +28,8 @@ export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFi
 
   // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (lastKm: Kilometers) => {
-    const cleanItem = {
-      _id: lastKm._id,
-      _rev: lastKm._rev,
-      data: lastKm.data,
-      km: lastKm.km,
-    };
-
     history.push({
       pathname: `/newkm/edit/${lastKm._id}`,
-      // search: '?update=true',  // query string
-      state: {
-        // location state
-        item: cleanItem,
-      },
     });
   };
 

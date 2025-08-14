@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { IonAlert, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonToast } from '@ionic/react';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonToast } from '@ionic/react';
 import { AlertConfirmation } from './AlertConfirmation';
 import { useKilometersDb, useMaintenanceDb } from '../hooks/useDbContext';
 import { trashOutline } from 'ionicons/icons';
@@ -16,11 +16,8 @@ const DeleteAllItem = () => {
       const deletedMaintenanceDb = maintenanceDb.deleteDatabase();
       const deletedKmDb = kmDb.deleteDatabase();
 
-      console.log(deletedMaintenanceDb);
-      console.log(deletedKmDb);
       setIsSuccess(true);
     } catch (error) {
-      console.log(error);
       setIsSuccess(false);
     } finally {
       setToastOpen(true);

@@ -26,8 +26,6 @@ export const getMaintenanceWithHigherKm = (maintenance: Maintenance[]): Maintena
     null as Maintenance | null,
   );
 
-  console.log('Maintenance With Highest Km: ', maintenaceWithHigherKm);
-
   return maintenaceWithHigherKm;
 };
 
@@ -45,7 +43,6 @@ export const getGroupByMaintenanceByKm = (maintenance: Maintenance[]): Stats | n
 
     return acc;
   }, {} as Stats);
-  console.log('Maintenance Grouped: ', maintenanceGrouped);
 
   return maintenanceGrouped;
 };

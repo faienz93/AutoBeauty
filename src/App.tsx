@@ -35,11 +35,11 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline, informationOutline } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, informationOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 
-import ItemPage from './pages/ItemPage';
+import NewMaintenance from './pages/NewMaintenance';
 
 import { Capacitor } from '@capacitor/core';
 
@@ -49,7 +49,7 @@ import KmPage from './pages/KmPage';
 import HomePage from './pages/HomePage';
 import { DatabaseProvider } from './services/database/DatabaseProvider';
 import InfoPage from './pages/InfoPage';
-import ItemPageUpdate from './pages/ItemPageUpdate';
+import UpdateMaitenance from './pages/UpdateMaitenance';
 
 setupIonicReact({ mode: 'md' });
 
@@ -63,13 +63,13 @@ function App() {
           <IonTabs>
             <IonRouterOutlet>
               <Redirect exact path="/" to="/home" />
-              <Route path="/home" render={() => <HomePage />} exact={true} />
-              <Route path="/newItem" render={() => <ItemPage />} exact={true} />
-              <Route path="/newItem/edit/:id" render={() => <ItemPageUpdate />} exact={true} />
-              <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-              <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
-              <Route path="/settings" render={() => <Setting />} exact={true} />
-              <Route path="/info" render={() => <InfoPage />} exact={true} />
+              <Route path="/home" component={HomePage} exact={true} />
+              <Route path="/newItem" component={NewMaintenance} exact={true} />
+              <Route path="/newItem/edit/:id" component={UpdateMaitenance} exact={true} />
+              <Route path="/list" component={ListCarMaintenance} exact={true} />
+              <Route path="/newkm/edit/:id" component={KmPage} exact={true} />
+              <Route path="/settings" component={Setting} exact={true} />
+              <Route path="/info" component={InfoPage} exact={true} />
             </IonRouterOutlet>
 
             <IonTabBar slot="bottom">
