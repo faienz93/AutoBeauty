@@ -1,0 +1,42 @@
+.my-ion-card {
+  /* border-radius: 18px; */
+  /* background-color: white; */
+}
+
+.my-ion-card-title,
+.my-ion-card-subtitle,
+.my-ion-card-content {
+  /* font-size: 15px; */
+  left: 15px;
+}
+
+.my-ion-card-title {
+  font-style: normal;
+}
+
+.my-ion-card-subtitle {
+  font-size: 15px;
+  font-style: italic;
+  bottom: 10px;
+  opacity: 0.6;
+}
+
+.my-ion-thumbnail {
+  position: absolute;
+  /* background-color: blue; */
+  bottom: 0px;
+  right: 15%;
+  width: 110px;
+  height: auto;
+  filter: opacity(0.3) drop-shadow(0 0 0 white);
+}
+
+.my-ion-card-content {
+  font-size: 15px;
+  opacity: 0.5;
+  top: 10px;
+  margin-bottom: 16px;
+  /* font-weight: 600; */
+  display: flex;
+  flex-direction: column;
+}
