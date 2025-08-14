@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
@@ -9,22 +9,13 @@ import { getDateString, parseItalianNumber, parseStringToDate } from '../utils/d
 import { useKilometersDb } from '../hooks/useDbContext';
 import { pencilOutline } from 'ionicons/icons';
 
-// interface KmState {
-//   item: Kilometers;
-// }
-// interface KmState extends RouteComponentProps<{ id: string }> {
-//   item: Kilometers;
-// }
-
 const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
-  const currentDate = getDateString();
-
   const dbKm = useKilometersDb();
   const id = match.params.id;
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState<Kilometers>({
-    data: currentDate,
+    data: getDateString(),
     km: 0,
   });
   const [didEdit, setDidEdit] = useState({
@@ -32,11 +23,14 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
     km: false,
   });
 
-  useIonViewWillEnter(() => {
+  useEffect(() => {
     dbKm
       .get(id)
       .then((fetched) => {
-        setFormData(fetched);
+        setFormData({
+          data: fetched ?? getDateString(),
+          km: fetched ?? 0,
+        });
         setLoading(false);
       })
       .catch((error) => {
@@ -47,7 +41,7 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
   useIonViewWillLeave(() => {
     setFormData({
-      data: currentDate,
+      data: getDateString(),
       km: 0,
     });
     setIsSuccess(false);

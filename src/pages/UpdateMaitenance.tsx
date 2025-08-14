@@ -1,6 +1,6 @@
 import { RouteComponentProps } from 'react-router-dom';
 import { useMaintenanceDb } from '../hooks/useDbContext';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
 import { IonToast, IonPage, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
@@ -11,11 +11,13 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
   const [isSuccess, setIsSuccess] = useState(false);
   const db = useMaintenanceDb();
   const id = match.params.id;
+  console.log('Vediamo che mi stampa');
+  console.log(id);
 
   const [item, setItem] = useState<Maintenance | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useIonViewWillEnter(() => {
+  useEffect(() => {
     db.get(id)
       .then((fetched) => {
         setItem(fetched);
