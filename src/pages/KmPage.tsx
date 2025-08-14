@@ -34,11 +34,9 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
     dbKm
       .get(id)
       .then((fetched) => {
-        console.log('fetched');
-        console.log(fetched);
         setFormData({
           _rev: fetched?._rev ?? undefined,
-          data: fetched.data ?? getDateString(),
+          data: fetched?.data ?? getDateString(),
           km: fetched.km ?? 0,
         });
         setLoading(false);
