@@ -14,7 +14,9 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   const id = match.params.id;
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [refreshCount, setRefreshCount] = useState(0);
   const [formData, setFormData] = useState<Kilometers>({
+    _rev: undefined,
     data: getDateString(),
     km: 0,
   });
@@ -23,13 +25,21 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
     km: false,
   });
 
+  useIonViewWillEnter(() => {
+    console.log('useIonViewWillEnter');
+    setRefreshCount((rc) => rc + 1);
+  });
+
   useEffect(() => {
     dbKm
       .get(id)
       .then((fetched) => {
+        console.log('fetched');
+        console.log(fetched);
         setFormData({
-          data: fetched ?? getDateString(),
-          km: fetched ?? 0,
+          _rev: fetched?._rev ?? undefined,
+          data: fetched.data ?? getDateString(),
+          km: fetched.km ?? 0,
         });
         setLoading(false);
       })
@@ -37,7 +47,7 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
         console.error('Errore nel recupero item', error);
         setLoading(false);
       });
-  }, [id, dbKm]);
+  }, [id, dbKm, refreshCount]);
 
   useIonViewWillLeave(() => {
     setFormData({
@@ -56,19 +66,14 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   const isKmInvalid = didEdit.km && Number(formData.km) === 0;
 
   const updateKm = async (newKm: Kilometers) => {
-    let newEvent: Kilometers;
-
-    if (formData._rev) {
-      newEvent = {
-        ...newKm,
-        _rev: formData._rev,
-      };
-    } else {
-      newEvent = newKm;
-    }
+    console.log(formData);
+    const newEvent = {
+      ...newKm,
+      ...(formData._rev && { _rev: formData._rev }),
+    };
 
     try {
-      const response = await dbKm.put(newEvent);
+      await dbKm.put(newEvent);
 
       // location.state.item._rev = response.rev;
       setIsSuccess((prevValue) => !prevValue);

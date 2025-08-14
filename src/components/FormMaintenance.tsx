@@ -46,14 +46,6 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
     setFormData(getInitialState(editData));
   }, [editData]);
 
-  // useIonViewDidEnter(() => {
-  //
-  // });
-
-  // useIonViewDidLeave(() => {
-  //
-  // });
-
   useIonViewWillLeave(() => {
     setFormData({
       _id: undefined,
