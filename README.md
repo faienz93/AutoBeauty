@@ -19,8 +19,9 @@ v22.13.1
 
    ```
    # .env example
-   VITE_API_URL=http://localhost:3000/api
-   VITE_DB_NAME=car-maintenance
+   VITE_ENV_NAME=TEST
+   VITE_TEST_CAR_TABLE=car
+   VITE_TEST_KM_TABLE=km
    ```
 
    Modifica i valori secondo le tue esigenze.
@@ -102,6 +103,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [ ] Fix Link of support
 - [ ] Add sentry for bug
 - [ ] Aggiungere le icone fatte bene su android
+- [ ] Affiungere un template per fare l'import dei dati
 
 ---
 
