@@ -56,6 +56,12 @@ export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, de
     return null;
   };
 
+  function handleSubmit(event: any) {
+    event.preventDefault();
+
+    onEdit();
+  }
+
   return (
     <div style={{ margin: '16px 0' }}>
       <IonCard color="light" style={{ borderRadius: 18, boxShadow: `0 4px 12px ${shadowColor}` }}>
@@ -92,7 +98,7 @@ export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, de
                   '--background': 'light',
                 } as React.CSSProperties
               }
-              onClick={onEdit}>
+              onClick={handleSubmit}>
               <IonIcon slot="icon-only" icon={pencil} />
             </IonButton>
           </div>

@@ -1,21 +1,23 @@
-import { useParams } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { useMaintenanceDb } from '../hooks/useDbContext';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
-import { IonToast, IonPage, useIonViewWillLeave } from '@ionic/react';
+import { IonToast, IonPage, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
 import { FormMaintenance } from '../components/FormMaintenance';
 
-const UpdateMaintenance = () => {
+const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   const [toastOpen, setToastOpen] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const { id } = useParams<{ id: string }>();
-  console.log(id);
   const db = useMaintenanceDb();
+  const id = match.params.id;
+  console.log(id);
+
   const [item, setItem] = useState<Maintenance | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  useIonViewWillEnter(() => {
+    console.log('ionViewWillEnter event fired');
     db.get(id)
       .then((fetched) => {
         setItem(fetched);
@@ -27,7 +29,16 @@ const UpdateMaintenance = () => {
       });
   }, [id, db]);
 
+  // useIonViewDidEnter(() => {
+  //   console.log('ionViewDidEnter event fired');
+  // });
+
+  // useIonViewDidLeave(() => {
+  //   console.log('ionViewDidLeave event fired');
+  // });
+
   useIonViewWillLeave(() => {
+    console.log('ionViewWillLeave event fired');
     setIsSuccess(false);
   });
 
@@ -57,7 +68,6 @@ const UpdateMaintenance = () => {
     }
   };
 
-  // return <NewMaintenance editingItem={item} key={id} />;
   return (
     <IonPage>
       <Header title="Modifica Manutenzione" />

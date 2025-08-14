@@ -10,8 +10,6 @@ import {
   IonSelectOption,
   IonIcon,
   IonText,
-  useIonViewDidEnter,
-  useIonViewDidLeave,
   useIonViewWillEnter,
   useIonViewWillLeave,
 } from '@ionic/react';
@@ -45,17 +43,17 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
   const [formData, setFormData] = useState<Maintenance>(getInitialState(editData));
 
   useIonViewWillEnter(() => {
-    console.log('ionViewWillEnter event fired');
+    console.log('FormMaintenance - ionViewWillEnter event fired');
     setFormData(getInitialState(editData));
   }, [editData]);
 
-  useIonViewDidEnter(() => {
-    console.log('ionViewDidEnter event fired');
-  });
+  // useIonViewDidEnter(() => {
+  //   console.log('ionViewDidEnter event fired');
+  // });
 
-  useIonViewDidLeave(() => {
-    console.log('ionViewDidLeave event fired');
-  });
+  // useIonViewDidLeave(() => {
+  //   console.log('ionViewDidLeave event fired');
+  // });
 
   useIonViewWillLeave(() => {
     console.log('ionViewWillLeave event fired');
@@ -120,9 +118,6 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
   };
 
   function handleSubmit(event: any) {
-    console.log('xxxxxxxxxxxxxxxxxxxx');
-    console.log(typeof event);
-    console.log(formData);
     event.preventDefault();
 
     const mnt: Maintenance = {
@@ -134,9 +129,6 @@ export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanc
       costo: Number(formData.costo) || 0,
       note: formData.note || '',
     };
-
-    console.log('yyyyyyyyyyyyyyy');
-    console.log(mnt);
 
     onSubmit({ ...mnt });
   }

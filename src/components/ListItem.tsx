@@ -22,7 +22,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
   const history = useHistory();
 
   // // https://stackoverflow.com/a/59464381/4700162
-  const handleEdit = (item: any) => {
+  const handleEdit = (item: Maintenance) => {
     history.push({
       pathname: `/newItem/edit/${item._id}`,
     });
