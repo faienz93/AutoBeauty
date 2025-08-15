@@ -1,10 +1,10 @@
-import { ReactNode } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
 import { useHistory } from 'react-router-dom';
-import { speedometerOutline } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
-import cartImage from '../assets/car-inspection-unsplash.jpg';
+import carRevision from '../assets/car-revision-unsplash.jpg';
 import { Card } from '../ui/Card';
+import genericCarIcon from '../assets/car.png';
+import { ReactNode } from 'react';
 import { IonText } from '@ionic/react';
 
 interface LastKmFindedProps {
@@ -16,15 +16,16 @@ interface LastKmFindedProps {
 export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFindedProps) => {
   const history = useHistory();
 
-  let content: ReactNode = '';
-  if (maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km) {
-    const msg = `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`;
-    content = (
-      <IonText color="danger" style={{ fontSize: '0.9em', lineHeight: '1.3' }}>
-        {msg}
-      </IonText>
-    );
-  }
+  const isWrongKilomers = maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km;
+  const msg = `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`;
+  const content: ReactNode = (
+    <>
+      <span>
+        <IonText style={{ fontSize: '1.5em', lineHeight: '1.3' }}>KM: {String(lastManualKm.km)}</IonText>
+      </span>
+      {isWrongKilomers && <IonText style={{ fontSize: '1em', lineHeight: '1.3', display: 'block', color: 'red' }}>{msg}</IonText>}
+    </>
+  );
 
   // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (lastKm: Kilometers) => {
@@ -37,15 +38,13 @@ export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFi
     <>
       <Card
         key={lastManualKm._id}
-        cardHeading={cartImage}
         title="Ultimo Kilometro rilevato"
         subtitle={`${lastManualKm.data}`}
-        mainNote={`${lastManualKm.km}`}
-        comment={content}
-        shadowColor="#3355ff"
-        iconContent={{
-          type: 'icon',
-          source: speedometerOutline,
+        content={content}
+        layout={{
+          color: isWrongKilomers ? 'warning' : 'secondary',
+          icon: genericCarIcon,
+          backgroundImage: carRevision,
         }}
         onEdit={() => handleEdit(lastManualKm)}
       />

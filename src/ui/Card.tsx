@@ -1,12 +1,11 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
-import './Example.css';
+import './Card.css';
 import { checkmarkDoneCircle, closeCircle } from 'ionicons/icons';
 
 interface CardProps {
   title: string;
   subtitle: string;
-  km: string;
-  note?: string;
+  content?: string | React.ReactNode;
   status?: 'urgent' | 'up-to-date';
   layout: {
     color?: string;
@@ -17,7 +16,7 @@ interface CardProps {
 }
 
 // https://forum.ionicframework.com/t/ion-card-design-weather-card/135329
-export const Example: React.FC<CardProps> = ({ title, subtitle, km, note, status, layout: { color = 'light', icon, backgroundImage }, onEdit }) => {
+export const Card: React.FC<CardProps> = ({ title, subtitle, content, status, layout: { color = 'light', icon, backgroundImage }, onEdit }) => {
   return (
     <>
       <IonCard color={color} className="my-ion-card" maintenance-state={status} onClick={onEdit}>
@@ -32,19 +31,14 @@ export const Example: React.FC<CardProps> = ({ title, subtitle, km, note, status
           <IonThumbnail slot="start" className="my-ion-thumbnail">
             <img src={backgroundImage} alt={backgroundImage || ''} />
           </IonThumbnail>
-          <span>
-            <b>KM:</b> {km}
-          </span>
-          {note && (
-            <span>
-              <b>Note:</b>
-              {note}
-            </span>
+
+          {content}
+          {status && (
+            <div>
+              <IonIcon slot="icon-only" icon={status === 'urgent' ? closeCircle : checkmarkDoneCircle} className="my-ion-icon" maintenance-state={status} />
+              <span maintenance-state={status}>{status === 'urgent' ? 'Da fare' : 'Tutto sotto controllo'}</span>
+            </div>
           )}
-          <div>
-            <IonIcon slot="icon-only" icon={status === 'urgent' ? closeCircle : checkmarkDoneCircle} className="my-ion-icon" maintenance-state={status} />
-            <span maintenance-state={status}>{status === 'urgent' ? 'Da fare' : 'Tutto sotto controllo'}</span>
-          </div>
         </IonCardContent>
       </IonCard>
     </>
