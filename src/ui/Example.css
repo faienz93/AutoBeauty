@@ -71,7 +71,6 @@
 .my-ion-card-content div {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #198754; /* Verde scuro Excel-style */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-top: 0.6em;
@@ -80,14 +79,31 @@
   position: relative;
 }
 
-ion-icon.my-ion-icon {
-  color: #198754; /* Verde più scuro e discreto */
+.my-ion-card-content span[maintenance-state='ok'] {
+  color: #198754;
+}
+
+.my-ion-card-content span[maintenance-state='urgent'] {
+  color: red;
+}
+
+ion-icon.my-ion-icon[maintenance-state='ok'] {
+  color: #198754;
   font-size: 1.5em;
   margin-right: 0.3em;
   font-weight: 500;
   /* opacity: 0.85;  */
 }
 
+ion-icon.my-ion-icon[maintenance-state='urgent'] {
+  color: red;
+  font-size: 1.5em;
+  margin-right: 0.3em;
+  font-weight: 500;
+  /* opacity: 0.85;  */
+}
+
+/* Selectable card */
 .my-ion-card {
   cursor: pointer;
   transition:

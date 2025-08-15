@@ -1,7 +1,7 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
 import tagliandoImg from '../assets/engine-oil.png';
 import './Example.css';
-import { checkmarkDone } from 'ionicons/icons';
+import { checkmarkDoneCircle, closeCircle } from 'ionicons/icons';
 
 // https://forum.ionicframework.com/t/ion-card-design-weather-card/135329
 export const Example = () => {
@@ -11,7 +11,7 @@ export const Example = () => {
   console.log(randomElement);
   return (
     <>
-      <IonCard color="light" className="my-ion-card" maintenance-state={randomElement}>
+      <IonCard color="light" className="my-ion-card" maintenance-state={randomElement} onClick={() => alert(randomElement)}>
         <IonCardHeader>
           <IonCardTitle className="my-ion-card-title">Revisione</IonCardTitle>
           <IonCardSubtitle className="my-ion-card-subtitle">10 mag 2025</IonCardSubtitle>
@@ -23,8 +23,13 @@ export const Example = () => {
           <span>Km: 107223</span>
           <span>Prossima Tra 5 mesi</span>
           <div>
-            <IonIcon slot="icon-only" icon={checkmarkDone} className="my-ion-icon" />
-            <span>Tutto sotto controllo</span>
+            <IonIcon
+              slot="icon-only"
+              icon={randomElement === 'urgent' ? closeCircle : checkmarkDoneCircle}
+              className="my-ion-icon"
+              maintenance-state={randomElement}
+            />
+            <span maintenance-state={randomElement}>{randomElement === 'urgent' ? 'Da fare' : 'Tutto sotto controllo'}</span>
           </div>
         </IonCardContent>
       </IonCard>
