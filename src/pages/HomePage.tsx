@@ -76,15 +76,15 @@ const HomePage = () => {
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
         ) : (
-          ['fare', 'nonfare', 'ok'].map((tipo) => <Example key={tipo} />)
-          // Object.entries(groupedMaintenance ?? {}).map(([tipo, maintenance]) => (
-          //   <CardMaintenance
-          //     key={tipo}
-          //     maintenanceType={tipo}
-          //     maintenance={maintenance}
-          //     maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km}
-          //   />
-          // ))
+          // ['fare', 'nonfare', 'ok'].map((tipo) => <Example key={tipo} />)
+          Object.entries(groupedMaintenance ?? {}).map(([tipo, maintenance]) => (
+            <CardMaintenance
+              key={tipo}
+              maintenanceType={tipo}
+              maintenance={maintenance}
+              maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km}
+            />
+          ))
         )}
       </IonContent>
     </IonPage>
