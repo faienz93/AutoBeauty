@@ -1,5 +1,4 @@
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonFab, IonFabButton, IonIcon, IonThumbnail } from '@ionic/react';
-import { add, cloudCircleOutline } from 'ionicons/icons';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonThumbnail } from '@ionic/react';
 import tagliandoImg from '../assets/engine-oil.png';
 import './Example.css';
 
@@ -7,7 +6,7 @@ import './Example.css';
 export const Example = () => {
   return (
     <>
-      <IonCard color="light" className="my-ion-card" data-stato="ok">
+      <IonCard color="light" className="my-ion-card" maintenance-state="ok">
         <IonCardHeader>
           <IonCardTitle className="my-ion-card-title">Revisione</IonCardTitle>
           <IonCardSubtitle className="my-ion-card-subtitle">10 mag 2025</IonCardSubtitle>
