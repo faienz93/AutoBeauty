@@ -1,3 +1,4 @@
+/* Message Details */
 .my-ion-card[maintenance-state='urgent']::before {
   content: '';
   position: absolute;
@@ -66,65 +67,26 @@
   flex-direction: column;
 }
 
-/* .my-ion-card-content span:nth-of-type(3) {
-  display: flex;
-  background: #36b06d;
-  color: #fff;
-  padding: 0.4em 1em;
-  border-radius: 20px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  margin-top: 0.8em;
-  box-shadow: 0 2px 8px #36b06d33;
-} */
-
 /* Opzione 2: Stile "status banner" */
-.my-ion-card-content span:nth-of-type(3) {
+.my-ion-card-content div {
   font-size: 1.1rem;
   font-weight: 600;
-  color: #4caf50; /* Verde scuro Excel-style */
+  color: #198754; /* Verde scuro Excel-style */
   text-transform: uppercase;
   letter-spacing: 0.05em;
   margin-top: 0.6em;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
+  display: flex;
   position: relative;
 }
 
-.my-ion-card-content span:nth-of-type(3)::before {
-  content: '✓ ';
+ion-icon.my-ion-icon {
   color: #198754; /* Verde più scuro e discreto */
-  font-size: 1.1em; /* Più piccolo */
+  font-size: 1.5em;
   margin-right: 0.3em;
   font-weight: 500;
-  opacity: 0.85; /* Più discreto */
+  /* opacity: 0.85;  */
 }
-
-/* Opzione 3: Box evidenziato */
-/* .my-ion-card-content span:nth-of-type(3) {
-  background-color: rgba(255, 255, 255, 0.15);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 0.5em 0.8em;
-  border-radius: 8px;
-  font-weight: 600;
-  color: #fff;
-  backdrop-filter: blur(10px);
-  margin-top: 0.7em;
-  display: inline-block;
-} */
-
-/* Opzione 4: Grande e dominante */
-/* .my-ion-card-content span:nth-of-type(3) {
-  font-size: 1.3rem;
-  font-weight: 800;
-  color: #fff;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-top: 1em;
-  text-shadow: 0 2px 4px #00000080;
-  position: relative;
-  border-left: 4px solid #4caf50;
-  padding-left: 0.8em;
-} */
 
 .my-ion-card {
   cursor: pointer;

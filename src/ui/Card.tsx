@@ -99,7 +99,7 @@ export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, de
                 } as React.CSSProperties
               }
               onClick={handleSubmit}>
-              <IonIcon slot="icon-only" icon={pencil} />
+              <IonIcon slot="icon-only" icon={pencil} className="pippo" />
             </IonButton>
           </div>
         </div>
