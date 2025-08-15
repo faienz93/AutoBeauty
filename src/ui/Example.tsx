@@ -1,5 +1,5 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
-// import tagliandoImg from '../assets/engine-oil.png';
+import tagliandoImg from '../assets/engine-oil.png';
 import carMaintenanceImg from '../assets/car-maintenance-unsplash.jpg';
 import './Example.css';
 import { checkmarkDoneCircle, closeCircle } from 'ionicons/icons';
@@ -13,6 +13,18 @@ export const Example = () => {
   return (
     <>
       <IonCard color="light" className="my-ion-card" maintenance-state={randomElement} onClick={() => alert(randomElement)}>
+        {/* <IonIcon
+          icon={informationCircleOutline}
+          className="header-icon"
+          onClick={(e) => {
+            e.stopPropagation(); // Non triggerare il click della card
+            // showInfo();
+          }}
+        /> */}
+
+        <IonThumbnail className="header-icon">
+          <img src={tagliandoImg as string} alt={tagliandoImg || ''} />
+        </IonThumbnail>
         <IonCardHeader>
           <IonCardTitle className="my-ion-card-title">Revisione</IonCardTitle>
           <IonCardSubtitle className="my-ion-card-subtitle">10 mag 2025</IonCardSubtitle>
