@@ -7,7 +7,7 @@ interface CardProps {
   subtitle: string;
   km: string;
   note?: string;
-  status: 'urgent' | 'up-to-date';
+  status?: 'urgent' | 'up-to-date';
   layout: {
     color?: string;
     icon: string;
@@ -21,15 +21,6 @@ export const Example: React.FC<CardProps> = ({ title, subtitle, km, note, status
   return (
     <>
       <IonCard color={color} className="my-ion-card" maintenance-state={status} onClick={onEdit}>
-        {/* <IonIcon
-          icon={informationCircleOutline}
-          className="header-icon"
-          onClick={(e) => {
-            e.stopPropagation(); // Non triggerare il click della card
-            // showInfo();
-          }}
-        /> */}
-
         <IonThumbnail className="header-icon">
           <img src={icon as string} alt={icon || ''} />
         </IonThumbnail>
