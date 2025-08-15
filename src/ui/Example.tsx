@@ -1,18 +1,26 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
-import tagliandoImg from '../assets/engine-oil.png';
-import carMaintenanceImg from '../assets/car-maintenance-unsplash.jpg';
 import './Example.css';
 import { checkmarkDoneCircle, closeCircle } from 'ionicons/icons';
 
+interface CardProps {
+  title: string;
+  subtitle: string;
+  km: string;
+  note?: string;
+  status: 'urgent' | 'up-to-date';
+  layout: {
+    color?: string;
+    icon: string;
+    backgroundImage: string;
+  };
+  onEdit(): void;
+}
+
 // https://forum.ionicframework.com/t/ion-card-design-weather-card/135329
-export const Example = () => {
-  const choice = ['urgent', 'ok'];
-  const randomIndex = Math.floor(Math.random() * choice.length);
-  const randomElement = choice[randomIndex];
-  console.log(randomElement);
+export const Example: React.FC<CardProps> = ({ title, subtitle, km, note, status, layout: { color = 'light', icon, backgroundImage }, onEdit }) => {
   return (
     <>
-      <IonCard color="light" className="my-ion-card" maintenance-state={randomElement} onClick={() => alert(randomElement)}>
+      <IonCard color={color} className="my-ion-card" maintenance-state={status} onClick={onEdit}>
         {/* <IonIcon
           icon={informationCircleOutline}
           className="header-icon"
@@ -23,26 +31,28 @@ export const Example = () => {
         /> */}
 
         <IonThumbnail className="header-icon">
-          <img src={tagliandoImg as string} alt={tagliandoImg || ''} />
+          <img src={icon as string} alt={icon || ''} />
         </IonThumbnail>
         <IonCardHeader>
-          <IonCardTitle className="my-ion-card-title">Revisione</IonCardTitle>
-          <IonCardSubtitle className="my-ion-card-subtitle">10 mag 2025</IonCardSubtitle>
+          <IonCardTitle className="my-ion-card-title">{title}</IonCardTitle>
+          <IonCardSubtitle className="my-ion-card-subtitle">{subtitle}</IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent className="my-ion-card-content">
           <IonThumbnail slot="start" className="my-ion-thumbnail">
-            <img src={carMaintenanceImg as string} alt={carMaintenanceImg || ''} />
+            <img src={backgroundImage} alt={backgroundImage || ''} />
           </IonThumbnail>
-          <span>Km: 107223</span>
-          <span>Prossima Tra 5 mesi</span>
+          <span>
+            <b>KM:</b> {km}
+          </span>
+          {note && (
+            <span>
+              <b>Note:</b>
+              {note}
+            </span>
+          )}
           <div>
-            <IonIcon
-              slot="icon-only"
-              icon={randomElement === 'urgent' ? closeCircle : checkmarkDoneCircle}
-              className="my-ion-icon"
-              maintenance-state={randomElement}
-            />
-            <span maintenance-state={randomElement}>{randomElement === 'urgent' ? 'Da fare' : 'Tutto sotto controllo'}</span>
+            <IonIcon slot="icon-only" icon={status === 'urgent' ? closeCircle : checkmarkDoneCircle} className="my-ion-icon" maintenance-state={status} />
+            <span maintenance-state={status}>{status === 'urgent' ? 'Da fare' : 'Tutto sotto controllo'}</span>
           </div>
         </IonCardContent>
       </IonCard>

@@ -27,7 +27,7 @@
   border-radius: 5px 0 0 5px;
 }
 
-.my-ion-card[maintenance-state='ok']::before {
+.my-ion-card[maintenance-state='up-to-date']::before {
   content: '';
   position: absolute;
   left: 0;
@@ -104,7 +104,7 @@
 }
 
 /* === STATO TESTO === */
-.my-ion-card-content span[maintenance-state='ok'] {
+.my-ion-card-content span[maintenance-state='up-to-date'] {
   color: #198754;
 }
 
@@ -113,7 +113,7 @@
 }
 
 /* === STATO ICONE === */
-ion-icon.my-ion-icon[maintenance-state='ok'] {
+ion-icon.my-ion-icon[maintenance-state='up-to-date'] {
   color: #198754;
   font-size: 1.5em;
   margin-right: 0.3em;

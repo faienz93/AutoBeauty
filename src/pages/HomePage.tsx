@@ -11,7 +11,6 @@ import { LastKmFinded } from '../components/LastKmFinded';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
-import { Example } from '../ui/Example';
 
 const HomePage = () => {
   const today = getDateString();
@@ -76,11 +75,10 @@ const HomePage = () => {
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
           </IonText>
         ) : (
-          // ['fare', 'nonfare', 'ok'].map((tipo) => <Example key={tipo} />)
-          Object.entries(groupedMaintenance ?? {}).map(([tipo, maintenance]) => (
+          Object.entries(groupedMaintenance ?? {}).map(([category, maintenance]) => (
             <CardMaintenance
-              key={tipo}
-              maintenanceType={tipo}
+              key={category}
+              category={category}
               maintenance={maintenance}
               maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km}
             />
