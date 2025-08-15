@@ -1,5 +1,6 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
-import tagliandoImg from '../assets/engine-oil.png';
+// import tagliandoImg from '../assets/engine-oil.png';
+import carMaintenanceImg from '../assets/car-maintenance-unsplash.jpg';
 import './Example.css';
 import { checkmarkDoneCircle, closeCircle } from 'ionicons/icons';
 
@@ -18,7 +19,7 @@ export const Example = () => {
         </IonCardHeader>
         <IonCardContent className="my-ion-card-content">
           <IonThumbnail slot="start" className="my-ion-thumbnail">
-            <img src={tagliandoImg as string} alt={tagliandoImg || ''} />
+            <img src={carMaintenanceImg as string} alt={carMaintenanceImg || ''} />
           </IonThumbnail>
           <span>Km: 107223</span>
           <span>Prossima Tra 5 mesi</span>
