@@ -1,4 +1,21 @@
-/* Message Details */
+/* === CARD PRINCIPALE === */
+.my-ion-card {
+  cursor: pointer;
+  transition:
+    transform 0.2s,
+    box-shadow 0.2s;
+}
+
+.my-ion-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+}
+
+.my-ion-card:active {
+  transform: translateY(0px);
+}
+
+/* === BARRE LATERALI STATO === */
 .my-ion-card[maintenance-state='urgent']::before {
   content: '';
   position: absolute;
@@ -17,14 +34,14 @@
   top: 0;
   width: 5px;
   height: 100%;
-  background: linear-gradient(to bottom, #4caf50, #81c784); /* Verde degradé */
+  background: linear-gradient(to bottom, #4caf50, #81c784);
   border-radius: 5px 0 0 5px;
 }
 
+/* === HEADER === */
 .my-ion-card-title,
 .my-ion-card-subtitle,
 .my-ion-card-content {
-  /* font-size: 15px; */
   left: 15px;
   right: 15px;
 }
@@ -40,13 +57,24 @@
   opacity: 0.6;
 }
 
+/* === CONTENUTO === */
+.my-ion-card-content {
+  font-size: 15px;
+  opacity: 0.5;
+  top: 10px;
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === THUMBNAIL/IMMAGINE === */
 .my-ion-thumbnail {
   position: absolute;
-  bottom: 0px; /* Finisce in basso */
+  bottom: 0px;
   right: 15%;
-  width: auto; /* Larghezza automatica per mantenere proporzioni */
+  width: auto;
   height: 100%;
-  min-height: 177px; /* Dimensione minima garantita */
+  min-height: 177px;
   filter: opacity(0.3) drop-shadow(0 0 0 white);
 }
 
@@ -57,17 +85,7 @@
   object-position: center;
 }
 
-.my-ion-card-content {
-  font-size: 15px;
-  opacity: 0.5;
-  top: 10px;
-  margin-bottom: 16px;
-  /* font-weight: 600; */
-  display: flex;
-  flex-direction: column;
-}
-
-/* Opzione 2: Stile "status banner" */
+/* === CONTAINER STATUS === */
 .my-ion-card-content div {
   font-size: 1.1rem;
   font-weight: 600;
@@ -76,46 +94,28 @@
   margin-top: 0.6em;
   text-shadow: 0 1px 2px rgba(255, 255, 255, 0.6);
   display: flex;
+  align-items: center;
   position: relative;
 }
 
+/* === STATO TESTO === */
 .my-ion-card-content span[maintenance-state='ok'] {
   color: #198754;
 }
 
 .my-ion-card-content span[maintenance-state='urgent'] {
-  color: red;
+  color: #fa4444;
 }
 
+/* === STATO ICONE === */
 ion-icon.my-ion-icon[maintenance-state='ok'] {
   color: #198754;
   font-size: 1.5em;
   margin-right: 0.3em;
-  font-weight: 500;
-  /* opacity: 0.85;  */
 }
 
 ion-icon.my-ion-icon[maintenance-state='urgent'] {
-  color: red;
+  color: #fa4444;
   font-size: 1.5em;
   margin-right: 0.3em;
-  font-weight: 500;
-  /* opacity: 0.85;  */
-}
-
-/* Selectable card */
-.my-ion-card {
-  cursor: pointer;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-}
-
-.my-ion-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-}
-
-.my-ion-card:active {
-  transform: translateY(0px);
 }
