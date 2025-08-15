@@ -3,7 +3,7 @@ import { Maintenance } from '../models/MaintenanceType';
 import { useHistory } from 'react-router-dom';
 import { speedometerOutline } from 'ionicons/icons';
 import { Kilometers } from '../models/KilometersType';
-import cartImage from '../assets/chad-kirchoff-xe-e69j6-Ds-unsplash.jpg';
+import cartImage from '../assets/car-inspection-unsplash.jpg';
 import { Card } from '../ui/Card';
 import { IonText } from '@ionic/react';
 
