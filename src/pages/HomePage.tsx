@@ -1,8 +1,7 @@
 import { useMemo } from 'react';
 import { useState } from 'react';
 import { Maintenance, Stats } from '../models/MaintenanceType';
-import { IonContent, IonCard, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
-import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
+import { IonContent, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
@@ -11,6 +10,7 @@ import { LastKmFinded } from '../components/LastKmFinded';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
+import { Card } from '../ui/Card';
 
 const HomePage = () => {
   const [lastManualKm, setLastManualKm] = useState<Kilometers>({
@@ -30,8 +30,6 @@ const HomePage = () => {
   }, [maintenances]) as Stats;
 
   useIonViewWillEnter(() => {
-    console.log('Loading data...');
-
     const loadData = async () => {
       try {
         // Carica in parallelo per essere più veloce
@@ -56,12 +54,13 @@ const HomePage = () => {
     <IonPage>
       <Header title="Home" showBackButton={false} />
       <IonContent>
-        <IonCard style={{ flexGlow: 1, borderRadius: '0.5em', boxShadow: '0 4px 12px' }}>
+        {/* <IonCard style={{ flexGlow: 1, borderRadius: '0.5em', boxShadow: '0 4px 12px' }}>
           <IonCardHeader>
             <IonCardTitle>Data odierna</IonCardTitle>
             <IonCardSubtitle>{getDateString()}</IonCardSubtitle>
           </IonCardHeader>
-        </IonCard>
+        </IonCard> */}
+        <Card title="Data Odierna" subtitle={getDateString()} />
         <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
         {groupedMaintenance && Object.keys(groupedMaintenance).length == 0 ? (
           <IonText color="secondary">

@@ -7,31 +7,37 @@ interface CardProps {
   subtitle: string;
   content?: string | React.ReactNode;
   status?: 'urgent' | 'up-to-date';
-  layout: {
+  layout?: {
     color?: string;
-    icon: string;
-    backgroundImage: string;
+    icon?: string;
+    backgroundImage?: string;
   };
-  onEdit(): void;
+  onEdit?(): void;
 }
 
 // https://forum.ionicframework.com/t/ion-card-design-weather-card/135329
-export const Card: React.FC<CardProps> = ({ title, subtitle, content, status, layout: { color = 'light', icon, backgroundImage }, onEdit }) => {
+export const Card: React.FC<CardProps> = ({ title, subtitle, content, status, layout = {}, onEdit }) => {
+  const { color, icon, backgroundImage } = layout;
+
   return (
     <>
       <IonCard color={color} className="my-ion-card" maintenance-state={status} onClick={onEdit}>
-        <IonThumbnail className="header-icon">
-          <img src={icon as string} alt={icon || ''} />
-        </IonThumbnail>
+        {icon && (
+          <IonThumbnail className="header-icon">
+            <img src={icon as string} alt={icon || ''} />
+          </IonThumbnail>
+        )}
+
         <IonCardHeader>
           <IonCardTitle className="my-ion-card-title">{title}</IonCardTitle>
           <IonCardSubtitle className="my-ion-card-subtitle">{subtitle}</IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent className="my-ion-card-content">
-          <IonThumbnail slot="start" className="my-ion-thumbnail">
-            <img src={backgroundImage} alt={backgroundImage || ''} />
-          </IonThumbnail>
-
+          {backgroundImage && (
+            <IonThumbnail slot="start" className="my-ion-thumbnail">
+              <img src={backgroundImage} alt={backgroundImage || ''} />
+            </IonThumbnail>
+          )}
           {content}
           {status && (
             <div>
