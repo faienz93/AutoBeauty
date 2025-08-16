@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useMemo } from 'react';
 import { useState } from 'react';
 import { Maintenance, Stats } from '../models/MaintenanceType';
 import { IonContent, IonCard, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
@@ -13,7 +13,10 @@ import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween 
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
 
 const HomePage = () => {
-  const today = getDateString();
+  const [lastManualKm, setLastManualKm] = useState<Kilometers>({
+    data: getDateString(),
+    km: 0,
+  });
   const fetchMaintenances = useFetchMaintenances();
   const fetchManualKm = useFetchManualKm();
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -26,40 +29,26 @@ const HomePage = () => {
     return getGroupByMaintenanceByKm(maintenances);
   }, [maintenances]) as Stats;
 
-  const [lastManualKm, setLastManualKm] = useState<Kilometers>({
-    data: getDateString(),
-    km: 0,
-  });
-
-  const fetchMaintenancesCallback = useCallback(async () => {
-    try {
-      const data = await fetchMaintenances();
-      setMaintenances(data);
-    } catch (error) {
-      console.error('Error fetching maintenances:', error);
-    }
-  }, [fetchMaintenances]);
-
-  const getLatestManualKilometers = useCallback(async () => {
-    const lastKm = await fetchManualKm();
-    setLastManualKm({
-      _id: lastKm._id || '',
-      _rev: lastKm._rev || '',
-      km: lastKm.km || 0,
-      data: getDateString(parseStringToDate(lastKm.data)),
-    });
-  }, [fetchManualKm]);
-
-  useMemo(() => {
-    getLatestManualKilometers();
-  }, [getLatestManualKilometers]);
-
-  const loadData = useCallback(async () => {
-    await fetchMaintenancesCallback();
-    await getLatestManualKilometers();
-  }, [fetchMaintenancesCallback, getLatestManualKilometers]);
-
   useIonViewWillEnter(() => {
+    console.log('Loading data...');
+
+    const loadData = async () => {
+      try {
+        // Carica in parallelo per essere più veloce
+        const [maintenancesData, manualKmData] = await Promise.all([fetchMaintenances(), fetchManualKm()]);
+
+        setMaintenances(maintenancesData);
+        setLastManualKm({
+          _id: manualKmData._id || '',
+          _rev: manualKmData._rev || '',
+          km: manualKmData.km || 0,
+          data: getDateString(parseStringToDate(manualKmData.data)),
+        });
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
+    };
+
     loadData();
   });
 
@@ -70,7 +59,7 @@ const HomePage = () => {
         <IonCard style={{ flexGlow: 1, borderRadius: '0.5em', boxShadow: '0 4px 12px' }}>
           <IonCardHeader>
             <IonCardTitle>Data odierna</IonCardTitle>
-            <IonCardSubtitle>{today}</IonCardSubtitle>
+            <IonCardSubtitle>{getDateString()}</IonCardSubtitle>
           </IonCardHeader>
         </IonCard>
         <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />

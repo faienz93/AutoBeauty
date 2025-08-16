@@ -27,14 +27,6 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
       });
   }, [id, db]);
 
-  // useIonViewDidEnter(() => {
-  //
-  // });
-
-  // useIonViewDidLeave(() => {
-  //
-  // });
-
   useIonViewWillLeave(() => {
     setIsSuccess(false);
   });
