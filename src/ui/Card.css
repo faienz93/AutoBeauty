@@ -1,5 +1,7 @@
 /* === CARD PRINCIPALE === */
 .my-ion-card {
+  flex-grow: 1;
+  border-radius: 0.5em;
   cursor: pointer;
   transition:
     transform 0.2s,
