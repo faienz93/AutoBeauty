@@ -5,7 +5,7 @@ import '@ionic/react/css/core.css';
 import { setupIonicReact } from '@ionic/react';
 
 setupIonicReact();
-import { Route, Redirect } from 'react-router';
+import { Route, Redirect, useHistory } from 'react-router';
 
 /* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
@@ -55,50 +55,64 @@ setupIonicReact({ mode: 'md' });
 
 export const platform = Capacitor.getPlatform();
 
+const MainTabs: React.FC = () => {
+  const history = useHistory();
+
+  return (
+    <IonTabs>
+      <IonRouterOutlet>
+        <Redirect exact path="/" to="/home" />
+        <Route path="/home" component={HomePage} exact={true} />
+        <Route path="/newItem" component={NewMaintenance} exact={true} />
+        <Route path="/newItem/edit/:id" component={UpdateMaitenance} exact={true} />
+        <Route path="/list" component={ListCarMaintenance} exact={true} />
+        <Route path="/newkm/edit/:id" component={KmPage} exact={true} />
+        <Route path="/settings" component={Setting} exact={true} />
+        <Route path="/info" component={InfoPage} exact={true} />
+      </IonRouterOutlet>
+
+      <IonTabBar slot="bottom">
+        <IonTabButton tab="home" href="/home">
+          <IonIcon icon={homeOutline} />
+          <IonLabel>Home</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab="list" href="/list">
+          <IonIcon icon={listOutline} />
+          <IonLabel>Lista</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton
+          tab="newItem"
+          onClick={() =>
+            history.push({
+              pathname: `/newItem`,
+            })
+          }>
+          <IonIcon icon={addCircleOutline} />
+          <IonLabel>Aggiungi</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab="settings" href="/settings">
+          <IonIcon icon={settingsOutline} />
+          <IonLabel>Impostazioni</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab="info" href="/info">
+          <IonIcon icon={informationOutline} />
+          <IonLabel>Info</IonLabel>
+        </IonTabButton>
+      </IonTabBar>
+    </IonTabs>
+  );
+};
+
 function App() {
   return (
     <DatabaseProvider>
       <IonApp>
         <IonReactRouter>
-          <IonTabs>
-            <IonRouterOutlet>
-              <Redirect exact path="/" to="/home" />
-              <Route path="/home" component={HomePage} exact={true} />
-              <Route path="/newItem" component={NewMaintenance} exact={true} />
-              <Route path="/newItem/edit/:id" component={UpdateMaitenance} exact={true} />
-              <Route path="/list" component={ListCarMaintenance} exact={true} />
-              <Route path="/newkm/edit/:id" component={KmPage} exact={true} />
-              <Route path="/settings" component={Setting} exact={true} />
-              <Route path="/info" component={InfoPage} exact={true} />
-            </IonRouterOutlet>
-
-            <IonTabBar slot="bottom">
-              <IonTabButton tab="home" href="/home">
-                <IonIcon icon={homeOutline} />
-                <IonLabel>Home</IonLabel>
-              </IonTabButton>
-
-              <IonTabButton tab="list" href="/list">
-                <IonIcon icon={listOutline} />
-                <IonLabel>Lista</IonLabel>
-              </IonTabButton>
-
-              <IonTabButton tab="newItem" href="/newItem">
-                <IonIcon icon={addCircleOutline} />
-                <IonLabel>Aggiungi</IonLabel>
-              </IonTabButton>
-
-              <IonTabButton tab="settings" href="/settings">
-                <IonIcon icon={settingsOutline} />
-                <IonLabel>Impostazioni</IonLabel>
-              </IonTabButton>
-
-              <IonTabButton tab="info" href="/info">
-                <IonIcon icon={informationOutline} />
-                <IonLabel>Info</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
+          <MainTabs />
         </IonReactRouter>
       </IonApp>
     </DatabaseProvider>
