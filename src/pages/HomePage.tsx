@@ -14,8 +14,8 @@ import { useFetchManualKm } from '../hooks/useFetchManualKm';
 
 const HomePage = () => {
   const today = getDateString();
-  const maintenancesData = useFetchMaintenances();
-  const manualKm = useFetchManualKm();
+  const fetchMaintenances = useFetchMaintenances();
+  const fetchManualKm = useFetchManualKm();
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 
   const maintenanceWithHigherKm = useMemo(() => {
@@ -31,29 +31,33 @@ const HomePage = () => {
     km: 0,
   });
 
-  const fetchMaintenances = async () => {
+  const fetchMaintenancesCallback = useCallback(async () => {
     try {
-      const data = await maintenancesData();
+      const data = await fetchMaintenances();
       setMaintenances(data);
     } catch (error) {
       console.error('Error fetching maintenances:', error);
     }
-  };
+  }, [fetchMaintenances]);
 
-  const getLatestManualKilometers = async () => {
-    const lastKm = await manualKm();
+  const getLatestManualKilometers = useCallback(async () => {
+    const lastKm = await fetchManualKm();
     setLastManualKm({
       _id: lastKm._id || '',
       _rev: lastKm._rev || '',
       km: lastKm.km || 0,
       data: getDateString(parseStringToDate(lastKm.data)),
     });
-  };
+  }, [fetchManualKm]);
+
+  useMemo(() => {
+    getLatestManualKilometers();
+  }, [getLatestManualKilometers]);
 
   const loadData = useCallback(async () => {
-    await fetchMaintenances();
+    await fetchMaintenancesCallback();
     await getLatestManualKilometers();
-  }, [fetchMaintenances, getLatestManualKilometers]);
+  }, [fetchMaintenancesCallback, getLatestManualKilometers]);
 
   useIonViewWillEnter(() => {
     loadData();

@@ -16,14 +16,18 @@ interface LastKmFindedProps {
 export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFindedProps) => {
   const history = useHistory();
 
-  const isWrongKilomers = maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km;
-  const msg = `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`;
+  const isWrongKilometers = maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km;
   const content: ReactNode = (
     <>
       <span>
         <IonText style={{ fontSize: '1.5em', lineHeight: '1.3' }}>KM: {String(lastManualKm.km)}</IonText>
       </span>
-      {isWrongKilomers && <IonText style={{ fontSize: '1em', lineHeight: '1.3', display: 'block', color: 'red' }}>{msg}</IonText>}
+      {isWrongKilometers && (
+        <IonText style={{ fontSize: '1em', lineHeight: '1.3', display: 'block', color: 'red' }}>
+          Attenzione hai impostato un Kilometraggio manuale ({lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (
+          {maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.
+        </IonText>
+      )}
     </>
   );
 
@@ -42,7 +46,7 @@ export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFi
         subtitle={`${lastManualKm.data}`}
         content={content}
         layout={{
-          color: isWrongKilomers ? 'warning' : 'secondary',
+          color: isWrongKilometers ? 'warning' : 'secondary',
           icon: genericCarIcon,
           backgroundImage: carRevision,
         }}
