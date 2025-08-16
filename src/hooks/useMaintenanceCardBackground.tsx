@@ -15,9 +15,9 @@ export const useMaintenanceCardBackground = (maintenanceType: MaintenanceType) =
       case 'Gomme':
         return tyreMaintenance;
       case 'Revisione':
-        return carRevision;
-      default:
         return carWorkshop;
+      default:
+        return carRevision;
     }
   }, [maintenanceType]);
 };

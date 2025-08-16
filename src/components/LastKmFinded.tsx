@@ -47,7 +47,7 @@ export const LastKmFinded = ({ lastManualKm, maintenanceWithHigherKm }: LastKmFi
         content={content}
         layout={{
           color: isWrongKilometers ? 'warning' : 'secondary',
-          icon: genericCarIcon,
+          icon: { iconImage: genericCarIcon },
           backgroundImage: carRevision,
         }}
         onEdit={() => handleEdit(lastManualKm)}

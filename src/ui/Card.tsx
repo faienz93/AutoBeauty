@@ -7,31 +7,48 @@ interface CardProps {
   subtitle: string;
   content?: string | React.ReactNode;
   status?: 'urgent' | 'up-to-date';
-  layout: {
+  layout?: {
     color?: string;
-    icon: string;
-    backgroundImage: string;
+    backgroundImage?: string;
+    icon?:
+      | { iconImage: string; ionIcon?: undefined } // Solo iconImage
+      | { ionIcon: string; iconImage?: undefined } // Solo ionIcon
+      | { iconImage?: undefined; ionIcon?: undefined }; // Nessuna icona
   };
-  onEdit(): void;
+  onEdit?(): void;
 }
 
 // https://forum.ionicframework.com/t/ion-card-design-weather-card/135329
-export const Card: React.FC<CardProps> = ({ title, subtitle, content, status, layout: { color = 'light', icon, backgroundImage }, onEdit }) => {
+export const Card: React.FC<CardProps> = ({ title, subtitle, content, status, layout = {}, onEdit }) => {
+  const { color, icon: { iconImage, ionIcon } = {}, backgroundImage } = layout;
+
+  const isClickable = !!onEdit;
+
   return (
     <>
-      <IonCard color={color} className="my-ion-card" maintenance-state={status} onClick={onEdit}>
-        <IonThumbnail className="header-icon">
-          <img src={icon as string} alt={icon || ''} />
-        </IonThumbnail>
+      <IonCard color={color} className="my-ion-card" data-clickable={isClickable ? 'true' : 'false'} maintenance-state={status} onClick={onEdit}>
+        {iconImage && (
+          <IonThumbnail className="header-icon">
+            <img src={iconImage as string} alt={iconImage || ''} />
+          </IonThumbnail>
+        )}
+
+        {ionIcon && (
+          <IonThumbnail className="header-icon">
+            <IonIcon icon={ionIcon} style={{ display: 'block', margin: 'auto', width: '100%', height: '100%' }} />
+          </IonThumbnail>
+        )}
+
         <IonCardHeader>
           <IonCardTitle className="my-ion-card-title">{title}</IonCardTitle>
           <IonCardSubtitle className="my-ion-card-subtitle">{subtitle}</IonCardSubtitle>
         </IonCardHeader>
         <IonCardContent className="my-ion-card-content">
-          <IonThumbnail slot="start" className="my-ion-thumbnail">
-            <img src={backgroundImage} alt={backgroundImage || ''} />
-          </IonThumbnail>
-
+          {backgroundImage && (
+            <IonThumbnail slot="start" className="my-ion-thumbnail">
+              <img src={backgroundImage} alt={backgroundImage || ''} />
+            </IonThumbnail>
+          )}
           {content}
           {status && (
             <div>
