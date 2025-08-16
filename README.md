@@ -99,7 +99,6 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [x] Simplyfy form entry
 - [x] Fix when update item routing
 - [ ] Fix when download file
-- [ ] Simplyfy the Hoe Page with only one page
 - [ ] Fix Link of support
 - [ ] Add sentry for bug
 - [ ] Aggiungere le icone fatte bene su android
