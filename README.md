@@ -1,4 +1,4 @@
-# Car Maintenance App 🚗
+# MyCar Diary 🚗
 
 A free and open-source application to track your vehicle maintenance history. Keep records of services, tire changes, and inspections all in one place.
 
