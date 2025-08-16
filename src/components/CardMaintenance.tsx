@@ -39,7 +39,7 @@ export const CardMaintenance = ({ category, maintenance, maxKm }: { category: st
       subtitle={maintenance?.data || 'N/A'}
       content={content}
       layout={{
-        icon: useMaintenanceCardIcon(maintenance.tipo),
+        icon: { iconImage: useMaintenanceCardIcon(maintenance.tipo) },
         backgroundImage: useMaintenanceCardBackground(maintenance.tipo),
       }}
       status={todo ? 'urgent' : 'up-to-date'}
