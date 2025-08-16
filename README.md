@@ -102,7 +102,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [ ] Fix when try to download maintenance.csv
 - [ ] Fix Link of support
 - [ ] Add sentry for bug
-- [ ] Added better icon for android
+- [x] Added better icon for android
 
 ---
 
