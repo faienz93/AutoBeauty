@@ -6,6 +6,8 @@ import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { getDateString, parseStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { getUUIDKey } from '../utils/pouchDBUtils';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
 
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -15,6 +17,16 @@ const ImportItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [label, setLabel] = useState('Nessun File scelto');
   const csvService = new CsvService();
+
+  const convertBlobToBase64 = (blob: Blob) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onerror = reject;
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.readAsDataURL(blob);
+    });
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0] || null;
@@ -65,12 +77,105 @@ const ImportItem = () => {
     }
   };
 
+  const downloadFile = (filename: string, data: Blob): Promise<boolean> => {
+    return new Promise((resolve, reject) => {
+      try {
+        // REF: https://dev.to/graciesharma/implementing-csv-data-export-in-react-without-external-libraries-3030
+        const url = window.URL.createObjectURL(data);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.setAttribute('download', filename);
+
+        // Add event listeners to track success/failure
+        link.addEventListener('click', () => {
+          setTimeout(() => {
+            // Cleanup
+            document.body.removeChild(link);
+            window.URL.revokeObjectURL(url);
+            resolve(true);
+          }, 100);
+        });
+
+        link.addEventListener('error', (error) => {
+          // Cleanup
+          document.body.removeChild(link);
+          window.URL.revokeObjectURL(url);
+          reject(error);
+        });
+
+        document.body.appendChild(link);
+        link.click();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  };
+
+  const handleExport = async () => {
+    try {
+      const data = [
+        {
+          data: '6 gen 2022',
+          km: 83938,
+          tipo: 'Gomme',
+          costo: 30,
+          note: 'Esempio di nota',
+        },
+        {
+          data: '21 ago 2019',
+          km: 62000,
+          tipo: 'Tagliando',
+          costo: 50,
+          note: '',
+        },
+      ];
+
+      const csvDataBlob = await csvService.exportCsvWithBlob(data as Maintenance[], ['data', 'km', 'tipo', 'costo', 'note']);
+
+      const base64Data = (await convertBlobToBase64(csvDataBlob)) as string;
+
+      const filename = `maintenance_${new Date().toISOString().slice(0, 10)}.csv`;
+      if (Capacitor.isNativePlatform()) {
+        const permissionResult = await Filesystem.checkPermissions();
+
+        if (permissionResult.publicStorage !== 'granted') {
+          // Richiedi i permessi se non sono stati concessi
+          await Filesystem.requestPermissions();
+        }
+
+        try {
+          await Filesystem.writeFile({
+            path: filename,
+            data: base64Data,
+            directory: Directory.Data,
+          });
+
+          setIsSuccess((prevValue) => !prevValue);
+        } catch (error) {
+          console.error('Errore durante il salvataggio del file:', error);
+          setIsSuccess(false);
+        }
+      } else {
+        downloadFile(filename, csvDataBlob).then(() => {
+          setIsSuccess((prevValue) => !prevValue);
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching maintenances:', error);
+      setIsSuccess(false);
+    }
+  };
+
   return (
     <>
       <IonCard>
         <IonCardHeader>
           <IonCardTitle>Importa</IonCardTitle>
         </IonCardHeader>
+        <p>
+          Here is a link <a onClick={handleExport}>PROVA</a>
+        </p>
         <IonCardContent>
           <p className="ion-padding-bottom">Seleziona un file per importare i tuoi dati preesistenti</p>
           <IonButton expand="block" color={'secondary'} onClick={() => openFileDialog()} className="ion-margin-bottom">
