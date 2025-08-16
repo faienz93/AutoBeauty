@@ -98,11 +98,11 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 - [x] Simplyfy form entry
 - [x] Fix when update item routing
-- [ ] Fix when download file
+- [ ] Add import template.csv
+- [ ] Fix when try to download maintenance.csv
 - [ ] Fix Link of support
 - [ ] Add sentry for bug
-- [ ] Aggiungere le icone fatte bene su android
-- [ ] Affiungere un template per fare l'import dei dati
+- [ ] Added better icon for android
 
 ---
 
