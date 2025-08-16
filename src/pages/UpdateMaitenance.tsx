@@ -2,7 +2,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useEffect, useState } from 'react';
 import { Maintenance } from '../models/MaintenanceType';
-import { IonToast, IonPage, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
+import { IonToast, IonPage, useIonViewWillLeave } from '@ionic/react';
 import { Header } from '../components/Header';
 import { FormMaintenance } from '../components/FormMaintenance';
 
@@ -11,8 +11,6 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
   const [isSuccess, setIsSuccess] = useState(false);
   const db = useMaintenanceDb();
   const id = match.params.id;
-  console.log('Vediamo che mi stampa');
-  console.log(id);
 
   const [item, setItem] = useState<Maintenance | null>(null);
   const [loading, setLoading] = useState(true);
@@ -29,14 +27,6 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
       });
   }, [id, db]);
 
-  // useIonViewDidEnter(() => {
-  //
-  // });
-
-  // useIonViewDidLeave(() => {
-  //
-  // });
-
   useIonViewWillLeave(() => {
     setIsSuccess(false);
   });
@@ -45,11 +35,11 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
   if (!item) return <div>Item non trovato</div>;
 
   const handleUpdateMaintenance = async (maintenance: Maintenance) => {
-    db.put(maintenance)
-      .then((response) => {})
-      .catch((error) => {
-        console.error('Error adding maintenance:', error);
-      });
+    try {
+      await db.put(maintenance);
+    } catch (error) {
+      console.error('Error adding maintenance:', error);
+    }
   };
 
   const handleSubmit = async (formData: Maintenance) => {

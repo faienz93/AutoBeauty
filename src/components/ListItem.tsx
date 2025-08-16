@@ -5,7 +5,7 @@ import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from '../components/AlertConfirmation';
 
 import { useHistory } from 'react-router-dom';
-import { useMaintenanceIcon } from '../hooks/useMaitenanceIcon';
+import { useMaintenanceCardIcon } from '../hooks/useMaitenanceCardIcon';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 
 interface ListItemProps {
@@ -40,7 +40,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
       <IonItem key={maintenance._id}>
         <IonThumbnail slot="start">
           {/* <img src={`/assets/${item.image}`} alt={item.name} /> */}
-          <img src={useMaintenanceIcon(maintenance.tipo)} alt={maintenance.tipo} />
+          <img src={useMaintenanceCardIcon(maintenance.tipo)} alt={maintenance.tipo} />
         </IonThumbnail>
         <IonLabel>
           <h2>{maintenance.tipo}</h2>

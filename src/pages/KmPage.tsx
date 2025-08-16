@@ -127,17 +127,6 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
     }));
   };
 
-  // useEffect(() => {
-  //   if (location.state?.item) {
-  //     setFormData({
-  //       _id: location.state.item._id,
-  //       _rev: location.state.item._rev || undefined,
-  //       data: location.state.item.data,
-  //       km: location.state.item.km,
-  //     });
-  //   }
-  // }, [location.state?.item]);
-
   return (
     <IonPage>
       <Header title="KM" />

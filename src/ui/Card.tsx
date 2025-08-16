@@ -1,109 +1,46 @@
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
-import { pencil } from 'ionicons/icons';
+import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
+import './Card.css';
+import { checkmarkDoneCircle, closeCircle } from 'ionicons/icons';
 
-import { ReactNode } from 'react';
 interface CardProps {
   title: string;
-  cardHeading?: string;
-  subtitle?: string;
-  mainNote?: string;
-  mainNoteColor?: string;
-  detailNote?: string;
-  comment?: string | ReactNode;
-  shadowColor: string;
-  iconContent: {
-    type: 'image' | 'icon';
-    source: string | typeof pencil; // esempio di icona, aggiorna in base alle tue necessità
-    alt?: string;
+  subtitle: string;
+  content?: string | React.ReactNode;
+  status?: 'urgent' | 'up-to-date';
+  layout: {
+    color?: string;
+    icon: string;
+    backgroundImage: string;
   };
-
   onEdit(): void;
 }
-export const Card = ({ title, cardHeading, subtitle, mainNote, mainNoteColor, detailNote, comment, shadowColor, iconContent, onEdit }: CardProps) => {
-  const getMainTextColor = () => {
-    if (mainNoteColor === undefined) return shadowColor;
-    return mainNoteColor;
-  };
 
-  const renderIcon = () => {
-    if (iconContent.type === 'image') {
-      return (
-        <IonThumbnail slot="start" style={{ fontSize: 38, color: 'var(--ion-color-medium)' }}>
-          <img src={iconContent.source as string} alt={iconContent.alt || ''} />
-        </IonThumbnail>
-      );
-    }
-    return <IonIcon icon={iconContent.source as typeof pencil} style={{ fontSize: 38, color: 'var(--ion-color-medium)' }} />;
-  };
-
-  const renderCardHeading = () => {
-    if (cardHeading) {
-      return (
-        <img
-          alt="Maintenance"
-          style={{
-            display: 'block',
-            width: '100%',
-            height: '300px',
-            objectFit: 'cover', // Taglia i bordi, ma sempre pieno
-            objectPosition: 'center', // Centra l'inquadratura
-          }}
-          src={cardHeading}
-        />
-      );
-    }
-
-    return null;
-  };
-
-  function handleSubmit(event: any) {
-    event.preventDefault();
-
-    onEdit();
-  }
-
+// https://forum.ionicframework.com/t/ion-card-design-weather-card/135329
+export const Card: React.FC<CardProps> = ({ title, subtitle, content, status, layout: { color = 'light', icon, backgroundImage }, onEdit }) => {
   return (
-    <div style={{ margin: '16px 0' }}>
-      <IonCard color="light" style={{ borderRadius: 18, boxShadow: `0 4px 12px ${shadowColor}` }}>
-        {renderCardHeading()}
+    <>
+      <IonCard color={color} className="my-ion-card" maintenance-state={status} onClick={onEdit}>
+        <IonThumbnail className="header-icon">
+          <img src={icon as string} alt={icon || ''} />
+        </IonThumbnail>
         <IonCardHeader>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div>
-              <IonCardTitle style={{ fontSize: 22 }}>{title}</IonCardTitle>
-              <IonCardSubtitle>{subtitle}</IonCardSubtitle>
-            </div>
-            {renderIcon()}
-          </div>
+          <IonCardTitle className="my-ion-card-title">{title}</IonCardTitle>
+          <IonCardSubtitle className="my-ion-card-subtitle">{subtitle}</IonCardSubtitle>
         </IonCardHeader>
-        <IonCardContent style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div>
-            <div style={{ fontSize: 34, fontWeight: 600, color: getMainTextColor() }}>{mainNote}</div>
-            <div style={{ fontSize: 15, color: '#5c5c5c' }}>{comment}</div>
-          </div>
-          <div style={{ fontSize: 16, color: '#777', minWidth: 54, textAlign: 'right' }}>
-            {detailNote && <div style={{ fontSize: 12, fontStyle: 'italic' }}>{detailNote}</div>}
-          </div>
+        <IonCardContent className="my-ion-card-content">
+          <IonThumbnail slot="start" className="my-ion-thumbnail">
+            <img src={backgroundImage} alt={backgroundImage || ''} />
+          </IonThumbnail>
+
+          {content}
+          {status && (
+            <div>
+              <IonIcon slot="icon-only" icon={status === 'urgent' ? closeCircle : checkmarkDoneCircle} className="my-ion-icon" maintenance-state={status} />
+              <span maintenance-state={status}>{status === 'urgent' ? 'Da fare' : 'Tutto sotto controllo'}</span>
+            </div>
+          )}
         </IonCardContent>
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ display: 'flex', alignItems: 'center', padding: '0 16px 16px' }}>
-            <IonButton
-              fill="outline"
-              style={
-                {
-                  '--color': shadowColor,
-                  '--border-color': shadowColor,
-                  '--border-width': '2px',
-                  '--border-style': 'solid',
-                  '--border-radius': '50%',
-                  '--background': 'light',
-                } as React.CSSProperties
-              }
-              onClick={handleSubmit}>
-              <IonIcon slot="icon-only" icon={pencil} />
-            </IonButton>
-          </div>
-        </div>
       </IonCard>
-    </div>
+    </>
   );
 };
