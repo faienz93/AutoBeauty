@@ -10,8 +10,6 @@ import { LastKmFinded } from '../components/LastKmFinded';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
-import { Card } from '../ui/Card';
-import { calendar } from 'ionicons/icons';
 import PageHeader from '../ui/PageHeader';
 
 const HomePage = () => {
@@ -57,7 +55,9 @@ const HomePage = () => {
       <Header title="Home" showBackButton={false} />
       <IonContent>
         <PageHeader userName="Antonio" totalMaintenances={maintenances.length} lastKm={lastManualKm.km} daysSinceLastMaintenance={15} />
+
         <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
+
         {groupedMaintenance && Object.keys(groupedMaintenance).length == 0 ? (
           <IonText color="secondary">
             <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
