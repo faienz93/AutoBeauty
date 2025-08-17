@@ -10,6 +10,7 @@ import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
 import PageHeader from '../ui/PageHeader';
+import WaveBackround from '../ui/WaveBackground';
 
 const HomePage = () => {
   const [lastManualKm, setLastManualKm] = useState<Kilometers>({
@@ -59,7 +60,7 @@ const HomePage = () => {
           totalMaintenances={maintenances.length}
           lastManualKm={lastManualKm.km}
           maxMaintenanceKm={maxMaintenanceKm}
-          daysSinceLastMaintenance={calculateDaysSinceLastMaintenance(maintenances[0].data)}
+          daysSinceLastMaintenance={maintenances.length > 0 ? calculateDaysSinceLastMaintenance(maintenances[0]?.data) : 0}
           hasMaintenances={maintenances.length > 0}
           isWrongKilometers={isWrongKilometers}
         />
@@ -68,6 +69,8 @@ const HomePage = () => {
           Object.entries(groupedMaintenance ?? {}).map(([category, maintenance]) => (
             <CardMaintenance key={category} category={category} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm.km, maxMaintenanceKm)} />
           ))}
+
+        <WaveBackround />
       </IonContent>
     </IonPage>
   );
