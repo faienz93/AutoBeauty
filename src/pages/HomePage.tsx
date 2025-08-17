@@ -69,8 +69,6 @@ const HomePage = () => {
           Object.entries(groupedMaintenance ?? {}).map(([category, maintenance]) => (
             <CardMaintenance key={category} category={category} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm.km, maxMaintenanceKm)} />
           ))}
-
-        <WaveBackround />
       </IonContent>
     </IonPage>
   );

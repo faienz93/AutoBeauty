@@ -1,7 +1,7 @@
 import { memo, useState } from 'react';
 import { IonThumbnail, IonItem, IonLabel, IonIcon, IonText, IonButton, IonBadge } from '@ionic/react';
 import { Maintenance } from '../types/MaintenanceType';
-import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
+import { pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from '../components/AlertConfirmation';
 
 import { useHistory } from 'react-router-dom';
@@ -20,7 +20,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
 
   const history = useHistory();
 
-  // {typeof value === 'number' && value > 1000 ? value.toLocaleString('it-IT') : value}
+  const km = typeof maintenance.km === 'number' && maintenance.km > 1000 ? maintenance.km.toLocaleString('it-IT') : maintenance.km;
 
   // // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (item: Maintenance) => {
@@ -56,7 +56,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
           </IonText>
 
           {/* KM */}
-          <IonBadge color={'primary'}>KM {maintenance.km}</IonBadge>
+          <IonBadge color={'primary'}>KM {km}</IonBadge>
           <p>{maintenance.note}</p>
         </IonLabel>
 
