@@ -3,7 +3,7 @@ import { car, speedometer, calendar } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { getDateString } from '../utils/dateUtils';
 
-const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 45780, daysSinceLastMaintenance = 15 }) => {
+const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 45780, daysSinceLastMaintenance = 15, hasMaintenances = true }) => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
   // Ionic-inspired color palette
@@ -95,6 +95,10 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
   };
 
   const getStatusMessage = () => {
+    if (!hasMaintenances) {
+      return { text: 'Inizia aggiungendo una manutenzione', color: colors.secondary };
+    }
+
     if (daysSinceLastMaintenance > 30) {
       return { text: 'Manutenzione raccomandata', color: colors.warning };
     } else if (daysSinceLastMaintenance > 60) {
@@ -176,12 +180,14 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
             Ciao, {userName}! 👋
           </h1>
 
+          {/* Date Indicator */}
           <div style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '16px', fontWeight: '500' }}>
             {icons.calendar} {getDateString()}
           </div>
+
           <p
             style={{
-              fontSize: window.innerWidth <= 768 ? '16px' : '18px',
+              fontSize: '18px',
               color: 'rgba(255, 255, 255, 0.9)',
               margin: '0',
               maxWidth: '600px',
@@ -189,25 +195,55 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
               marginRight: 'auto',
               lineHeight: '1.5',
             }}>
-            Benvenuto nel tuo centro di controllo per la manutenzione del veicolo
+            {hasMaintenances ? 'Benvenuto nel tuo centro di controllo per la manutenzione del veicolo' : 'Inizia a tracciare le manutenzioni del tuo veicolo'}
           </p>
         </div>
 
-        {/* Stats Cards Grid */}
-        <div
-          style={{
-            display: 'grid',
-            gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(3, 1fr)',
-            gap: '20px',
-            maxWidth: '900px',
-            margin: '0 auto 32px auto',
-          }}>
-          <StatCard icon={icons.car} label="Totale Manutenzioni" value={totalMaintenances} iconColor={colors.primary} index={0} />
-
-          <StatCard icon={icons.speedometer} label="Ultimi km Registrati" value={lastKm} iconColor={colors.success} index={1} />
-
-          <StatCard icon={icons.calendar} label="Giorni dall'ultima manutenzione" value={daysSinceLastMaintenance} iconColor={colors.warning} index={2} />
-        </div>
+        {hasMaintenances ? (
+          /* Stats Cards Grid */
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(3, 1fr)',
+              gap: '20px',
+              maxWidth: '900px',
+              margin: '0 auto 32px auto',
+            }}>
+            <StatCard icon={icons.car} label="Totale Manutenzioni" value={totalMaintenances} iconColor={colors.primary} index={0} />
+            <StatCard icon={icons.speedometer} label="Ultimi km Registrati" value={lastKm} iconColor={colors.success} index={1} />
+            <StatCard icon={icons.calendar} label="Giorni dall'ultima manutenzione" value={daysSinceLastMaintenance} iconColor={colors.warning} index={2} />
+          </div>
+        ) : (
+          <div style={{ textAlign: 'center', margin: '0 auto 32px auto', maxWidth: '600px' }}>
+            <div
+              style={{
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(10px)',
+                borderRadius: '20px',
+                padding: '40px 24px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+              }}>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔧</div>
+              <h3 style={{ color: colors.white, fontSize: '24px', fontWeight: '600', margin: '0 0 12px 0' }}>Non ci sono Manutenzioni</h3>
+              <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '16px', margin: '0 0 20px 0', lineHeight: '1.5' }}>
+                Inizia a tracciare le manutenzioni del tuo veicolo per tenere tutto sotto controllo
+              </p>
+              <div
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
+                  borderRadius: '25px',
+                  padding: '12px 20px',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  color: colors.white,
+                }}>
+                💡 Aggiungine una per iniziare 😉!
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Status Indicator */}
         <div style={{ display: 'flex', justifyContent: 'center' }}>

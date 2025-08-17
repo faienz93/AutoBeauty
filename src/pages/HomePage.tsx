@@ -54,7 +54,13 @@ const HomePage = () => {
     <IonPage>
       <Header title="Home" showBackButton={false} />
       <IonContent>
-        <PageHeader userName="Antonio" totalMaintenances={maintenances.length} lastKm={lastManualKm.km} daysSinceLastMaintenance={15} />
+        <PageHeader
+          userName="Antonio"
+          totalMaintenances={maintenances.length}
+          lastKm={lastManualKm.km}
+          daysSinceLastMaintenance={15}
+          hasMaintenances={maintenances.length > 0}
+        />
 
         <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
 
