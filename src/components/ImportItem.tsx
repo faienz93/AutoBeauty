@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonInput, IonItem, IonLabel, IonList, IonToast } from '@ionic/react';
 import { addOutline, cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
-import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
+import { Maintenance, MaintenanceType } from '../types/MaintenanceType';
 import { getDateString, parseStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { getUUIDKey } from '../utils/pouchDBUtils';

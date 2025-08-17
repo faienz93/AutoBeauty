@@ -1,6 +1,6 @@
 import { memo, useState } from 'react';
 import { IonThumbnail, IonItem, IonLabel, IonIcon, IonText, IonButton, IonBadge } from '@ionic/react';
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance } from '../types/MaintenanceType';
 import { calendarOutline, pencil, trashOutline } from 'ionicons/icons';
 import { AlertConfirmation } from '../components/AlertConfirmation';
 

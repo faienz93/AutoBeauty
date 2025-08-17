@@ -1,4 +1,4 @@
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance } from '../types/MaintenanceType';
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceCardIcon } from '../hooks/useMaitenanceCardIcon';
 import { isMaintenanceNeeded } from '../utils/carUtils';

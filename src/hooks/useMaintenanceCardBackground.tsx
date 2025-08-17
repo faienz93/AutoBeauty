@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { MaintenanceType } from '../models/MaintenanceType';
+import { MaintenanceType } from '../types/MaintenanceType';
 import carWorkshop from '../assets/car-workshop-unsplash.jpg';
 
 // Revision

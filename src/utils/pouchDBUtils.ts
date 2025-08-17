@@ -1,5 +1,5 @@
-import { Kilometers } from '../models/KilometersType';
-import { Maintenance, Stats } from '../models/MaintenanceType';
+import { Kilometers } from '../types/KilometersType';
+import { Maintenance, Stats } from '../types/MaintenanceType';
 import { parseStringToDate } from './dateUtils';
 import { v4 as uuidv4 } from 'uuid';
 

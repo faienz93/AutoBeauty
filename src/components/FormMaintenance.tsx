@@ -15,7 +15,7 @@ import {
 } from '@ionic/react';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { add, pencilOutline } from 'ionicons/icons';
-import { Maintenance, MaintenanceType, maintenanceTypes } from '../models/MaintenanceType';
+import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/MaintenanceType';
 import { useState } from 'react';
 import { formatCost } from '../utils/carUtils';
 import { getDateString, parseStringToDate } from '../utils/dateUtils';

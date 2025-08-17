@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter } from '@ionic/react';
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance } from '../types/MaintenanceType';
 import { Header } from '../components/Header';
 import { ListItem } from '../components/ListItem';
 import { useMaintenanceDb } from '../hooks/useDbContext';

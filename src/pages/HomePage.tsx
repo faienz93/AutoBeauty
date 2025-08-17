@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { useState } from 'react';
-import { Maintenance, Stats } from '../models/MaintenanceType';
+import { Maintenance, Stats } from '../types/MaintenanceType';
 import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
-import { Kilometers } from '../models/KilometersType';
+import { Kilometers } from '../types/KilometersType';
 import { getDateString, parseStringToDate } from '../utils/dateUtils';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';

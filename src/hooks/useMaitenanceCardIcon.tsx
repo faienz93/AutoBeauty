@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { MaintenanceType } from '../models/MaintenanceType';
+import { MaintenanceType } from '../types/MaintenanceType';
 import maintenanceIcon from '../assets/engine-oil.png';
 import tireIcon from '../assets/wheel.png';
 import revisionIcon from '../assets/car-repair.png';

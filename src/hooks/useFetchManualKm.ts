@@ -1,4 +1,4 @@
-import { Kilometers } from '../models/KilometersType';
+import { Kilometers } from '../types/KilometersType';
 import { getDateString, parseStringToDate } from '../utils/dateUtils';
 import { useKilometersDb } from './useDbContext';
 

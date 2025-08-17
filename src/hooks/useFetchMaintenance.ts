@@ -1,5 +1,5 @@
 import { useMaintenanceDb } from './useDbContext';
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance } from '../types/MaintenanceType';
 import { parseStringToDate } from '../utils/dateUtils';
 import { getMaintenanceKey } from '../utils/pouchDBUtils';
 

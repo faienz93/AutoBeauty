@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IonToast, useIonViewWillLeave, IonPage } from '@ionic/react';
 import './ItemPage.css';
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance } from '../types/MaintenanceType';
 import { Header } from '../components/Header';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { FormMaintenance } from '../components/FormMaintenance';

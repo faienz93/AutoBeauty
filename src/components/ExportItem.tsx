@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IonAlert, IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonToast } from '@ionic/react';
 import { CsvService } from '../services/excel/csvParser';
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance } from '../types/MaintenanceType';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { downloadOutline } from 'ionicons/icons';
 import { getMaintenanceKey } from '../utils/pouchDBUtils';

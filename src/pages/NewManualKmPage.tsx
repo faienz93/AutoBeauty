@@ -3,7 +3,7 @@ import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, I
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
-import { Kilometers } from '../models/KilometersType';
+import { Kilometers } from '../types/KilometersType';
 import { getDateString, parseItalianNumber, parseStringToDate } from '../utils/dateUtils';
 import { useKilometersDb } from '../hooks/useDbContext';
 import { pencilOutline } from 'ionicons/icons';
