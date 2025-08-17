@@ -60,7 +60,7 @@ const HomePage = () => {
       <IonContent>
         <PageHeader
           totalMaintenances={maintenances.length}
-          lastKm={lastManualKm.km}
+          lastManualKm={lastManualKm.km}
           maxMaintenanceKm={maxMaintenanceKm}
           daysSinceLastMaintenance={calculateDaysSinceLastMaintenance(maintenances[0].data)}
           hasMaintenances={maintenances.length > 0}

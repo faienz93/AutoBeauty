@@ -9,7 +9,7 @@ import WaveBackround from './WaveBackground';
 type PageHeaderProp = {
   userName?: string;
   totalMaintenances: number;
-  lastKm: number;
+  lastManualKm: number;
   maxMaintenanceKm: number;
   daysSinceLastMaintenance: number;
   hasMaintenances: boolean;
@@ -18,7 +18,7 @@ type PageHeaderProp = {
 const PageHeader: React.FC<PageHeaderProp> = ({
   userName,
   totalMaintenances,
-  lastKm,
+  lastManualKm: lastKm,
   maxMaintenanceKm,
   daysSinceLastMaintenance,
   hasMaintenances,
@@ -140,7 +140,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
               margin: '0 auto 32px auto',
             }}>
             <StatCard icon={icons.car} label="Totale Manutenzioni" value={totalMaintenances} iconColor={colors.primary} color={colors} index={0} />
-            <StatCard icon={icons.speedometer} label="Ultimi km Registrati" value={lastKm} iconColor={colors.success} color={colors} index={1} />
+            <StatCard icon={icons.speedometer} label="Ultimo Km manuale" value={lastKm} iconColor={colors.success} color={colors} index={1} />
             <StatCard
               icon={icons.calendar}
               label="Giorni dall'ultima manutenzione"
