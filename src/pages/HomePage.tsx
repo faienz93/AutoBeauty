@@ -34,12 +34,9 @@ const HomePage = () => {
   useIonViewWillEnter(() => {
     const loadData = async () => {
       try {
-        // Carica in parallelo per essere più veloce
         const [maintenancesData, manualKmData] = await Promise.all([fetchMaintenances(), fetchManualKm()]);
 
         setMaintenances(maintenancesData);
-        console.log('CIAOOOOOOOOO');
-        console.log(maintenancesData);
         setLastManualKm({
           _id: manualKmData._id || '',
           _rev: manualKmData._rev || '',
@@ -69,12 +66,7 @@ const HomePage = () => {
 
         {maintenances.length > 0 &&
           Object.entries(groupedMaintenance ?? {}).map(([category, maintenance]) => (
-            <CardMaintenance
-              key={category}
-              category={category}
-              maintenance={maintenance}
-              maxKm={getMaxKmBetween(lastManualKm, maxMaintenanceKm as Maintenance).km}
-            />
+            <CardMaintenance key={category} category={category} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm.km, maxMaintenanceKm)} />
           ))}
       </IonContent>
     </IonPage>

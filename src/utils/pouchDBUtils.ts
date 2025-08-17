@@ -49,7 +49,7 @@ export const getGroupByMaintenanceByKm = (maintenance: Maintenance[]): Stats | n
   return maintenanceGrouped;
 };
 
-export const getMaxKmBetween = (km: Kilometers, maintenance: Maintenance) => {
-  if (km.km > maintenance.km) return km;
-  return maintenance;
+export const getMaxKmBetween = (lastManualKm: number, maxMaintenanceKm: number) => {
+  if (lastManualKm > maxMaintenanceKm) return lastManualKm;
+  return maxMaintenanceKm;
 };
