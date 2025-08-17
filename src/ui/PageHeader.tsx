@@ -2,6 +2,7 @@ import { getDateString } from '../utils/dateUtils';
 import StatCard from './StatCard';
 import { colors } from '../types/Color';
 import { emoticosIcon, icons } from '../types/Icon';
+import StatusIndicator from './StatusIndicator';
 
 const PageHeader = ({
   userName = 'Utente',
@@ -9,7 +10,7 @@ const PageHeader = ({
   lastKm = 45780,
   daysSinceLastMaintenance = 15,
   hasMaintenances = true,
-  isWrongKilometers = false,
+  isWrongKilometers = true,
 }) => {
   const getStatusMessage = () => {
     if (!hasMaintenances) {
@@ -25,14 +26,6 @@ const PageHeader = ({
     }
   };
 
-  const getIsWrongMaintenance = () => {
-    return {
-      text: 'Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.',
-      color: colors.danger,
-    };
-  };
-
-  const additionalMessage = getIsWrongMaintenance();
   const status = getStatusMessage();
 
   return (
@@ -178,73 +171,17 @@ const PageHeader = ({
         )}
 
         {/* Status Indicator */}
-        <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', margin: '0 auto 32px auto' }}>
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              backgroundColor: 'rgba(255, 255, 255, 0.15)',
-              backdropFilter: 'blur(10px)',
-              borderRadius: '25px',
-              padding: '12px 24px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              transition: 'all 0.3s ease',
-            }}>
-            <div
-              style={{
-                width: '12px',
-                height: '12px',
-                backgroundColor: status.color,
-                borderRadius: '50%',
-                marginRight: '12px',
-                boxShadow: `0 0 8px ${status.color}60`,
-              }}
-            />
-            <span
-              style={{
-                color: colors.white,
-                fontSize: '14px',
-                fontWeight: '500',
-              }}>
-              {status.text}
-            </span>
-          </div>
-        </div>
+        <StatusIndicator status={status} textColor={colors.white} />
 
         {/* status isWrongMaintenance */}
         {isWrongKilometers && (
-          <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', margin: '0 auto 32px auto' }}>
-            <div
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                backdropFilter: 'blur(10px)',
-                borderRadius: '25px',
-                padding: '12px 24px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                transition: 'all 0.3s ease',
-              }}>
-              <div
-                style={{
-                  width: '12px',
-                  height: '12px',
-                  backgroundColor: additionalMessage.color,
-                  borderRadius: '50%',
-                  marginRight: '12px',
-                  boxShadow: `0 0 8px ${additionalMessage.color}60`,
-                }}
-              />
-              <span
-                style={{
-                  color: colors.white,
-                  fontSize: '14px',
-                  fontWeight: '500',
-                }}>
-                {additionalMessage.text}
-              </span>
-            </div>
-          </div>
+          <StatusIndicator
+            status={{
+              text: 'Attenzione: il kilometraggio manuale (${lastManualKm.km} km) è inferiore al massimo registrato (${maintenanceWithHigherKm.km} km). Verrà usato il valore più alto.',
+              color: colors.danger,
+            }}
+            textColor={colors.white}
+          />
         )}
       </div>
 
