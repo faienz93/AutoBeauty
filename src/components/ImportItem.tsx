@@ -1,6 +1,20 @@
 import React, { useRef, useState } from 'react';
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonInput, IonItem, IonLabel, IonList, IonToast } from '@ionic/react';
-import { addOutline, cloudUpload } from 'ionicons/icons';
+import {
+  IonButton,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
+  IonCardTitle,
+  IonIcon,
+  IonInput,
+  IonItem,
+  IonLabel,
+  IonList,
+  IonText,
+  IonToast,
+} from '@ionic/react';
+import { addOutline, cloudUpload, downloadOutline, informationCircle } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { getDateString, parseStringToDate, parseItalianNumber } from '../utils/dateUtils';
@@ -85,41 +99,34 @@ const ImportItem = () => {
     }
   };
 
-  const handleExport = async () => {
+  const handleTemplateDownload = async (event: React.MouseEvent) => {
+    event.preventDefault();
     try {
       const csvDataBlob = await csvService.exportCsvWithBlob(data as Maintenance[], ['data', 'km', 'tipo', 'costo', 'note']);
+      const filename = `template_manutenzioni.csv`;
 
-      const base64Data = (await convertBlobToBase64(csvDataBlob)) as string;
-
-      const filename = `template.csv`;
       if (Capacitor.isNativePlatform()) {
+        const base64Data = (await convertBlobToBase64(csvDataBlob)) as string;
         const permissionResult = await Filesystem.checkPermissions();
 
         if (permissionResult.publicStorage !== 'granted') {
-          // Richiedi i permessi se non sono stati concessi
-          await Filesystem.requestPermissions();
+          const permissionRequest = await Filesystem.requestPermissions();
+          if (permissionRequest.publicStorage !== 'granted') {
+            console.error("Permesso di salvataggio non concesso dall'utente.");
+            return;
+          }
         }
 
-        try {
-          await Filesystem.writeFile({
-            path: filename,
-            data: base64Data,
-            directory: Directory.Data,
-          });
-
-          setIsSuccess((prevValue) => !prevValue);
-        } catch (error) {
-          console.error('Errore durante il salvataggio del file:', error);
-          setIsSuccess(false);
-        }
-      } else {
-        downloadFile(filename, csvDataBlob).then(() => {
-          setIsSuccess((prevValue) => !prevValue);
+        await Filesystem.writeFile({
+          path: filename,
+          data: base64Data,
+          directory: Directory.Downloads,
         });
+      } else {
+        await downloadFile(filename, csvDataBlob);
       }
     } catch (error) {
-      console.error('Error fetching maintenances:', error);
-      setIsSuccess(false);
+      console.error('Errore durante il download del template:', error);
     }
   };
 
@@ -129,11 +136,15 @@ const ImportItem = () => {
         <IonCardHeader>
           <IonCardTitle>Importa</IonCardTitle>
         </IonCardHeader>
-        <p>
-          Here is a link <a onClick={handleExport}>PROVA</a>
-        </p>
+
         <IonCardContent>
           <p className="ion-padding-bottom">Seleziona un file per importare i tuoi dati preesistenti</p>
+          <p className="ion-padding-bottom">
+            <IonIcon icon={informationCircle} style={{ verticalAlign: 'middle' }} /> Non sai come formattare il file?{' '}
+            <a href="#" onClick={handleTemplateDownload} style={{ fontWeight: 'bold' }}>
+              Scarica il template
+            </a>
+          </p>
           <IonButton expand="block" color={'secondary'} onClick={() => openFileDialog()} className="ion-margin-bottom">
             <IonIcon icon={cloudUpload} slot="start" />
           </IonButton>
