@@ -10,17 +10,19 @@ type PageHeaderProp = {
   userName?: string;
   totalMaintenances: number;
   lastKm: number;
+  maxMaintenanceKm: number;
   daysSinceLastMaintenance: number;
   hasMaintenances: boolean;
   isWrongKilometers: boolean;
 };
 const PageHeader: React.FC<PageHeaderProp> = ({
   userName,
-  totalMaintenances = 12,
-  lastKm = 45780,
-  daysSinceLastMaintenance = 15,
-  hasMaintenances = true,
-  isWrongKilometers = true,
+  totalMaintenances,
+  lastKm,
+  maxMaintenanceKm,
+  daysSinceLastMaintenance,
+  hasMaintenances,
+  isWrongKilometers,
 }) => {
   const getStatusMessage = () => {
     if (!hasMaintenances) {
@@ -159,7 +161,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
         {isWrongKilometers && (
           <StatusIndicator
             status={{
-              text: 'Attenzione: il kilometraggio manuale (${lastManualKm.km} km) è inferiore al massimo registrato (${maintenanceWithHigherKm.km} km). Verrà usato il valore più alto.',
+              text: `Il kilometraggio manuale (${lastKm} km) è inferiore al massimo registrato (${maxMaintenanceKm} km). Verrà usato il valore più alto.`,
               color: colors.danger,
             }}
             textColor={colors.white}

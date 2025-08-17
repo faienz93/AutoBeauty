@@ -12,21 +12,23 @@ export const getUUIDKey = () => {
   return getMaintenanceKey() + uuidv4();
 };
 
-export const getMaintenanceWithHigherKm = (maintenance: Maintenance[]): Maintenance | null => {
-  if (maintenance.length === 0) return null;
+export const getMaintenanceWithHigherKm = (maintenances: Maintenance[]): number => {
+  if (maintenances.length === 0) return 0;
 
   // O(n)
-  const maintenaceWithHigherKm = maintenance.reduce(
-    (acc, current) => {
-      if (!acc || current.km > acc.km) {
-        return current;
-      }
-      return acc;
-    },
-    null as Maintenance | null,
-  );
+  // const maintenaceWithHigherKm = maintenance.reduce(
+  //   (acc, current) => {
+  //     if (!acc || current.km > acc.km) {
+  //       return current;
+  //     }
+  //     return acc;
+  //   },
+  //   null as Maintenance | null,
+  // );
 
-  return maintenaceWithHigherKm;
+  // return maintenaceWithHigherKm;
+
+  return maintenances.reduce((maxKm, m) => Math.max(maxKm, m.km), 0);
 };
 
 export const getGroupByMaintenanceByKm = (maintenance: Maintenance[]): Stats | null => {

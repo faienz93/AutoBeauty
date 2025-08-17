@@ -20,18 +20,15 @@ const HomePage = () => {
   const fetchManualKm = useFetchManualKm();
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 
-  const maintenanceWithHigherKm = useMemo(() => {
+  const maxMaintenanceKm = useMemo(() => {
     return getMaintenanceWithHigherKm(maintenances);
-  }, [maintenances]) as Maintenance;
+  }, [maintenances]);
 
   const groupedMaintenance = useMemo(() => {
     return getGroupByMaintenanceByKm(maintenances);
   }, [maintenances]) as Stats;
 
-  const isWrongKilometers = useMemo(
-    () => maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km,
-    [maintenanceWithHigherKm, lastManualKm.km],
-  ) as boolean;
+  const isWrongKilometers = useMemo(() => lastManualKm.km < maxMaintenanceKm, [maxMaintenanceKm, lastManualKm.km]);
 
   useIonViewWillEnter(() => {
     const loadData = async () => {
@@ -54,12 +51,6 @@ const HomePage = () => {
     loadData();
   });
 
-  const msg =
-    isWrongKilometers &&
-    `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`;
-
-  console.log(msg);
-
   return (
     <IonPage>
       <Header title="Home" showBackButton={false} />
@@ -67,9 +58,10 @@ const HomePage = () => {
         <PageHeader
           totalMaintenances={maintenances.length}
           lastKm={lastManualKm.km}
+          maxMaintenanceKm={maxMaintenanceKm}
           daysSinceLastMaintenance={15}
           hasMaintenances={maintenances.length > 0}
-          isWrongKilometers={true}
+          isWrongKilometers={isWrongKilometers}
         />
 
         {maintenances.length > 0 &&
@@ -78,7 +70,7 @@ const HomePage = () => {
               key={category}
               category={category}
               maintenance={maintenance}
-              maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km}
+              maxKm={getMaxKmBetween(lastManualKm, maxMaintenanceKm as Maintenance).km}
             />
           ))}
       </IonContent>
