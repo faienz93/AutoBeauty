@@ -44,7 +44,7 @@ import NewMaintenance from './pages/NewMaintenance';
 import { Capacitor } from '@capacitor/core';
 
 import Setting from './pages/Setting';
-import KmPage from './pages/KmPage';
+import NewManualKmPage from './pages/NewManualKmPage';
 
 import HomePage from './pages/HomePage';
 import { DatabaseProvider } from './services/database/DatabaseProvider';
@@ -66,8 +66,7 @@ const MainTabs: React.FC = () => {
         <Route path="/newItem" component={NewMaintenance} exact={true} />
         <Route path="/newItem/edit/:id" component={UpdateMaitenance} exact={true} />
         <Route path="/list" component={ListCarMaintenance} exact={true} />
-        <Route path="/newkm/edit/:id" component={KmPage} exact={true} />
-        <Route path="/newkm" component={KmPage} exact={true} />
+        <Route path="/newManualkm" component={NewManualKmPage} exact={true} />
         <Route path="/settings" component={Setting} exact={true} />
         <Route path="/info" component={InfoPage} exact={true} />
       </IonRouterOutlet>
@@ -94,7 +93,7 @@ const MainTabs: React.FC = () => {
           <IonLabel>Aggiungi</IonLabel>
         </IonTabButton>
 
-        <IonTabButton tab="newkm" href="/newkm">
+        <IonTabButton tab="newkm" href="/newManualkm">
           <IonIcon icon={speedometerOutline} />
           <IonLabel>KM</IonLabel>
         </IonTabButton>

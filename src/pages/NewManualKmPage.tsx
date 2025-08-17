@@ -3,15 +3,15 @@ import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, I
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
-import { RouteComponentProps } from 'react-router-dom';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, parseItalianNumber, parseStringToDate } from '../utils/dateUtils';
 import { useKilometersDb } from '../hooks/useDbContext';
 import { pencilOutline } from 'ionicons/icons';
 
-const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
+const manualKmKey = 'manual-km';
+
+const NewManualKmPage: React.FC = () => {
   const dbKm = useKilometersDb();
-  const id = match.params.id;
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshCount, setRefreshCount] = useState(0);
@@ -32,7 +32,7 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
 
   useEffect(() => {
     dbKm
-      .get(id)
+      .get(manualKmKey)
       .then((fetched) => {
         setFormData({
           _rev: fetched?._rev ?? undefined,
@@ -45,7 +45,7 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
         console.error('Errore nel recupero item', error);
         setLoading(false);
       });
-  }, [id, dbKm, refreshCount]);
+  }, [dbKm, refreshCount]);
 
   useIonViewWillLeave(() => {
     setFormData({
@@ -171,4 +171,4 @@ const KmPage: React.FC<RouteComponentProps<{ id: string }>> = ({ match }) => {
   );
 };
 
-export default KmPage;
+export default NewManualKmPage;
