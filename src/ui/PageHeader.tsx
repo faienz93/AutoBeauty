@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { car, speedometer, calendar } from 'ionicons/icons';
-import { IonIcon } from '@ionic/react';
 import { getDateString } from '../utils/dateUtils';
+import StatCard from './StatCard';
+import { colors } from '../types/Color';
+import { emoticosIcon, icons } from '../types/Icon';
 
 const PageHeader = ({
   userName = 'Utente',
@@ -11,104 +11,6 @@ const PageHeader = ({
   hasMaintenances = true,
   isWrongKilometers = false,
 }) => {
-  const [hoveredCard, setHoveredCard] = useState(null);
-
-  // Ionic-inspired color palette
-  const colors = {
-    primary: '#3880ff',
-    primaryShade: '#3171e0',
-    primaryTint: '#4c8dff',
-    secondary: '#3dc2ff',
-    success: '#2dd36f',
-    warning: '#ffc409',
-    danger: '#eb445a',
-    light: '#f4f5f8',
-    medium: '#92949c',
-    dark: '#222428',
-    white: '#ffffff',
-    gradientStart: '#3880ff',
-    gradientEnd: '#3171e0',
-  };
-
-  const emoticosIcon = {
-    car: '🚗',
-    speedometer: '⚡',
-    calendar: '📅',
-    lightbulb: '💡',
-    smile: '😉',
-    hand: '👋',
-  };
-  const icons = {
-    car: <IonIcon icon={car} />,
-    speedometer: <IonIcon icon={speedometer} />,
-    calendar: <IonIcon icon={calendar} />,
-  };
-  const StatCard = ({ icon, label, value, iconColor, index }) => {
-    const isHovered = hoveredCard === index;
-
-    return (
-      <div
-        onMouseEnter={() => setHoveredCard(index)}
-        onMouseLeave={() => setHoveredCard(null)}
-        style={{
-          backgroundColor: colors.white,
-          borderRadius: '16px',
-          padding: '24px',
-          boxShadow: isHovered ? '0 8px 32px rgba(56, 128, 255, 0.15)' : '0 2px 16px rgba(0, 0, 0, 0.1)',
-          transform: isHovered ? 'translateY(-4px) scale(1.02)' : 'translateY(0) scale(1)',
-          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-          cursor: 'pointer',
-          border: `2px solid ${isHovered ? colors.primary : 'transparent'}`,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-          minHeight: '160px',
-          justifyContent: 'center',
-        }}>
-        <div
-          style={{
-            width: '56px',
-            height: '56px',
-            borderRadius: '50%',
-            backgroundColor: `${iconColor}15`,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            marginBottom: '16px',
-            border: `2px solid ${iconColor}30`,
-            fontSize: '24px',
-            transform: isHovered ? 'scale(1.1)' : 'scale(1)',
-            transition: 'transform 0.3s ease',
-          }}>
-          {icon}
-        </div>
-
-        <div
-          style={{
-            fontSize: '28px',
-            fontWeight: '700',
-            color: colors.dark,
-            marginBottom: '8px',
-            lineHeight: '1.2',
-          }}>
-          {typeof value === 'number' && value > 1000 ? value.toLocaleString('it-IT') : value}
-        </div>
-
-        <div
-          style={{
-            fontSize: '14px',
-            fontWeight: '500',
-            color: colors.medium,
-            lineHeight: '1.4',
-            maxWidth: '120px',
-          }}>
-          {label}
-        </div>
-      </div>
-    );
-  };
-
   const getStatusMessage = () => {
     if (!hasMaintenances) {
       return { text: 'Inizia aggiungendo una manutenzione', color: colors.secondary };
@@ -232,9 +134,16 @@ const PageHeader = ({
               maxWidth: '900px',
               margin: '0 auto 32px auto',
             }}>
-            <StatCard icon={icons.car} label="Totale Manutenzioni" value={totalMaintenances} iconColor={colors.primary} index={0} />
-            <StatCard icon={icons.speedometer} label="Ultimi km Registrati" value={lastKm} iconColor={colors.success} index={1} />
-            <StatCard icon={icons.calendar} label="Giorni dall'ultima manutenzione" value={daysSinceLastMaintenance} iconColor={colors.warning} index={2} />
+            <StatCard icon={icons.car} label="Totale Manutenzioni" value={totalMaintenances} iconColor={colors.primary} color={colors} index={0} />
+            <StatCard icon={icons.speedometer} label="Ultimi km Registrati" value={lastKm} iconColor={colors.success} color={colors} index={1} />
+            <StatCard
+              icon={icons.calendar}
+              label="Giorni dall'ultima manutenzione"
+              value={daysSinceLastMaintenance}
+              color={colors}
+              iconColor={colors.warning}
+              index={2}
+            />
           </div>
         ) : (
           <div style={{ textAlign: 'center', margin: '0 auto 32px auto', maxWidth: '600px' }}>
@@ -303,12 +212,6 @@ const PageHeader = ({
         </div>
 
         {/* status isWrongMaintenance */}
-        {/* if (isWrongKilometers) {
-      return {
-        text: ,
-        color: colors.danger,
-      };
-    } */}
         {isWrongKilometers && (
           <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', margin: '0 auto 32px auto' }}>
             <div
