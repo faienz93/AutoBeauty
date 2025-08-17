@@ -64,11 +64,7 @@ const HomePage = () => {
 
         <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
 
-        {groupedMaintenance && Object.keys(groupedMaintenance).length == 0 ? (
-          <IonText color="secondary">
-            <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
-          </IonText>
-        ) : (
+        {maintenances.length > 0 &&
           Object.entries(groupedMaintenance ?? {}).map(([category, maintenance]) => (
             <CardMaintenance
               key={category}
@@ -76,8 +72,7 @@ const HomePage = () => {
               maintenance={maintenance}
               maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km}
             />
-          ))
-        )}
+          ))}
       </IonContent>
     </IonPage>
   );
