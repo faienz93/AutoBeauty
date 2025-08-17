@@ -89,3 +89,8 @@ export const parseItalianNumber = (value: string | number): number => {
   // Restituisce 0 se la conversione fallisce
   return isNaN(result) ? 0 : result;
 };
+
+export const calculateDaysSinceLastMaintenance = (startStringDate: string): number => {
+  const maintenanceDate = parseStringToDate(startStringDate);
+  return Math.floor((Date.now() - new Date(maintenanceDate).getTime()) / (1000 * 60 * 60 * 24));
+};

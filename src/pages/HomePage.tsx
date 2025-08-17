@@ -5,7 +5,7 @@ import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../types/KilometersType';
-import { getDateString, parseStringToDate } from '../utils/dateUtils';
+import { calculateDaysSinceLastMaintenance, getDateString, parseStringToDate } from '../utils/dateUtils';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
@@ -16,6 +16,7 @@ const HomePage = () => {
     data: getDateString(),
     km: 0,
   });
+
   const fetchMaintenances = useFetchMaintenances();
   const fetchManualKm = useFetchManualKm();
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
@@ -37,6 +38,8 @@ const HomePage = () => {
         const [maintenancesData, manualKmData] = await Promise.all([fetchMaintenances(), fetchManualKm()]);
 
         setMaintenances(maintenancesData);
+        console.log('CIAOOOOOOOOO');
+        console.log(maintenancesData);
         setLastManualKm({
           _id: manualKmData._id || '',
           _rev: manualKmData._rev || '',
@@ -59,7 +62,7 @@ const HomePage = () => {
           totalMaintenances={maintenances.length}
           lastKm={lastManualKm.km}
           maxMaintenanceKm={maxMaintenanceKm}
-          daysSinceLastMaintenance={15}
+          daysSinceLastMaintenance={calculateDaysSinceLastMaintenance(maintenances[0].data)}
           hasMaintenances={maintenances.length > 0}
           isWrongKilometers={isWrongKilometers}
         />
