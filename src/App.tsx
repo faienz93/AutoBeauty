@@ -35,7 +35,7 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, settingsOutline, informationOutline } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, informationOutline, speedometerOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
 
@@ -67,6 +67,7 @@ const MainTabs: React.FC = () => {
         <Route path="/newItem/edit/:id" component={UpdateMaitenance} exact={true} />
         <Route path="/list" component={ListCarMaintenance} exact={true} />
         <Route path="/newkm/edit/:id" component={KmPage} exact={true} />
+        <Route path="/newkm" component={KmPage} exact={true} />
         <Route path="/settings" component={Setting} exact={true} />
         <Route path="/info" component={InfoPage} exact={true} />
       </IonRouterOutlet>
@@ -91,6 +92,11 @@ const MainTabs: React.FC = () => {
           }>
           <IonIcon icon={addCircleOutline} />
           <IonLabel>Aggiungi</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab="newkm" href="/newkm">
+          <IonIcon icon={speedometerOutline} />
+          <IonLabel>KM</IonLabel>
         </IonTabButton>
 
         <IonTabButton tab="settings" href="/settings">
