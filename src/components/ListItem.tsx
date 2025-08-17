@@ -29,10 +29,12 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
   const handleDeleteMaintenance = async (maintenanceId: string) => {
     try {
       const doc = await db.get(maintenanceId.toString());
-      const response = await db.remove(doc);
+      await db.remove(doc);
 
       onDelete();
-    } catch (err) {}
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (
