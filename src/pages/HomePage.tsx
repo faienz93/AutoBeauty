@@ -6,7 +6,6 @@ import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
 import { getDateString, parseStringToDate } from '../utils/dateUtils';
-import { LastKmFinded } from '../components/LastKmFinded';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
@@ -50,6 +49,18 @@ const HomePage = () => {
     loadData();
   });
 
+  const isWrongKilometers = maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km;
+  // <IonText style={{ fontSize: '1em', lineHeight: '1.3', display: 'block', color: 'red' }}>
+  //         Attenzione hai impostato un Kilometraggio manuale ({lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (
+  //         {maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.
+  //       </IonText>
+
+  const msg =
+    isWrongKilometers &&
+    'Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione ({maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.';
+
+  console.log(msg);
+
   return (
     <IonPage>
       <Header title="Home" showBackButton={false} />
@@ -61,8 +72,6 @@ const HomePage = () => {
           daysSinceLastMaintenance={15}
           hasMaintenances={maintenances.length > 0}
         />
-
-        <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
 
         {maintenances.length > 0 &&
           Object.entries(groupedMaintenance ?? {}).map(([category, maintenance]) => (
