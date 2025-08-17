@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import { useState } from 'react';
 import { Maintenance, Stats } from '../models/MaintenanceType';
-import { IonContent, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
+import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../models/KilometersType';
@@ -28,6 +28,11 @@ const HomePage = () => {
     return getGroupByMaintenanceByKm(maintenances);
   }, [maintenances]) as Stats;
 
+  const isWrongKilometers = useMemo(
+    () => maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km,
+    [maintenanceWithHigherKm, lastManualKm.km],
+  ) as boolean;
+
   useIonViewWillEnter(() => {
     const loadData = async () => {
       try {
@@ -49,15 +54,9 @@ const HomePage = () => {
     loadData();
   });
 
-  const isWrongKilometers = maintenanceWithHigherKm && lastManualKm.km < maintenanceWithHigherKm.km;
-  // <IonText style={{ fontSize: '1em', lineHeight: '1.3', display: 'block', color: 'red' }}>
-  //         Attenzione hai impostato un Kilometraggio manuale ({lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (
-  //         {maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.
-  //       </IonText>
-
   const msg =
     isWrongKilometers &&
-    'Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione ({maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.';
+    `Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.`;
 
   console.log(msg);
 

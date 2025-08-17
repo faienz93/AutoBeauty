@@ -23,6 +23,11 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
     gradientEnd: '#3171e0',
   };
 
+  const customIcons = {
+    car: '🚗',
+    speedometer: '⚡',
+    calendar: '📅',
+  };
   const icons = {
     car: <IonIcon icon={car} />,
     speedometer: <IonIcon icon={speedometer} />,
