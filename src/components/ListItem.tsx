@@ -7,6 +7,7 @@ import { AlertConfirmation } from '../components/AlertConfirmation';
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceCardIcon } from '../hooks/useMaitenanceCardIcon';
 import { useMaintenanceDb } from '../hooks/useDbContext';
+import { emojisIcon } from '../types/Icon';
 
 interface ListItemProps {
   maintenance: Maintenance;
@@ -18,6 +19,8 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
   const db = useMaintenanceDb();
 
   const history = useHistory();
+
+  // {typeof value === 'number' && value > 1000 ? value.toLocaleString('it-IT') : value}
 
   // // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (item: Maintenance) => {
@@ -41,24 +44,16 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
     <>
       <IonItem key={maintenance._id}>
         <IonThumbnail slot="start">
-          {/* <img src={`/assets/${item.image}`} alt={item.name} /> */}
           <img src={useMaintenanceCardIcon(maintenance.tipo)} alt={maintenance.tipo} />
         </IonThumbnail>
         <IonLabel>
           <h2>{maintenance.tipo}</h2>
           <IonText>
             <p>
-              <IonIcon icon={calendarOutline} />
+              {emojisIcon.calendar}
               {maintenance.data}
             </p>
           </IonText>
-
-          {/* Rating (★ Star icons) */}
-          {/* <p>
-                  {Array.from({ length: 5 }, (_, i) => (
-                    <IonIcon key={i} icon={i < 3 ? star : starOutline} color="warning" />
-                  ))}
-                </p> */}
 
           {/* KM */}
           <IonBadge color={'primary'}>KM {maintenance.km}</IonBadge>

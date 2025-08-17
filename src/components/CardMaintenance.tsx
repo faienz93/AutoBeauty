@@ -17,10 +17,12 @@ export const CardMaintenance = ({ category, maintenance, maxKm }: { category: st
 
   const diffKm = maxKm - maintenance.km;
 
+  const km = typeof maintenance.km === 'number' && maintenance.km > 1000 ? maintenance.km.toLocaleString('it-IT') : maintenance.km;
+
   const content: ReactNode = (
     <>
       <span>
-        <b>KM:</b> {String(maintenance.km)}
+        <b>KM:</b> {String(km)}
       </span>
 
       <span>
