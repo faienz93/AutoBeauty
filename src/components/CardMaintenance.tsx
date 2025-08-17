@@ -2,7 +2,7 @@ import { Maintenance } from '../models/MaintenanceType';
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceCardIcon } from '../hooks/useMaitenanceCardIcon';
 import { isMaintenanceNeeded } from '../utils/carUtils';
-import { Card } from '../ui/Card';
+import { CardMaitenanceDetail } from '../ui/CardMaitenanceDetail';
 import { useMaintenanceCardBackground } from '../hooks/useMaintenanceCardBackground';
 import { ReactNode } from 'react';
 
@@ -33,7 +33,7 @@ export const CardMaintenance = ({ category, maintenance, maxKm }: { category: st
   const todo = isMaintenanceNeeded(category, diffKm, maintenance?.data);
 
   return (
-    <Card
+    <CardMaitenanceDetail
       key={maintenance._id}
       title={category}
       subtitle={maintenance?.data || 'N/A'}
