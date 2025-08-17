@@ -8,6 +8,7 @@ export const emoticosIcon = {
   lightbulb: '💡',
   smile: '😉',
   hand: '👋',
+  settings: '🔧',
 };
 
 export const icons = {

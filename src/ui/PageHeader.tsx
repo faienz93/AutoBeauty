@@ -148,7 +148,7 @@ const PageHeader = ({
                 padding: '40px 24px',
                 border: '1px solid rgba(255, 255, 255, 0.2)',
               }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>🔧</div>
+              <div style={{ fontSize: '48px', marginBottom: '16px' }}>{emoticosIcon.settings}</div>
               <h3 style={{ color: colors.white, fontSize: '24px', fontWeight: '600', margin: '0 0 12px 0' }}>Non ci sono Manutenzioni</h3>
               <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '16px', margin: '0 0 20px 0', lineHeight: '1.5' }}>
                 Inizia a tracciare le manutenzioni del tuo veicolo per tenere tutto sotto controllo
