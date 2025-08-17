@@ -3,7 +3,14 @@ import { car, speedometer, calendar } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 import { getDateString } from '../utils/dateUtils';
 
-const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 45780, daysSinceLastMaintenance = 15, hasMaintenances = true }) => {
+const PageHeader = ({
+  userName = 'Utente',
+  totalMaintenances = 12,
+  lastKm = 45780,
+  daysSinceLastMaintenance = 15,
+  hasMaintenances = true,
+  isWrongKilometers = false,
+}) => {
   const [hoveredCard, setHoveredCard] = useState(null);
 
   // Ionic-inspired color palette
@@ -23,10 +30,13 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
     gradientEnd: '#3171e0',
   };
 
-  const customIcons = {
+  const emoticosIcon = {
     car: '🚗',
     speedometer: '⚡',
     calendar: '📅',
+    lightbulb: '💡',
+    smile: '😉',
+    hand: '👋',
   };
   const icons = {
     car: <IonIcon icon={car} />,
@@ -113,6 +123,14 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
     }
   };
 
+  const getIsWrongMaintenance = () => {
+    return {
+      text: 'Attenzione hai impostato un Kilometraggio manuale (${lastManualKm.km} km) che è inferiore al massimo dei km segnati per una manutenzione (${maintenanceWithHigherKm.km} km). Il valore più alto verrà usato nei calcoli.',
+      color: colors.danger,
+    };
+  };
+
+  const additionalMessage = getIsWrongMaintenance();
   const status = getStatusMessage();
 
   return (
@@ -182,12 +200,12 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
               lineHeight: '1.2',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
             }}>
-            Ciao, {userName}! 👋
+            Ciao, {userName}! {emoticosIcon.hand}
           </h1>
 
           {/* Date Indicator */}
           <div style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '16px', fontWeight: '500' }}>
-            {icons.calendar} {getDateString()}
+            {emoticosIcon.calendar} {getDateString()}
           </div>
 
           <p
@@ -244,14 +262,14 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
                   fontWeight: '500',
                   color: colors.white,
                 }}>
-                💡 Aggiungine una per iniziare 😉!
+                {emoticosIcon.lightbulb} Aggiungine una per iniziare {emoticosIcon.smile}!
               </div>
             </div>
           </div>
         )}
 
         {/* Status Indicator */}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', margin: '0 auto 32px auto' }}>
           <div
             style={{
               display: 'flex',
@@ -283,6 +301,48 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
             </span>
           </div>
         </div>
+
+        {/* status isWrongMaintenance */}
+        {/* if (isWrongKilometers) {
+      return {
+        text: ,
+        color: colors.danger,
+      };
+    } */}
+        {isWrongKilometers && (
+          <div style={{ display: 'flex', justifyContent: 'center', textAlign: 'center', margin: '0 auto 32px auto' }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                backdropFilter: 'blur(10px)',
+                borderRadius: '25px',
+                padding: '12px 24px',
+                border: '1px solid rgba(255, 255, 255, 0.2)',
+                transition: 'all 0.3s ease',
+              }}>
+              <div
+                style={{
+                  width: '12px',
+                  height: '12px',
+                  backgroundColor: additionalMessage.color,
+                  borderRadius: '50%',
+                  marginRight: '12px',
+                  boxShadow: `0 0 8px ${additionalMessage.color}60`,
+                }}
+              />
+              <span
+                style={{
+                  color: colors.white,
+                  fontSize: '14px',
+                  fontWeight: '500',
+                }}>
+                {additionalMessage.text}
+              </span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Bottom wave decoration */}
