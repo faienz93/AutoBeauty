@@ -140,7 +140,7 @@ const PageHeader = ({
             />
           </div>
         ) : (
-          <NoMainteinance icon={emojisIcon} color={colors.white} />
+          <NoMainteinance />
         )}
 
         {/* Status Indicator */}
