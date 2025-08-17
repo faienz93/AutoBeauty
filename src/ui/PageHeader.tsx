@@ -1,8 +1,9 @@
 import { getDateString } from '../utils/dateUtils';
 import StatCard from './StatCard';
 import { colors } from '../types/Color';
-import { emoticosIcon, icons } from '../types/Icon';
+import { emojisIcon, icons } from '../types/Icon';
 import StatusIndicator from './StatusIndicator';
+import NoMainteinance from './NoMaintenance';
 
 const PageHeader = ({
   userName = 'Utente',
@@ -95,12 +96,12 @@ const PageHeader = ({
               lineHeight: '1.2',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
             }}>
-            Ciao, {userName}! {emoticosIcon.hand}
+            Ciao, {userName}! {emojisIcon.hand}
           </h1>
 
           {/* Date Indicator */}
           <div style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '16px', fontWeight: '500' }}>
-            {emoticosIcon.calendar} {getDateString()}
+            {emojisIcon.calendar} {getDateString()}
           </div>
 
           <p
@@ -139,35 +140,7 @@ const PageHeader = ({
             />
           </div>
         ) : (
-          <div style={{ textAlign: 'center', margin: '0 auto 32px auto', maxWidth: '600px' }}>
-            <div
-              style={{
-                backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                backdropFilter: 'blur(10px)',
-                borderRadius: '20px',
-                padding: '40px 24px',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-              }}>
-              <div style={{ fontSize: '48px', marginBottom: '16px' }}>{emoticosIcon.settings}</div>
-              <h3 style={{ color: colors.white, fontSize: '24px', fontWeight: '600', margin: '0 0 12px 0' }}>Non ci sono Manutenzioni</h3>
-              <p style={{ color: 'rgba(255, 255, 255, 0.8)', fontSize: '16px', margin: '0 0 20px 0', lineHeight: '1.5' }}>
-                Inizia a tracciare le manutenzioni del tuo veicolo per tenere tutto sotto controllo
-              </p>
-              <div
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  backgroundColor: 'rgba(255, 255, 255, 0.2)',
-                  borderRadius: '25px',
-                  padding: '12px 20px',
-                  fontSize: '14px',
-                  fontWeight: '500',
-                  color: colors.white,
-                }}>
-                {emoticosIcon.lightbulb} Aggiungine una per iniziare {emoticosIcon.smile}!
-              </div>
-            </div>
-          </div>
+          <NoMainteinance icon={emojisIcon} color={colors.white} />
         )}
 
         {/* Status Indicator */}

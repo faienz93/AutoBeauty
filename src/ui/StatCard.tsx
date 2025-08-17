@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Colors } from '../types/Color';
-import { EmoticosIcon, Icon } from '../types/Icon';
+import { EmojisIcon, Icon } from '../types/Icon';
 
 interface StatCardProps {
-  icon: Icon | EmoticosIcon;
+  icon: Icon | EmojisIcon;
   label: string;
   value: number;
   iconColor: string;

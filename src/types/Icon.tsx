@@ -1,7 +1,7 @@
 import { car, speedometer, calendar } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
 
-export const emoticosIcon = {
+export const emojisIcon = {
   car: '🚗',
   speedometer: '⚡',
   calendar: '📅',
@@ -17,5 +17,6 @@ export const icons = {
   calendar: <IonIcon icon={calendar} />,
 };
 
-export type EmoticosIcon = (typeof emoticosIcon)[keyof typeof emoticosIcon]; // string
+export type Emojis = typeof emojisIcon;
+export type EmojisIcon = (typeof emojisIcon)[keyof typeof emojisIcon]; // string
 export type Icon = (typeof icons)[keyof typeof icons]; // JSX.Element
