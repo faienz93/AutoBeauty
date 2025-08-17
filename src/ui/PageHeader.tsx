@@ -6,8 +6,16 @@ import StatusIndicator from './StatusIndicator';
 import NoMainteinance from './NoMaintenance';
 import WaveBackround from './WaveBackground';
 
-const PageHeader = ({
-  userName = 'Utente',
+type PageHeaderProp = {
+  userName?: string;
+  totalMaintenances: number;
+  lastKm: number;
+  daysSinceLastMaintenance: number;
+  hasMaintenances: boolean;
+  isWrongKilometers: boolean;
+};
+const PageHeader: React.FC<PageHeaderProp> = ({
+  userName,
   totalMaintenances = 12,
   lastKm = 45780,
   daysSinceLastMaintenance = 15,
@@ -97,7 +105,7 @@ const PageHeader = ({
               lineHeight: '1.2',
               textShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
             }}>
-            Ciao, {userName}! {emojisIcon.hand}
+            {userName ? `Ciao, ${userName}! ${emojisIcon.hand}` : `Ciao! ${emojisIcon.hand}`}
           </h1>
 
           {/* Date Indicator */}

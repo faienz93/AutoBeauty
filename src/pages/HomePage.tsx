@@ -65,11 +65,11 @@ const HomePage = () => {
       <Header title="Home" showBackButton={false} />
       <IonContent>
         <PageHeader
-          userName="Antonio"
           totalMaintenances={maintenances.length}
           lastKm={lastManualKm.km}
           daysSinceLastMaintenance={15}
           hasMaintenances={maintenances.length > 0}
+          isWrongKilometers={true}
         />
 
         {maintenances.length > 0 &&

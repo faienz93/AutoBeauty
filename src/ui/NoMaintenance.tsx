@@ -1,5 +1,5 @@
 import { colors } from '../types/Color';
-import { Emojis, emojisIcon } from '../types/Icon';
+import { emojisIcon } from '../types/Icon';
 
 const NoMainteinance: React.FC = () => {
   return (
