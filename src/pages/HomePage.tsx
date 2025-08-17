@@ -12,6 +12,7 @@ import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween 
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
 import { Card } from '../ui/Card';
 import { calendar } from 'ionicons/icons';
+import PageHeader from '../ui/PageHeader';
 
 const HomePage = () => {
   const [lastManualKm, setLastManualKm] = useState<Kilometers>({
@@ -55,12 +56,7 @@ const HomePage = () => {
     <IonPage>
       <Header title="Home" showBackButton={false} />
       <IonContent>
-        {/* <IonCard style={{ flexGlow: 1, borderRadius: '0.5em', boxShadow: '0 4px 12px' }}>
-          <IonCardHeader>
-            <IonCardTitle>Data odierna</IonCardTitle>
-            <IonCardSubtitle>{getDateString()}</IonCardSubtitle>
-          </IonCardHeader>
-        </IonCard> */}
+        <PageHeader userName="Antonio" totalMaintenances={maintenances.length} lastKm={lastManualKm.km} daysSinceLastMaintenance={15} />
         <Card title="Data Odierna" subtitle={getDateString()} layout={{ icon: { ionIcon: calendar } }} />
         <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
         {groupedMaintenance && Object.keys(groupedMaintenance).length == 0 ? (
