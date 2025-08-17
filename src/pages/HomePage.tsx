@@ -57,7 +57,6 @@ const HomePage = () => {
       <Header title="Home" showBackButton={false} />
       <IonContent>
         <PageHeader userName="Antonio" totalMaintenances={maintenances.length} lastKm={lastManualKm.km} daysSinceLastMaintenance={15} />
-        <Card title="Data Odierna" subtitle={getDateString()} layout={{ icon: { ionIcon: calendar } }} />
         <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
         {groupedMaintenance && Object.keys(groupedMaintenance).length == 0 ? (
           <IonText color="secondary">

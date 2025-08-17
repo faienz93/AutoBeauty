@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { car, speedometer, calendar } from 'ionicons/icons';
 import { IonIcon } from '@ionic/react';
+import { getDateString } from '../utils/dateUtils';
 
 const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 45780, daysSinceLastMaintenance = 15 }) => {
   const [hoveredCard, setHoveredCard] = useState(null);
@@ -174,6 +175,10 @@ const PageHeader = ({ userName = 'Utente', totalMaintenances = 12, lastKm = 4578
             }}>
             Ciao, {userName}! 👋
           </h1>
+
+          <div style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '16px', fontWeight: '500' }}>
+            {icons.calendar} {getDateString()}
+          </div>
           <p
             style={{
               fontSize: window.innerWidth <= 768 ? '16px' : '18px',
