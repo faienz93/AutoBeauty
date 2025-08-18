@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, IonText, useIonViewWillLeave, useIonViewWillEnter } from '@ionic/react';
+import { IonContent, IonButton, IonList, IonItem, IonToast, IonInput, IonPage, IonIcon, useIonViewWillLeave, useIonViewWillEnter, IonNote } from '@ionic/react';
 import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
@@ -7,22 +7,33 @@ import { Kilometers } from '../types/KilometersType';
 import { getDateToString, parseItalianNumber, getStringToDate } from '../utils/dateUtils';
 import { useKilometersDb } from '../hooks/useDbContext';
 import { pencilOutline } from 'ionicons/icons';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 const manualKmKey = 'manual-km';
+
+interface IFormInputs {
+  _rev?: string;
+  data: string;
+  km: number;
+}
 
 const NewManualKmPage: React.FC = () => {
   const dbKm = useKilometersDb();
   const [isSuccess, setIsSuccess] = useState(false);
   const [loading, setLoading] = useState(true);
   const [refreshCount, setRefreshCount] = useState(0);
-  const [formData, setFormData] = useState<Kilometers>({
-    _rev: undefined,
-    data: getDateToString(),
-    km: 0,
-  });
-  const [didEdit, setDidEdit] = useState({
-    data: false,
-    km: false,
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+  } = useForm<IFormInputs>({
+    defaultValues: {
+      km: 0,
+      data: getDateToString(),
+    },
   });
 
   useIonViewWillEnter(() => {
@@ -34,10 +45,10 @@ const NewManualKmPage: React.FC = () => {
     dbKm
       .get(manualKmKey)
       .then((fetched) => {
-        setFormData({
-          _rev: fetched?._rev ?? undefined,
-          data: fetched?.data ?? getDateToString(),
+        reset({
+          _rev: fetched._rev ?? undefined,
           km: fetched.km ?? 0,
+          data: fetched?.data ?? getDateToString(),
         });
         setLoading(false);
       })
@@ -45,35 +56,23 @@ const NewManualKmPage: React.FC = () => {
         console.error('Errore nel recupero item', error);
         setLoading(false);
       });
-  }, [dbKm, refreshCount]);
+  }, [dbKm, refreshCount, reset]);
 
   useIonViewWillLeave(() => {
-    setFormData({
+    reset({
       data: getDateToString(),
       km: 0,
     });
+
     setIsSuccess(false);
-    setDidEdit({
-      data: false,
-      km: false,
-    });
   });
 
   if (loading) return <div>Caricamento…</div>;
 
-  const isKmInvalid = didEdit.km && Number(formData.km) === 0;
-
-  const updateKm = async (newKm: Kilometers) => {
-    console.log(formData);
-    const newEvent = {
-      ...newKm,
-      ...(formData._rev && { _rev: formData._rev }),
-    };
-
+  const updateManualKm = async (newKm: Kilometers) => {
     try {
-      await dbKm.put(newEvent);
+      await dbKm.put(newKm);
 
-      // location.state.item._rev = response.rev;
       setIsSuccess((prevValue) => !prevValue);
     } catch (error) {
       console.error('Error adding Kilometer:', error);
@@ -81,83 +80,107 @@ const NewManualKmPage: React.FC = () => {
     }
   };
 
-  const handleInputChange = (inputIdentifier: any, newValue: any) => {
-    if (inputIdentifier === 'data') {
-      newValue = getDateToString(getStringToDate(newValue as string));
-    }
-
-    if (inputIdentifier === 'km') {
-      // IonInput type="number" restituisce stringa, convertiamo
-      const numericValue = parseFloat(newValue as string);
-      newValue = isNaN(numericValue) ? '' : numericValue; // Mantieni stringa vuota se non è un numero, o gestisci come preferisci
-    }
-
-    setFormData((prevState) => ({
-      ...prevState,
-      [inputIdentifier]: newValue,
-    }));
-
-    setDidEdit((prevEdit) => ({
-      ...prevEdit,
-      [inputIdentifier]: true,
-    }));
-  };
-
-  const handleSubmit = async (event: any) => {
-    event.preventDefault();
-
-    if (didEdit.km && Number(formData.km) === 0) return;
-
+  const onSubmitForm: SubmitHandler<IFormInputs> = async (event) => {
     try {
       const lastKm: Kilometers = {
         _id: 'manual-km',
-        data: getDateToString(getStringToDate(formData.data)),
-        km: parseItalianNumber(formData.km),
+        ...(event._rev && { _rev: event._rev }), // added _rev only if exist otherwise not
+        data: getDateToString(getStringToDate(event.data)),
+        km: parseItalianNumber(event.km),
       };
-      await updateKm(lastKm);
+      await updateManualKm(lastKm);
     } catch (error) {
       console.error('Errore nel salvataggio:', error);
     }
-  };
-
-  const handleInputBlur = (identifier: any) => {
-    setDidEdit((prevEdit) => ({
-      ...prevEdit,
-      [identifier]: true,
-    }));
   };
 
   return (
     <IonPage>
       <Header title="KM" />
       <IonContent color="light">
-        <IonList inset={true}>
-          <IonItem lines="inset" slot="header">
-            <DataPickerPopup title="Scegli data" currentDate={formData.data} onChange={handleInputChange} />
-          </IonItem>
-          <IonItem>
-            <IonInput
-              labelPlacement="floating"
-              label="KM"
-              type="number"
-              name="km"
-              onBlur={() => handleInputBlur('km')}
-              value={formData.km}
-              onIonChange={(e) => handleInputChange('km', e.detail.value)}
-              min={0}
-            />
-          </IonItem>
-          <div style={{ padding: '0 16px' }}>
-            <IonText color="danger" style={{ fontSize: '0.8em' }}>
-              {isKmInvalid && <p style={{ margin: '4px 0' }}>Per favore inserisci un kilometraggio diverso da 0.</p>}
-            </IonText>
-          </div>
-        </IonList>
+        <form onSubmit={handleSubmit(onSubmitForm)}>
+          <IonList inset={true}>
+            {/* Data Picker */}
+            <IonItem lines="inset" slot="header">
+              <Controller
+                render={({ field }) => (
+                  <DataPickerPopup
+                    name="data"
+                    title="Scegli data"
+                    currentDate={field.value}
+                    onChange={(date: Date) => field.onChange(getDateToString(date))}
+                    // onChange={(date: Date) => console.log(date)}
+                  />
+                )}
+                control={control}
+                name="data"
+                rules={{
+                  required: 'La data è obbligatoria',
+                  validate: {
+                    notFuture: (value) => {
+                      const today = new Date();
+                      today.setHours(23, 59, 59, 999);
+                      console.log(today);
+                      return getStringToDate(value) < today || 'La data non può essere nel futuro';
+                    },
+                  },
+                }}
+              />
+            </IonItem>
+            <ErrorMessage errors={errors} name="data" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
 
-        <IonButton id="open-toast" type="submit" expand="full" className="buttonAddList" onClick={handleSubmit} disabled={isKmInvalid}>
-          <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
-          Modifica Kilometraggio
-        </IonButton>
+            {/* KM */}
+            <IonItem>
+              <Controller
+                render={({ field }) => (
+                  <IonInput
+                    labelPlacement="floating"
+                    label="KM"
+                    type="text"
+                    name="km"
+                    value={field.value}
+                    onIonChange={(e) => {
+                      const value = parseInt(e.detail.value!) || 0;
+                      field.onChange(value);
+                    }}
+                    onIonBlur={() => {
+                      field.onBlur();
+
+                      if (field.value > 1000) {
+                        field.onChange(field.value.toLocaleString('it-IT'));
+                      }
+                    }}
+                    helperText={field.value > 0 ? `${field.value.toLocaleString('it-IT')} km` : undefined}
+                    className={errors.km ? 'ion-invalid ion-touched' : ''}
+                  />
+                )}
+                control={control}
+                name="km"
+                rules={{
+                  required: 'Il campo KM è obbligatorio',
+                  min: {
+                    value: 1,
+                    message: 'I KM devono essere maggiori di 0',
+                  },
+                  max: {
+                    value: 999999,
+                    message: 'I KM non possono superare 999.999',
+                  },
+                  validate: {
+                    positive: (value) => value > 0 || 'I KM devono essere maggiori di 0',
+                    // integer: (value) => Number.isInteger(value) || 'I KM devono essere un numero intero',
+                  },
+                }}
+              />
+            </IonItem>
+            <ErrorMessage errors={errors} name="km" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
+          </IonList>
+
+          <IonButton type="submit" expand="full" className="ion-margin" disabled={Object.keys(errors).length > 0}>
+            <IonIcon slot="icon-only" icon={pencilOutline}></IonIcon>
+            Modifica Kilometraggio
+          </IonButton>
+        </form>
 
         <IonToast
           isOpen={isSuccess}

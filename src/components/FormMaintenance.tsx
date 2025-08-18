@@ -10,6 +10,7 @@ import {
   IonSelectOption,
   useIonViewWillEnter,
   useIonViewWillLeave,
+  IonIcon,
 } from '@ionic/react';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/MaintenanceType';
@@ -17,6 +18,7 @@ import { getDateToString, getStringToDate } from '../utils/dateUtils';
 import { getUUIDKey } from '../utils/pouchDBUtils';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
+import { add, pencilOutline } from 'ionicons/icons';
 
 const getInitialState = (editData?: Maintenance) => {
   return {
@@ -31,10 +33,9 @@ const getInitialState = (editData?: Maintenance) => {
 };
 
 interface IFormInputs {
-  datapicker: string;
+  data: string;
   km: number;
   costo: number;
-  data: Date;
   type: MaintenanceType;
   note: string;
 }
@@ -42,12 +43,12 @@ interface IFormInputs {
 interface FormMaintenanceProps {
   editData?: Maintenance;
   children: React.ReactNode;
-  ciao: (event: Maintenance) => void;
+  onChangeFormSumbission: (event: Maintenance) => void;
 }
 
 // REF: https://dev.to/ionic/using-react-hook-form-with-ionic-react-components-update-1463
 // REF: https://react-hook-form.com/get-started#IntegratingControlledInputs
-export const FormMaintenance = ({ editData, children, ciao }: FormMaintenanceProps) => {
+export const FormMaintenance = ({ editData, children, onChangeFormSumbission }: FormMaintenanceProps) => {
   const initialData = getInitialState(editData);
 
   const {
@@ -59,7 +60,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
     defaultValues: {
       km: initialData.km,
       costo: initialData.costo,
-      datapicker: initialData.data,
+      data: initialData.data,
       type: initialData.tipo,
       note: initialData.note,
     },
@@ -70,7 +71,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
     reset({
       km: newData.km,
       costo: newData.costo,
-      datapicker: newData.data,
+      data: newData.data,
       type: newData.tipo,
       note: newData.note,
     });
@@ -80,7 +81,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
     reset({
       km: 0,
       costo: 0,
-      datapicker: getDateToString(),
+      data: getDateToString(),
       type: 'Tagliando',
       note: '',
     });
@@ -92,15 +93,13 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
     const mnt: Maintenance = {
       _id: _id,
       _rev: _rev,
-      data: getDateToString(getStringToDate(formData.datapicker)),
+      data: getDateToString(getStringToDate(formData.data)),
       km: Number(formData.km) || 0,
       tipo: formData.type as MaintenanceType,
       costo: Number(formData.costo) || 0,
       note: formData.note || '',
     };
-
-    console.log('Form submitted:', mnt);
-    ciao(mnt);
+    onChangeFormSumbission(mnt);
   };
 
   return (
@@ -112,7 +111,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
             <Controller
               render={({ field }) => (
                 <DataPickerPopup
-                  name="datapicker"
+                  name="data"
                   title="Scegli data"
                   currentDate={field.value}
                   onChange={(date: Date) => field.onChange(getDateToString(date))}
@@ -120,7 +119,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
                 />
               )}
               control={control}
-              name="datapicker"
+              name="data"
               rules={{
                 required: 'La data è obbligatoria',
                 validate: {
@@ -134,7 +133,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
               }}
             />
           </IonItem>
-          <ErrorMessage errors={errors} name="datapicker" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
+          <ErrorMessage errors={errors} name="data" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
 
           {/* KM */}
           <IonItem>
@@ -304,6 +303,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
         </IonList>
 
         <IonButton type="submit" expand="full" className="ion-margin" disabled={Object.keys(errors).length > 0}>
+          <IonIcon slot="icon-only" icon={editData ? pencilOutline : add}></IonIcon>
           {editData ? 'Modifica Manutenzione' : 'Aggiungi Manutenzione'}
         </IonButton>
       </form>

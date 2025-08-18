@@ -59,7 +59,7 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
     <IonPage>
       <Header title="Modifica Manutenzione" />
 
-      <FormMaintenance editData={item} ciao={handleSubmit}>
+      <FormMaintenance editData={item} onChangeFormSumbission={handleSubmit}>
         <IonToast
           isOpen={toastOpen && isSuccess}
           onDidDismiss={() => setToastOpen(false)}

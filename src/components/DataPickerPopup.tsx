@@ -21,9 +21,6 @@ const DataPickerPopup: React.FC<DataPickerPopouProps> = ({ name, title, currentD
       return;
     }
 
-    console.log('DATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
-    console.log(isoDate);
-    console.log(date);
     onChange(date);
   };
   return (

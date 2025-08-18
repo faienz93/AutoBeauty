@@ -40,7 +40,7 @@ const NewMaintenance = () => {
     <IonPage>
       <Header title="Aggiungi Manutenzione" />
 
-      <FormMaintenance ciao={handleSubmit}>
+      <FormMaintenance onChangeFormSumbission={handleSubmit}>
         <IonToast
           isOpen={toastOpen && isSuccess}
           onDidDismiss={() => setToastOpen(false)}
