@@ -25,10 +25,6 @@ const PageHeader: React.FC<PageHeaderProp> = ({
   isWrongKilometers,
 }) => {
   const getStatusMessage = () => {
-    if (!hasMaintenances) {
-      return { text: 'Inizia aggiungendo una manutenzione', color: colors.secondary };
-    }
-
     if (daysSinceLastMaintenance > 30) {
       return { text: 'Manutenzione raccomandata', color: colors.warning };
     } else if (daysSinceLastMaintenance > 60) {
@@ -155,7 +151,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
         )}
 
         {/* Status Indicator */}
-        <StatusIndicator status={status} textColor={colors.white} />
+        {hasMaintenances && <StatusIndicator status={status} textColor={colors.white} />}
 
         {/* status isWrongMaintenance */}
         {isWrongKilometers && (
