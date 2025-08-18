@@ -7,3 +7,17 @@
   /* box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); */
   padding: 2px;
 }
+
+.maintenance-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-left: 8px;
+}
+
+.maintenance-buttons ion-button {
+  --padding-start: 8px;
+  --padding-end: 8px;
+  height: 32px;
+  min-height: 32px;
+}

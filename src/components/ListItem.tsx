@@ -57,20 +57,24 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
 
           {/* KM */}
           <IonBadge color={'primary'}>KM {km}</IonBadge>
+
+          {/* Price & Cart Button */}
+          <IonText>
+            <h3>€ {maintenance.costo}</h3>
+          </IonText>
           <p>{maintenance.note}</p>
         </IonLabel>
 
-        {/* Price & Cart Button */}
-        <IonText slot="end">
-          <h2>€ {maintenance.costo}</h2>
-        </IonText>
+        <div slot="end" className="maintenance-buttons">
+          <IonButton fill="clear" size="small" onClick={() => handleEdit(maintenance)}>
+            <IonIcon icon={pencil} />
+          </IonButton>
 
-        <IonButton fill="clear" slot="end" onClick={() => handleEdit(maintenance)}>
-          <IonIcon icon={pencil} />
-        </IonButton>
-        <IonButton fill="clear" id={`delete-alert-${maintenance._id}`} slot="end" onClick={() => setConfirmDelete(true)}>
-          <IonIcon icon={trashOutline} color="danger" />
-        </IonButton>
+          <IonButton fill="clear" size="small" id={`delete-alert-${maintenance._id}`} onClick={() => setConfirmDelete(true)}>
+            <IonIcon icon={trashOutline} color="danger" />
+          </IonButton>
+        </div>
+
         <AlertConfirmation
           key={maintenance._id}
           trigger={`delete-alert-${maintenance._id}`}
