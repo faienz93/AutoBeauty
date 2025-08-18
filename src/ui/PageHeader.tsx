@@ -1,11 +1,11 @@
-import { getDateToString } from '../utils/dateUtils';
 import StatCard from './StatCard';
 import { colors } from '../types/Color';
-import { emojisIcon, icons } from '../types/Icon';
 import StatusIndicator from './StatusIndicator';
 import NoMainteinance from './NoMaintenance';
 import WaveBackround from './WaveBackground';
 import { WelcomeSection } from './WelcomeSection';
+import { icons } from '../types/Icon';
+import { IonCol, IonGrid, IonRow } from '@ionic/react';
 
 type PageHeaderProp = {
   userName?: string;
@@ -41,7 +41,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
     <div
       style={{
         // background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientEnd} 100%)`,
-        background: `linear-gradient(to bottom, #051937, #004d7a, #008793, #00bf72, #a8eb12)`,
+        background: `linear-gradient(to bottom, ${colors.gradient1}, ${colors.gradient2}, ${colors.gradient3}, ${colors.gradient4}, ${colors.gradient5})`,
         minHeight: '420px',
         position: 'relative',
         overflow: 'hidden',
@@ -97,26 +97,26 @@ const PageHeader: React.FC<PageHeaderProp> = ({
         <WelcomeSection userName={userName} hasMaintenances={hasMaintenances} />
 
         {hasMaintenances ? (
-          /* Stats Cards Grid */
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: window.innerWidth <= 768 ? '1fr' : 'repeat(3, 1fr)',
-              gap: '20px',
-              maxWidth: '900px',
-              margin: '0 auto 32px auto',
-            }}>
-            <StatCard icon={icons.car} label="Totale Manutenzioni" value={totalMaintenances} iconColor={colors.primary} color={colors} index={0} />
-            <StatCard icon={icons.speedometer} label="Ultimo Km manuale" value={lastKm} iconColor={colors.success} color={colors} index={1} />
-            <StatCard
-              icon={icons.calendar}
-              label="Giorni dall'ultima manutenzione"
-              value={daysSinceLastMaintenance}
-              color={colors}
-              iconColor={colors.warning}
-              index={2}
-            />
-          </div>
+          <IonGrid fixed={true}>
+            <IonRow>
+              <IonCol>
+                <StatCard icon={icons.car} label="Totale Manutenzioni" value={totalMaintenances} iconColor={colors.primary} color={colors} index={0} />
+              </IonCol>
+              <IonCol>
+                <StatCard icon={icons.speedometer} label="Ultimo Km manuale" value={lastKm} iconColor={colors.success} color={colors} index={1} />
+              </IonCol>
+              <IonCol>
+                <StatCard
+                  icon={icons.calendar}
+                  label="Giorni dall'ultima manutenzione"
+                  value={daysSinceLastMaintenance}
+                  color={colors}
+                  iconColor={colors.warning}
+                  index={2}
+                />
+              </IonCol>
+            </IonRow>
+          </IonGrid>
         ) : (
           <NoMainteinance />
         )}
