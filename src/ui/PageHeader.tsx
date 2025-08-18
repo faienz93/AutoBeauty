@@ -1,4 +1,4 @@
-import { getDateString } from '../utils/dateUtils';
+import { getDateToString } from '../utils/dateUtils';
 import StatCard from './StatCard';
 import { colors } from '../types/Color';
 import { emojisIcon, icons } from '../types/Icon';
@@ -112,7 +112,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
 
           {/* Date Indicator */}
           <div style={{ fontSize: '16px', color: 'rgba(255, 255, 255, 0.8)', marginBottom: '16px', fontWeight: '500' }}>
-            {emojisIcon.calendar} {getDateString()}
+            {emojisIcon.calendar} {getDateToString()}
           </div>
 
           <p

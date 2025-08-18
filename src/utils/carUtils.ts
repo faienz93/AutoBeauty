@@ -1,4 +1,4 @@
-import { parseStringToDate } from './dateUtils';
+import { getStringToDate } from './dateUtils';
 import { LimitGomme, LimitTagliando } from '../constant';
 
 export function isMaintenanceNeeded(maintenanceType: string, diffKm: number, maintenanceDate: string) {
@@ -6,7 +6,7 @@ export function isMaintenanceNeeded(maintenanceType: string, diffKm: number, mai
   if (maintenanceType === 'Gomme') todo = diffKm >= LimitGomme;
   if (maintenanceType === 'Tagliando') todo = diffKm >= LimitTagliando;
   if (maintenanceType === 'Revisione') {
-    const dataUltimaRevisione = parseStringToDate(maintenanceDate);
+    const dataUltimaRevisione = getStringToDate(maintenanceDate);
     const dataAttuale = new Date();
     const mesiPassati = (dataAttuale.getFullYear() - dataUltimaRevisione.getFullYear()) * 12 + (dataAttuale.getMonth() - dataUltimaRevisione.getMonth());
 

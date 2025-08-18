@@ -3,7 +3,7 @@ import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIco
 import { addOutline, cloudUpload } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance, MaintenanceType } from '../types/MaintenanceType';
-import { getDateString, parseStringToDate, parseItalianNumber } from '../utils/dateUtils';
+import { getDateToString, getStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { getUUIDKey } from '../utils/pouchDBUtils';
 
@@ -41,7 +41,7 @@ const ImportItem = () => {
       // Parse result
       const convertedItems: Maintenance[] = importedItemFromCsv.map((item) => ({
         _id: getUUIDKey(),
-        data: getDateString(parseStringToDate(item.data)),
+        data: getDateToString(getStringToDate(item.data)),
         km: parseItalianNumber(item.km), // gestisce numeri con virgola italiana
         tipo: item.tipo as MaintenanceType,
         costo: parseItalianNumber(item.costo), // gestisce numeri con virgola italiana

@@ -5,7 +5,7 @@ import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../types/KilometersType';
-import { calculateDaysSinceLastMaintenance, getDateString, parseStringToDate } from '../utils/dateUtils';
+import { calculateDaysSinceLastMaintenance, getDateToString, getStringToDate } from '../utils/dateUtils';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
@@ -14,7 +14,7 @@ import WaveBackround from '../ui/WaveBackground';
 
 const HomePage = () => {
   const [lastManualKm, setLastManualKm] = useState<Kilometers>({
-    data: getDateString(),
+    data: getDateToString(),
     km: 0,
   });
 
@@ -42,7 +42,7 @@ const HomePage = () => {
           _id: manualKmData._id || '',
           _rev: manualKmData._rev || '',
           km: manualKmData.km || 0,
-          data: getDateString(parseStringToDate(manualKmData.data)),
+          data: getDateToString(getStringToDate(manualKmData.data)),
         });
       } catch (error) {
         console.error('Error loading data:', error);

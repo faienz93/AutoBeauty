@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/MaintenanceType';
-import { getDateString, parseStringToDate } from '../utils/dateUtils';
+import { getDateToString, getStringToDate } from '../utils/dateUtils';
 import { getUUIDKey } from '../utils/pouchDBUtils';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
@@ -22,7 +22,7 @@ const getInitialState = (editData?: Maintenance) => {
   return {
     _id: editData?._id ?? getUUIDKey(),
     _rev: editData?._rev ?? undefined,
-    data: editData?.data ?? getDateString(),
+    data: editData?.data ?? getDateToString(),
     km: editData?.km ?? 0,
     tipo: (editData?.tipo as MaintenanceType) ?? 'Tagliando',
     costo: editData?.costo ?? 0,
@@ -80,7 +80,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
     reset({
       km: 0,
       costo: 0,
-      datapicker: getDateString(),
+      datapicker: getDateToString(),
       type: 'Tagliando',
       note: '',
     });
@@ -92,7 +92,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
     const mnt: Maintenance = {
       _id: _id,
       _rev: _rev,
-      data: getDateString(parseStringToDate(formData.datapicker)),
+      data: getDateToString(getStringToDate(formData.datapicker)),
       km: Number(formData.km) || 0,
       tipo: formData.type as MaintenanceType,
       costo: Number(formData.costo) || 0,
@@ -115,7 +115,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
                   name="datapicker"
                   title="Scegli data"
                   currentDate={field.value}
-                  onChange={(date: Date) => field.onChange(getDateString(date))}
+                  onChange={(date: Date) => field.onChange(getDateToString(date))}
                   // onChange={(date: Date) => console.log(date)}
                 />
               )}
@@ -128,7 +128,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
                     const today = new Date();
                     today.setHours(23, 59, 59, 999);
                     console.log(today);
-                    return parseStringToDate(value) < today || 'La data non può essere nel futuro';
+                    return getStringToDate(value) < today || 'La data non può essere nel futuro';
                   },
                 },
               }}

@@ -1,5 +1,5 @@
 import { Kilometers } from '../types/KilometersType';
-import { getDateString, parseStringToDate } from '../utils/dateUtils';
+import { getDateToString, getStringToDate } from '../utils/dateUtils';
 import { useKilometersDb } from './useDbContext';
 
 export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
@@ -10,7 +10,7 @@ export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
     let lastKm: Kilometers = {
       _id: 'manual-km',
       // _rev: '',
-      data: getDateString(),
+      data: getDateToString(),
       km: 0,
     };
 
@@ -21,7 +21,7 @@ export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
           _id: searchLastManualKm._id || '',
           _rev: searchLastManualKm._rev || '',
           km: searchLastManualKm.km || 0,
-          data: getDateString(parseStringToDate(searchLastManualKm.data)),
+          data: getDateToString(getStringToDate(searchLastManualKm.data)),
         };
       }
     } catch (err) {}

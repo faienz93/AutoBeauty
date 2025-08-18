@@ -1,6 +1,6 @@
 import { useMaintenanceDb } from './useDbContext';
 import { Maintenance } from '../types/MaintenanceType';
-import { parseStringToDate } from '../utils/dateUtils';
+import { getStringToDate } from '../utils/dateUtils';
 import { getMaintenanceKey } from '../utils/pouchDBUtils';
 
 export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
@@ -20,7 +20,7 @@ export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
       }))
       .sort((a: Maintenance, b: Maintenance) => {
         // Ordina per data decrescente
-        return new Date(parseStringToDate(b.data)).getTime() - new Date(parseStringToDate(a.data)).getTime();
+        return new Date(getStringToDate(b.data)).getTime() - new Date(getStringToDate(a.data)).getTime();
 
         // Oppure per km decrescente
         // return b.km - a.km;

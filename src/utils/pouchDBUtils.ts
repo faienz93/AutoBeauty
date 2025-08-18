@@ -1,6 +1,6 @@
 import { Kilometers } from '../types/KilometersType';
 import { Maintenance, Stats } from '../types/MaintenanceType';
-import { parseStringToDate } from './dateUtils';
+import { getStringToDate } from './dateUtils';
 import { v4 as uuidv4 } from 'uuid';
 
 export const getMaintenanceKey = () => {
@@ -39,7 +39,7 @@ export const getGroupByMaintenanceByKm = (maintenance: Maintenance[]): Stats | n
 
     // Se non esiste una manutenzione per questo tipo O
     // se la manutenzione corrente è più recente, aggiorna
-    if (!existing || new Date(parseStringToDate(current.data)).getTime() > new Date(parseStringToDate(existing.data)).getTime()) {
+    if (!existing || new Date(getStringToDate(current.data)).getTime() > new Date(getStringToDate(existing.data)).getTime()) {
       acc[current.tipo] = current;
     }
 

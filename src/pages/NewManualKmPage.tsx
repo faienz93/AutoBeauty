@@ -4,7 +4,7 @@ import './ItemPage.css';
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Header } from '../components/Header';
 import { Kilometers } from '../types/KilometersType';
-import { getDateString, parseItalianNumber, parseStringToDate } from '../utils/dateUtils';
+import { getDateToString, parseItalianNumber, getStringToDate } from '../utils/dateUtils';
 import { useKilometersDb } from '../hooks/useDbContext';
 import { pencilOutline } from 'ionicons/icons';
 
@@ -17,7 +17,7 @@ const NewManualKmPage: React.FC = () => {
   const [refreshCount, setRefreshCount] = useState(0);
   const [formData, setFormData] = useState<Kilometers>({
     _rev: undefined,
-    data: getDateString(),
+    data: getDateToString(),
     km: 0,
   });
   const [didEdit, setDidEdit] = useState({
@@ -36,7 +36,7 @@ const NewManualKmPage: React.FC = () => {
       .then((fetched) => {
         setFormData({
           _rev: fetched?._rev ?? undefined,
-          data: fetched?.data ?? getDateString(),
+          data: fetched?.data ?? getDateToString(),
           km: fetched.km ?? 0,
         });
         setLoading(false);
@@ -49,7 +49,7 @@ const NewManualKmPage: React.FC = () => {
 
   useIonViewWillLeave(() => {
     setFormData({
-      data: getDateString(),
+      data: getDateToString(),
       km: 0,
     });
     setIsSuccess(false);
@@ -83,7 +83,7 @@ const NewManualKmPage: React.FC = () => {
 
   const handleInputChange = (inputIdentifier: any, newValue: any) => {
     if (inputIdentifier === 'data') {
-      newValue = getDateString(parseStringToDate(newValue as string));
+      newValue = getDateToString(getStringToDate(newValue as string));
     }
 
     if (inputIdentifier === 'km') {
@@ -111,7 +111,7 @@ const NewManualKmPage: React.FC = () => {
     try {
       const lastKm: Kilometers = {
         _id: 'manual-km',
-        data: getDateString(parseStringToDate(formData.data)),
+        data: getDateToString(getStringToDate(formData.data)),
         km: parseItalianNumber(formData.km),
       };
       await updateKm(lastKm);
