@@ -8,7 +8,7 @@ import { useHistory } from 'react-router-dom';
 import { useMaintenanceCardIcon } from '../hooks/useMaitenanceCardIcon';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { emojisIcon } from '../types/Icon';
-
+import './ListItem.css';
 interface ListItemProps {
   maintenance: Maintenance;
   onDelete: () => void;
@@ -42,7 +42,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
 
   return (
     <>
-      <IonItem key={maintenance._id}>
+      <IonItem key={maintenance._id} className="maintenance-list">
         <IonThumbnail slot="start">
           <img src={useMaintenanceCardIcon(maintenance.tipo)} alt={maintenance.tipo} />
         </IonThumbnail>
