@@ -19,4 +19,9 @@ export const maintenanceTypes: MaintenanceType[] = ['Tagliando', 'Gomme', 'Revis
 //   Chilometraggio?: Maintenance;
 // };
 
-export type Stats = Partial<Record<MaintenanceType, Maintenance>>;
+export interface MaintenanceWithStatus extends Maintenance {
+  // maxKm: number;
+  isNeeded: boolean;
+}
+
+export type Stats = Partial<Record<MaintenanceType, MaintenanceWithStatus>>;

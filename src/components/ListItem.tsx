@@ -66,7 +66,7 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
         </IonLabel>
 
         <div slot="end" className="maintenance-buttons">
-          <IonButton fill="clear" size="small" onClick={() => handleEdit(maintenance)}>
+          <IonButton fill="clear" size="small" id={`edit-alert-${maintenance._id}`} onClick={() => handleEdit(maintenance)}>
             <IonIcon icon={pencil} />
           </IonButton>
 

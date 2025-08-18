@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useState } from 'react';
-import { Maintenance, Stats } from '../types/MaintenanceType';
+import { Maintenance, MaintenanceWithStatus, Stats } from '../types/MaintenanceType';
 import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
@@ -26,12 +26,18 @@ const HomePage = () => {
   }, [maintenances]);
 
   const groupByMaintenance = useMemo(() => {
-    return getGroupByMaintenanceByKm(maintenances);
-  }, [maintenances]) as Stats;
+    const maxBetweenManualAndHighestKm = getMaxKmBetween(lastManualKm.km, maxMaintenanceKm);
+    console.log('maxBetweenManualAndHighestKm', maxBetweenManualAndHighestKm);
+    return getGroupByMaintenanceByKm(maintenances, maxBetweenManualAndHighestKm);
+  }, [maintenances, lastManualKm.km, maxMaintenanceKm]) as Stats;
 
   console.log('groupedMaintenance', groupByMaintenance);
 
   const isWrongKilometers = useMemo(() => lastManualKm.km < maxMaintenanceKm, [maxMaintenanceKm, lastManualKm.km]);
+  
+  const isMaitenanceNeeded = useMemo(() => {
+    return Object.values(groupByMaintenance ?? {}).some(maintenance => maintenance?.isNeeded);
+  }, [groupByMaintenance]);
 
   useIonViewWillEnter(() => {
     const loadData = async () => {
@@ -62,13 +68,14 @@ const HomePage = () => {
           lastManualKm={lastManualKm.km}
           maxMaintenanceKm={maxMaintenanceKm}
           daysSinceLastMaintenance={maintenances.length > 0 ? calculateDaysSinceLastMaintenance(maintenances[0]?.data) : 0}
+          isMaitenanceNeeded={isMaitenanceNeeded}
           hasMaintenances={maintenances.length > 0}
           isWrongKilometers={isWrongKilometers}
         />
 
         {maintenances.length > 0 &&
           Object.entries(groupByMaintenance ?? {}).map(([category, maintenance]) => (
-            <CardMaintenance key={category} category={category} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm.km, maxMaintenanceKm)} />
+            <CardMaintenance key={category} category={category} maintenance={maintenance as MaintenanceWithStatus} />
           ))}
       </IonContent>
     </IonPage>

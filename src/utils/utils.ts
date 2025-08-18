@@ -53,16 +53,17 @@ export const getMaintenanceWithHigherKm = (maintenances: Maintenance[]): number 
  * @param maintenance - An array of maintenance objects.
  * @returns An object grouping the latest maintenance records by type. Returns an empty object if the input is empty.
  */
-export const getGroupByMaintenanceByKm = (maintenance: Maintenance[]): Stats | null => {
+export const getGroupByMaintenanceByKm = (maintenance: Maintenance[], maxBetweenManualAndHighestKm: number): Stats | null => {
   if (maintenance.length === 0) return {};
 
   const maintenanceGrouped = maintenance.reduce((acc, current) => {
-    const existing = acc[current.tipo];
+    const existMaintenanceType = acc[current.tipo];
 
-    // Se non esiste una manutenzione per questo tipo O
-    // se la manutenzione corrente è più recente, aggiorna
-    if (!existing || new Date(getStringToDate(current.data)).getTime() > new Date(getStringToDate(existing.data)).getTime()) {
-      acc[current.tipo] = current;
+    // if Exist more recent maintenance, replace maintenance
+    if (!existMaintenanceType || new Date(getStringToDate(current.data)).getTime() > new Date(getStringToDate(existMaintenanceType.data)).getTime()) {
+      const diffKmForNextMaintenance = maxBetweenManualAndHighestKm - current.km;
+      const isNeeded = isMaintenanceNeededFor(current.tipo, diffKmForNextMaintenance, current.data);
+      acc[current.tipo] = { ...current, isNeeded };
     }
 
     return acc;
@@ -92,7 +93,7 @@ export const getMaxKmBetween = (lastManualKm: number, maxMaintenanceKm: number) 
  * @param maintenanceDate - The date of the last maintenance (required for 'Revisione').
  * @returns `true` if maintenance is needed, `false` otherwise.
  */
-export function isMaintenanceNeeded(maintenanceType: string, diffKm: number, maintenanceDate: string) {
+export function isMaintenanceNeededFor(maintenanceType: string, diffKm: number, maintenanceDate: string) {
   let maintenanceNeeded = false;
   if (maintenanceType === 'Gomme') maintenanceNeeded = diffKm >= TyreLimit;
   if (maintenanceType === 'Tagliando') maintenanceNeeded = diffKm >= MaintenanceLimit;

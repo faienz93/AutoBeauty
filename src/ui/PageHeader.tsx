@@ -14,6 +14,7 @@ type PageHeaderProp = {
   lastManualKm: number;
   maxMaintenanceKm: number;
   daysSinceLastMaintenance: number;
+  isMaitenanceNeeded: boolean;
   hasMaintenances: boolean;
   isWrongKilometers: boolean;
 };
@@ -23,14 +24,21 @@ const PageHeader: React.FC<PageHeaderProp> = ({
   lastManualKm: lastKm,
   maxMaintenanceKm,
   daysSinceLastMaintenance,
+  isMaitenanceNeeded,
   hasMaintenances,
   isWrongKilometers,
 }) => {
   const getStatusMessage = () => {
-    if (daysSinceLastMaintenance > 30) {
-      return { text: 'Manutenzione raccomandata', color: colors.warning };
-    } else if (daysSinceLastMaintenance > 60) {
-      return { text: 'Manutenzione urgente', color: colors.danger };
+    // if (daysSinceLastMaintenance > 30) {
+    //   return { text: 'Manutenzione raccomandata', color: colors.warning };
+    // } else if (daysSinceLastMaintenance > 60) {
+    //   return { text: 'Manutenzione urgente', color: colors.danger };
+    // } else {
+    //   return { text: 'Stato veicolo ottimale', color: colors.success };
+    // }
+
+    if (isMaitenanceNeeded) {
+      return { text: 'Manutenzione necessaria', color: colors.danger };
     } else {
       return { text: 'Stato veicolo ottimale', color: colors.success };
     }
