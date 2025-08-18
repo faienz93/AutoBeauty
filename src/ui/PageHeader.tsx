@@ -41,7 +41,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
     <div
       style={{
         // background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientEnd} 100%)`,
-        background: `linear-gradient(to bottom, ${colors.gradient1}, ${colors.gradient2}, ${colors.gradient3}, ${colors.gradient4}, ${colors.gradient5})`,
+        background: `linear-gradient(to top, ${colors.gradient1}, ${colors.gradient2}, ${colors.gradient3}, ${colors.gradient4}, ${colors.gradient5})`,
         minHeight: '420px',
         position: 'relative',
         overflow: 'hidden',
@@ -128,7 +128,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
         {isWrongKilometers && (
           <StatusIndicator
             status={{
-              text: `Il kilometraggio manuale (${lastKm} km) è inferiore al massimo registrato (${maxMaintenanceKm} km). Verrà usato il valore più alto.`,
+              text: `Il Km manuale (${lastKm} km) < del max (${maxMaintenanceKm} km).\nSi userà il maggiore.`,
               color: colors.danger,
             }}
             textColor={colors.white}
