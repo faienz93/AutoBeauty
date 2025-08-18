@@ -6,6 +6,7 @@ import { ListItem } from '../components/ListItem';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import NoMainteinance from '../ui/NoMaintenance';
 import { colors } from '../types/Color';
+import Jumbotron from '../ui/Jumbotron';
 
 function ListCarMaintenance() {
   const fetchMaintenancesData = useFetchMaintenances();
@@ -43,23 +44,13 @@ function ListCarMaintenance() {
             <NoMainteinance />
           </div>
         ) : (
-          <div
-            style={{
-              background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientEnd} 100%)`,
-              minHeight: '420px',
-              position: 'relative',
-              overflow: 'hidden',
-              paddingBottom: '40px',
-              paddingTop: '40px',
-              paddingLeft: '16px',
-              paddingRight: '16px',
-            }}>
+          <Jumbotron>
             <IonList inset={true} style={{ backgroundColor: 'transparent' }}>
               {maintenances.map((item, index) => (
                 <ListItem key={index} maintenance={item} onDelete={fetchMaintenances} />
               ))}
             </IonList>
-          </div>
+          </Jumbotron>
         )}
       </IonContent>
     </IonPage>
