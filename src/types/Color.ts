@@ -11,8 +11,16 @@ export const colors = {
   medium: '#92949c',
   dark: '#222428',
   white: '#ffffff',
-  gradientStart: '#3880ff',
-  gradientEnd: '#3171e0',
+  // Vecchio gradiente
+  gradientStart: '#5e72e4',
+  gradientEnd: '#79b7ff',
+
+  // Nuovo gradiente per PageHeader
+  gradient1: '#051937',
+  gradient2: '#004d7a',
+  gradient3: '#008793',
+  gradient4: '#00bf72',
+  gradient5: '#a8eb12',
 };
 
 export type Colors = typeof colors;

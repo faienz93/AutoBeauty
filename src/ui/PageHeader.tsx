@@ -40,7 +40,8 @@ const PageHeader: React.FC<PageHeaderProp> = ({
   return (
     <div
       style={{
-        background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientEnd} 100%)`,
+        // background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientEnd} 100%)`,
+        background: `linear-gradient(to bottom, #051937, #004d7a, #008793, #00bf72, #a8eb12)`,
         minHeight: '420px',
         position: 'relative',
         overflow: 'hidden',
