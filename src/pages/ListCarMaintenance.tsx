@@ -1,26 +1,24 @@
-import { useCallback, useState } from 'react';
-import { IonContent, IonList, IonPage, IonText, useIonViewWillEnter } from '@ionic/react';
+import { useState } from 'react';
+import { IonContent, IonList, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Maintenance } from '../types/MaintenanceType';
 import { Header } from '../components/Header';
 import { ListItem } from '../components/ListItem';
-import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
+import NoMainteinance from '../ui/NoMaintenance';
+import { colors } from '../types/Color';
 
 function ListCarMaintenance() {
   const fetchMaintenancesData = useFetchMaintenances();
-  // All'interno del tuo componente:
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 
-  const db = useMaintenanceDb();
-
-  const fetchMaintenances = useCallback(async () => {
+  const fetchMaintenances = async () => {
     try {
       const data = await fetchMaintenancesData();
       setMaintenances(data);
     } catch (error) {
       console.error('Error fetching maintenances:', error);
     }
-  }, [db]);
+  };
 
   useIonViewWillEnter(() => {
     fetchMaintenances();
@@ -29,17 +27,39 @@ function ListCarMaintenance() {
   return (
     <IonPage>
       <Header title="Lista Manutenzioni" />
-      <IonContent color="light" fullscreen={true}>
-        {maintenances.length == 0 ? (
-          <IonText color="secondary">
-            <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
-          </IonText>
+      <IonContent fullscreen className="maintenance-content">
+        {maintenances.length === 0 ? (
+          <div
+            style={{
+              background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientEnd} 100%)`,
+              minHeight: '420px',
+              position: 'relative',
+              overflow: 'hidden',
+              paddingBottom: '40px',
+              paddingTop: '40px',
+              paddingLeft: '16px',
+              paddingRight: '16px',
+            }}>
+            <NoMainteinance />
+          </div>
         ) : (
-          <IonList inset={true}>
-            {maintenances.map((item, index) => (
-              <ListItem key={index} maintenance={item} onDelete={fetchMaintenances} />
-            ))}
-          </IonList>
+          <div
+            style={{
+              background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientEnd} 100%)`,
+              minHeight: '420px',
+              position: 'relative',
+              overflow: 'hidden',
+              paddingBottom: '40px',
+              paddingTop: '40px',
+              paddingLeft: '16px',
+              paddingRight: '16px',
+            }}>
+            <IonList inset={true} style={{ backgroundColor: 'transparent' }}>
+              {maintenances.map((item, index) => (
+                <ListItem key={index} maintenance={item} onDelete={fetchMaintenances} />
+              ))}
+            </IonList>
+          </div>
         )}
       </IonContent>
     </IonPage>
