@@ -15,7 +15,7 @@ import {
 import DataPickerPopup from '../components/DataPickerPopup';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/MaintenanceType';
 import { getDateToString, getStringToDate } from '../utils/dateUtils';
-import { getUUIDKey } from '../utils/pouchDBUtils';
+import { getUUIDKey } from '../utils/utils';
 import { useForm, Controller, SubmitHandler } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
 import { add, pencilOutline } from 'ionicons/icons';

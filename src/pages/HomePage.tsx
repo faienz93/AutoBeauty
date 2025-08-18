@@ -7,7 +7,7 @@ import { CardMaintenance } from '../components/CardMaintenance';
 import { Kilometers } from '../types/KilometersType';
 import { calculateDaysSinceLastMaintenance, getDateToString, getStringToDate } from '../utils/dateUtils';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
-import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
+import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/utils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
 import PageHeader from '../ui/PageHeader';
 

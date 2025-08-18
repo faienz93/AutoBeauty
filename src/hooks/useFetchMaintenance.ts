@@ -1,7 +1,7 @@
 import { useMaintenanceDb } from './useDbContext';
 import { Maintenance } from '../types/MaintenanceType';
 import { getStringToDate } from '../utils/dateUtils';
-import { getMaintenanceKey } from '../utils/pouchDBUtils';
+import { getMaintenanceKey } from '../utils/utils';
 
 export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
   const dbMaitenenance = useMaintenanceDb();

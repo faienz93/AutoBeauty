@@ -5,7 +5,7 @@ import { CsvService } from '../services/excel/csvParser';
 import { Maintenance, MaintenanceType } from '../types/MaintenanceType';
 import { getDateToString, getStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
-import { getUUIDKey } from '../utils/pouchDBUtils';
+import { getUUIDKey } from '../utils/utils';
 
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
