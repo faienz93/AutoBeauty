@@ -5,15 +5,29 @@ import { v4 as uuidv4 } from 'uuid';
 const MaintenanceLimit = 15000; // limite gomme
 const TyreLimit = 10000; // limite tagliando
 
+/**
+ * Returns the static key prefix for maintenance documents.
+ * @returns The string 'mnt-'.
+ */
 export const getMaintenanceKey = () => {
   return 'mnt-';
 };
 
+/**
+ * Generates a unique key for a maintenance document.
+ * The key is composed of the maintenance prefix and a version 4 UUID.
+ * @returns A unique string identifier.
+ */
 export const getUUIDKey = () => {
   // return 'mnt-' + Date.now();
   return getMaintenanceKey() + uuidv4();
 };
 
+/**
+ * Finds the highest kilometer value from an array of maintenance records.
+ * @param maintenances - An array of maintenance objects.
+ * @returns The highest kilometer value, or 0 if the array is empty.
+ */
 export const getMaintenanceWithHigherKm = (maintenances: Maintenance[]): number => {
   if (maintenances.length === 0) return 0;
 
@@ -33,6 +47,12 @@ export const getMaintenanceWithHigherKm = (maintenances: Maintenance[]): number 
   return maintenances.reduce((maxKm, m) => Math.max(maxKm, m.km), 0);
 };
 
+/**
+ * Groups maintenance records by type, keeping only the most recent one for each type.
+ * The most recent record is determined by the maintenance date.
+ * @param maintenance - An array of maintenance objects.
+ * @returns An object grouping the latest maintenance records by type. Returns an empty object if the input is empty.
+ */
 export const getGroupByMaintenanceByKm = (maintenance: Maintenance[]): Stats | null => {
   if (maintenance.length === 0) return {};
 
@@ -51,11 +71,27 @@ export const getGroupByMaintenanceByKm = (maintenance: Maintenance[]): Stats | n
   return maintenanceGrouped;
 };
 
+/**
+ * Returns the greater of two kilometer values.
+ * @param lastManualKm - The last manually entered kilometer reading.
+ * @param maxMaintenanceKm - The highest kilometer reading from maintenance records.
+ * @returns The higher of the two kilometer values.
+ */
 export const getMaxKmBetween = (lastManualKm: number, maxMaintenanceKm: number) => {
   if (lastManualKm > maxMaintenanceKm) return lastManualKm;
   return maxMaintenanceKm;
 };
 
+/**
+ * Determines if a specific type of maintenance is needed.
+ * - For 'Gomme' (Tyres), it checks if the kilometer difference exceeds `TyreLimit`.
+ * - For 'Tagliando' (Service), it checks if the kilometer difference exceeds `MaintenanceLimit`.
+ * - For 'Revisione' (Inspection), it checks if 24 months have passed since the last inspection.
+ * @param maintenanceType - The type of maintenance to check.
+ * @param diffKm - The kilometers driven since the last maintenance of the same type.
+ * @param maintenanceDate - The date of the last maintenance (required for 'Revisione').
+ * @returns `true` if maintenance is needed, `false` otherwise.
+ */
 export function isMaintenanceNeeded(maintenanceType: string, diffKm: number, maintenanceDate: string) {
   let maintenanceNeeded = false;
   if (maintenanceType === 'Gomme') maintenanceNeeded = diffKm >= TyreLimit;
@@ -69,7 +105,3 @@ export function isMaintenanceNeeded(maintenanceType: string, diffKm: number, mai
   }
   return maintenanceNeeded;
 }
-
-export const formatCost = (value: string): string => {
-  return value.replace('.', ',');
-};
