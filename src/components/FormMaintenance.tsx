@@ -8,18 +8,15 @@ import {
   IonTextarea,
   IonNote,
   IonSelectOption,
-  IonIcon,
-  IonText,
   useIonViewWillEnter,
   useIonViewWillLeave,
 } from '@ionic/react';
 import DataPickerPopup from '../components/DataPickerPopup';
-import { add, pencilOutline } from 'ionicons/icons';
 import { Maintenance, MaintenanceType, maintenanceTypes } from '../types/MaintenanceType';
-import { useState } from 'react';
-import { formatCost } from '../utils/carUtils';
 import { getDateString, parseStringToDate } from '../utils/dateUtils';
 import { getUUIDKey } from '../utils/pouchDBUtils';
+import { useForm, Controller, SubmitHandler } from 'react-hook-form';
+import { ErrorMessage } from '@hookform/error-message';
 
 const getInitialState = (editData?: Maintenance) => {
   return {
@@ -33,180 +30,283 @@ const getInitialState = (editData?: Maintenance) => {
   };
 };
 
+interface IFormInputs {
+  datapicker: string;
+  km: number;
+  costo: number;
+  data: Date;
+  type: MaintenanceType;
+  note: string;
+}
+
 interface FormMaintenanceProps {
   editData?: Maintenance;
   children: React.ReactNode;
-  onSubmit: (event: Maintenance) => void;
+  ciao: (event: Maintenance) => void;
 }
 
-export const FormMaintenance = ({ editData, children, onSubmit }: FormMaintenanceProps) => {
-  const [formData, setFormData] = useState<Maintenance>(getInitialState(editData));
+// REF: https://dev.to/ionic/using-react-hook-form-with-ionic-react-components-update-1463
+// REF: https://react-hook-form.com/get-started#IntegratingControlledInputs
+export const FormMaintenance = ({ editData, children, ciao }: FormMaintenanceProps) => {
+  const initialData = getInitialState(editData);
+
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+    reset,
+  } = useForm<IFormInputs>({
+    defaultValues: {
+      km: initialData.km,
+      costo: initialData.costo,
+      datapicker: initialData.data,
+      type: initialData.tipo,
+      note: initialData.note,
+    },
+  });
 
   useIonViewWillEnter(() => {
-    setFormData(getInitialState(editData));
-  }, [editData]);
+    const newData = getInitialState(editData);
+    reset({
+      km: newData.km,
+      costo: newData.costo,
+      datapicker: newData.data,
+      type: newData.tipo,
+      note: newData.note,
+    });
+  }, [editData, reset]);
 
   useIonViewWillLeave(() => {
-    setFormData({
-      _id: undefined,
-      _rev: undefined,
-      data: getDateString(),
+    reset({
       km: 0,
-      tipo: 'Tagliando' as MaintenanceType,
       costo: 0,
+      datapicker: getDateString(),
+      type: 'Tagliando',
       note: '',
     });
-
-    setDidEdit({
-      data: false,
-      km: false,
-      tipo: false,
-      costo: false,
-      note: false,
-    });
   });
 
-  const [didEdit, setDidEdit] = useState({
-    data: false,
-    km: false,
-    tipo: false,
-    costo: false,
-    note: false,
-  });
-
-  const isKmInvalid = didEdit.km && (Number(formData.km) === 0 || Number(formData.km) > 999999);
-  const isCostoInvalid = didEdit.costo && (Number(formData.costo) === 0 || Number(formData.costo) > 999999);
-
-  const onInputChange = (inputIdentifier: 'data' | 'km' | 'tipo' | 'costo' | 'note', newValue: any) => {
-    if (inputIdentifier === 'data') {
-      newValue = getDateString(newValue as Date);
-    }
-
-    if (inputIdentifier === 'costo') {
-      newValue = formatCost(String(newValue));
-    }
-
-    setFormData((prevState) => ({
-      ...prevState,
-      [inputIdentifier]: newValue,
-    }));
-
-    setDidEdit((prevEdit) => ({
-      ...prevEdit,
-      [inputIdentifier]: true,
-    }));
-  };
-
-  const onInputBlur = (identifier: 'data' | 'km' | 'tipo' | 'costo' | 'note') => {
-    setDidEdit((prevEdit) => ({
-      ...prevEdit,
-      [identifier]: true,
-    }));
-  };
-
-  function handleSubmit(event: any) {
-    event.preventDefault();
+  const onSubmitForm: SubmitHandler<IFormInputs> = (formData) => {
+    const { _id, _rev } = getInitialState(editData);
 
     const mnt: Maintenance = {
-      _id: formData._id,
-      _rev: formData._rev,
-      data: getDateString(parseStringToDate(formData.data)),
+      _id: _id,
+      _rev: _rev,
+      data: getDateString(parseStringToDate(formData.datapicker)),
       km: Number(formData.km) || 0,
-      tipo: formData.tipo as MaintenanceType,
+      tipo: formData.type as MaintenanceType,
       costo: Number(formData.costo) || 0,
       note: formData.note || '',
     };
 
-    onSubmit({ ...mnt });
-  }
+    console.log('Form submitted:', mnt);
+    ciao(mnt);
+  };
 
   return (
     <IonContent color="light">
-      <IonList inset={true}>
-        <IonItem lines="inset" slot="header">
-          <DataPickerPopup title="Scegli data" currentDate={formData.data} onChange={onInputChange} />
-        </IonItem>
-        <IonItem>
-          <IonInput
-            labelPlacement="floating"
-            label="KM"
-            type="number"
-            name="km"
-            onBlur={() => onInputBlur('km')}
-            value={formData.km}
-            onIonChange={(e) => onInputChange('km', e.detail.value)}
-            min={0}
-            max={999999}
-          />
-        </IonItem>
-        <div style={{ padding: '0 16px' }}>
-          <IonText color="danger" style={{ fontSize: '0.8em' }}>
-            {isKmInvalid && <p style={{ margin: '4px 0' }}>Per favore inserisci un costo superiore a 0.</p>}
-          </IonText>
-        </div>
-        <IonItem>
-          <IonInput
-            labelPlacement="floating"
-            label="Costo (€)"
-            type="text"
-            inputmode="decimal"
-            name="costo"
-            onBlur={() => onInputBlur('costo')}
-            value={formData.costo}
-            onIonChange={(e) => onInputChange('costo', e.detail.value)}
-            min={0}
-            max={999999}
-          />
-        </IonItem>
-        <div style={{ padding: '0 16px' }}>
-          <IonText color="danger" style={{ fontSize: '0.8em' }}>
-            {isCostoInvalid && <p style={{ margin: '4px 0' }}>Per favore inserisci un costo superiore a 0.</p>}
-          </IonText>
-        </div>
-        <IonItem lines="inset" slot="header">
-          <IonSelect
-            labelPlacement="floating"
-            label="Tipo"
-            aria-label="Maintenance"
-            interface="action-sheet"
-            placeholder="Select Maintenance"
-            name="type"
-            value={formData.tipo}
-            onBlur={() => onInputBlur('tipo')}
-            onIonChange={(e) => onInputChange('tipo', e.detail.value)}>
-            {maintenanceTypes.map((type) => (
-              <IonSelectOption key={type} value={type}>
-                {type}
-              </IonSelectOption>
-            ))}
-          </IonSelect>
-        </IonItem>
-      </IonList>
-      <IonNote color="medium" class="ion-margin-horizontal">
-        Aggiungi eventuali note.
-      </IonNote>
-      <IonList inset={true}>
-        <IonItem>
-          <IonTextarea
-            label="Commento"
-            label-placement="floating"
-            value={formData.note}
-            rows={5}
-            onIonChange={(e) => onInputChange('note', e.detail.value)}></IonTextarea>
-        </IonItem>
-      </IonList>
+      <form onSubmit={handleSubmit(onSubmitForm)}>
+        <IonList inset={true}>
+          {/* Data Picker */}
+          <IonItem lines="inset" slot="header">
+            <Controller
+              render={({ field }) => (
+                <DataPickerPopup
+                  name="datapicker"
+                  title="Scegli data"
+                  currentDate={field.value}
+                  onChange={(date: Date) => field.onChange(getDateString(date))}
+                  // onChange={(date: Date) => console.log(date)}
+                />
+              )}
+              control={control}
+              name="datapicker"
+              rules={{
+                required: 'La data è obbligatoria',
+                validate: {
+                  notFuture: (value) => {
+                    const today = new Date();
+                    today.setHours(23, 59, 59, 999);
+                    console.log(today);
+                    return parseStringToDate(value) < today || 'La data non può essere nel futuro';
+                  },
+                },
+              }}
+            />
+          </IonItem>
+          <ErrorMessage errors={errors} name="datapicker" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
 
-      {editData ? (
-        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit} disabled={isCostoInvalid || isKmInvalid}>
-          <IonIcon slot="icon-only" ios={pencilOutline} md={pencilOutline}></IonIcon>
-          Modifica Manutenzione
+          {/* KM */}
+          <IonItem>
+            <Controller
+              render={({ field }) => (
+                <IonInput
+                  labelPlacement="floating"
+                  label="KM"
+                  // type="number"
+                  name="km"
+                  value={field.value}
+                  onIonChange={(e) => {
+                    const value = parseInt(e.detail.value!) || 0;
+                    field.onChange(value);
+                  }}
+                  onIonBlur={() => {
+                    field.onBlur();
+
+                    if (field.value > 1000) {
+                      field.onChange(field.value.toLocaleString('it-IT'));
+                    }
+                  }}
+                  helperText={field.value > 0 ? `${field.value.toLocaleString('it-IT')} km` : undefined}
+                  className={errors.km ? 'ion-invalid ion-touched' : ''}
+                />
+              )}
+              control={control}
+              name="km"
+              rules={{
+                required: 'Il campo KM è obbligatorio',
+                min: {
+                  value: 1,
+                  message: 'I KM devono essere maggiori di 0',
+                },
+                max: {
+                  value: 999999,
+                  message: 'I KM non possono superare 999.999',
+                },
+                validate: {
+                  positive: (value) => value > 0 || 'I KM devono essere maggiori di 0',
+                  // integer: (value) => Number.isInteger(value) || 'I KM devono essere un numero intero',
+                },
+              }}
+            />
+          </IonItem>
+          <ErrorMessage errors={errors} name="km" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
+
+          {/* Costo */}
+          <IonItem>
+            <Controller
+              render={({ field }) => (
+                <IonInput
+                  labelPlacement="floating"
+                  label="Costo (€)"
+                  type="text"
+                  inputmode="decimal"
+                  name="costo"
+                  value={field.value}
+                  onIonChange={(e) => {
+                    const value = parseFloat(e.detail.value!) || 0;
+                    field.onChange(value);
+                  }}
+                  onIonBlur={() => {
+                    field.onBlur();
+                    if (field.value > 1000) {
+                      field.onChange(field.value.toLocaleString('it-IT'));
+                    }
+                  }}
+                  helperText={field.value > 0 ? `€ ${field.value.toLocaleString('it-IT', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}` : undefined}
+                  className={errors.costo ? 'ion-invalid ion-touched' : ''}
+                />
+              )}
+              control={control}
+              name="costo"
+              rules={{
+                required: 'Il campo Costo è obbligatorio',
+                min: {
+                  value: 0.01,
+                  message: 'Il costo deve essere maggiore di 0',
+                },
+                max: {
+                  value: 999999,
+                  message: 'Il costo non può superare €999.999',
+                },
+                validate: {
+                  positive: (value) => value > 0 || 'Il costo deve essere maggiore di 0',
+                },
+              }}
+            />
+          </IonItem>
+          <ErrorMessage errors={errors} name="costo" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
+
+          {/* Tipo */}
+          <IonItem lines="inset" slot="header">
+            <Controller
+              render={({ field }) => (
+                <IonSelect
+                  labelPlacement="floating"
+                  label="Tipo Manutenzione"
+                  aria-label="Tipo Manutenzione"
+                  interface="action-sheet"
+                  placeholder="Seleziona tipo di manutenzione"
+                  name="type"
+                  value={field.value}
+                  onIonChange={(e) => field.onChange(e.detail.value)}
+                  onIonBlur={field.onBlur}
+                  className={errors.type ? 'ion-invalid ion-touched' : ''}>
+                  {maintenanceTypes.map((type) => (
+                    <IonSelectOption key={type} value={type}>
+                      {type}
+                    </IonSelectOption>
+                  ))}
+                </IonSelect>
+              )}
+              control={control}
+              name="type"
+              rules={{
+                required: 'Seleziona un tipo di manutenzione',
+                validate: {
+                  validType: (value) => maintenanceTypes.includes(value) || 'Tipo di manutenzione non valido',
+                },
+              }}
+            />
+          </IonItem>
+          <ErrorMessage errors={errors} name="type" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
+        </IonList>
+
+        <IonNote color="medium" class="ion-margin-horizontal">
+          Aggiungi eventuali note.
+        </IonNote>
+
+        <IonList inset={true}>
+          <IonItem>
+            <Controller
+              render={({ field }) => (
+                <IonTextarea
+                  label="Commento"
+                  labelPlacement="floating"
+                  name="note"
+                  rows={5}
+                  value={field.value}
+                  onIonChange={field.onChange}
+                  onIonBlur={field.onBlur}
+                  placeholder="Inserisci eventuali note o commenti..."
+                  helperText={field.value ? `${field.value.length}/500 caratteri` : undefined}
+                  className={errors.note ? 'ion-invalid ion-touched' : ''}
+                />
+              )}
+              control={control}
+              name="note"
+              rules={{
+                maxLength: {
+                  value: 500,
+                  message: 'Le note non possono superare i 500 caratteri',
+                },
+                // validate: {
+                //   noSpecialChars: (value) => {
+                //     if (!value) return true;
+                //     const regex = /^[a-zA-Z0-9\s.,!?àáèéìíòóùúÀÁÈÉÌÍÒÓÙÚ\-()]*$/;
+                //     return regex.test(value) || 'Le note contengono caratteri non validi';
+                //   }
+                // }
+              }}
+            />
+          </IonItem>
+          <ErrorMessage errors={errors} name="note" as={<IonNote color="danger" style={{ padding: '0 16px', fontSize: '0.8em' }} />} />
+        </IonList>
+
+        <IonButton type="submit" expand="full" className="ion-margin" disabled={Object.keys(errors).length > 0}>
+          {editData ? 'Modifica Manutenzione' : 'Aggiungi Manutenzione'}
         </IonButton>
-      ) : (
-        <IonButton id="open-toast" expand="full" className="buttonAddList" onClick={handleSubmit} disabled={isCostoInvalid || isKmInvalid}>
-          <IonIcon slot="icon-only" ios={add} md={add}></IonIcon>
-          Aggiungi Manutenzione
-        </IonButton>
-      )}
+      </form>
 
       {children}
     </IonContent>

@@ -1,19 +1,34 @@
 import { IonInput, IonDatetime, IonPopover, IonContent } from '@ionic/react';
 
 interface DataPickerPopouProps {
+  name: string;
   title: string;
   currentDate: string;
-  onChange(inputIdentifier: any, newValue: any): void;
+  onChange(newValue: Date): void;
 }
 // https://www.damirscorner.com/blog/posts/20220107-DatePickerPopupInIonic6.html
-const DataPickerPopup: React.FC<DataPickerPopouProps> = ({ title, currentDate, onChange }) => {
-  const handleDateChange = (isoDate: any) => {
-    const date = new Date(isoDate);
-    onChange('data', date);
+const DataPickerPopup: React.FC<DataPickerPopouProps> = ({ name, title, currentDate, onChange }) => {
+  const handleDateChange = (isoDate: string | string[] | null | undefined) => {
+    if (!isoDate) {
+      return;
+    }
+
+    const value = Array.isArray(isoDate) ? isoDate[0] : isoDate;
+
+    const date = new Date(value);
+
+    if (isNaN(date.getTime())) {
+      return;
+    }
+
+    console.log('DATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+    console.log(isoDate);
+    console.log(date);
+    onChange(date);
   };
   return (
     <>
-      <IonInput label={title} value={currentDate} id="click-trigger" className="ion-text-end"></IonInput>
+      <IonInput name={name} label={title} value={currentDate} id="click-trigger" className="ion-text-end"></IonInput>
       <IonPopover trigger="click-trigger" side="top" alignment="center" triggerAction="click">
         <IonContent class="ion-padding">
           {/* <IonDatetime presentation="date" onIonChange={(e) => onChange('data', e.detail.value)}></IonDatetime> */}
