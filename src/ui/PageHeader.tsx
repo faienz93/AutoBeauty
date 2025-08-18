@@ -17,6 +17,7 @@ type PageHeaderProp = {
   isMaitenanceNeeded: boolean;
   hasMaintenances: boolean;
   isWrongKilometers: boolean;
+  children?: React.ReactNode;
 };
 const PageHeader: React.FC<PageHeaderProp> = ({
   userName,
@@ -27,6 +28,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
   isMaitenanceNeeded,
   hasMaintenances,
   isWrongKilometers,
+  children,
 }) => {
   const getStatusMessage = () => {
     // if (daysSinceLastMaintenance > 30) {
@@ -99,8 +101,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
         )}
       </div>
 
-      {/* Bottom wave decoration */}
-      <WaveBackround />
+      {children}
     </Jumbotron>
   );
 };
