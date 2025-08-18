@@ -143,7 +143,7 @@ export const FormMaintenance = ({ editData, children, ciao }: FormMaintenancePro
                 <IonInput
                   labelPlacement="floating"
                   label="KM"
-                  // type="number"
+                  type="text"
                   name="km"
                   value={field.value}
                   onIonChange={(e) => {

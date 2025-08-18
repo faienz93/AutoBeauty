@@ -5,8 +5,8 @@ export type MaintenanceType = 'Tagliando' | 'Revisione' | 'Gomme';
 export interface Maintenance extends PouchDbType {
   data: string;
   km: number;
-  tipo: MaintenanceType;
   costo: number;
+  tipo: MaintenanceType;
   note?: string;
 }
 
