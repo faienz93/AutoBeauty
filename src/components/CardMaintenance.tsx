@@ -1,7 +1,7 @@
 import { Maintenance } from '../types/MaintenanceType';
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceCardIcon } from '../hooks/useMaitenanceCardIcon';
-import { isMaintenanceNeeded } from '../utils/carUtils';
+import { isMaintenanceNeeded } from '../utils/utils';
 import { CardMaitenanceDetail } from '../ui/CardMaitenanceDetail';
 import { useMaintenanceCardBackground } from '../hooks/useMaintenanceCardBackground';
 import { ReactNode } from 'react';

@@ -25,9 +25,11 @@ const HomePage = () => {
     return getMaintenanceWithHigherKm(maintenances);
   }, [maintenances]);
 
-  const groupedMaintenance = useMemo(() => {
+  const groupByMaintenance = useMemo(() => {
     return getGroupByMaintenanceByKm(maintenances);
   }, [maintenances]) as Stats;
+
+  console.log('groupedMaintenance', groupByMaintenance);
 
   const isWrongKilometers = useMemo(() => lastManualKm.km < maxMaintenanceKm, [maxMaintenanceKm, lastManualKm.km]);
 
@@ -65,7 +67,7 @@ const HomePage = () => {
         />
 
         {maintenances.length > 0 &&
-          Object.entries(groupedMaintenance ?? {}).map(([category, maintenance]) => (
+          Object.entries(groupByMaintenance ?? {}).map(([category, maintenance]) => (
             <CardMaintenance key={category} category={category} maintenance={maintenance} maxKm={getMaxKmBetween(lastManualKm.km, maxMaintenanceKm)} />
           ))}
       </IonContent>
