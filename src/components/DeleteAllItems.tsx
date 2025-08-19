@@ -13,11 +13,12 @@ const DeleteAllItem = () => {
 
   const handleDelete = async () => {
     try {
-      const deletedMaintenanceDb = maintenanceDb.deleteDatabase();
-      const deletedKmDb = kmDb.deleteDatabase();
+      await maintenanceDb.deleteDatabase();
+      await kmDb.deleteDatabase();
 
       setIsSuccess(true);
     } catch (error) {
+      console.error('Errore durante la cancellazione:', error);
       setIsSuccess(false);
     } finally {
       setToastOpen(true);

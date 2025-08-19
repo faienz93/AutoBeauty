@@ -14,17 +14,15 @@ export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
       km: 0,
     };
 
-    try {
-      const searchLastManualKm = await dbKm.get('manual-km');
-      if (searchLastManualKm) {
-        lastKm = {
-          _id: searchLastManualKm._id || '',
-          _rev: searchLastManualKm._rev || '',
-          km: searchLastManualKm.km || 0,
-          data: getDateToString(getStringToDate(searchLastManualKm.data)),
-        };
-      }
-    } catch (err) {}
+    const searchLastManualKm = await dbKm.get<Kilometers>('manual-km');
+    if (searchLastManualKm) {
+      lastKm = {
+        _id: searchLastManualKm._id || '',
+        _rev: searchLastManualKm._rev || '',
+        km: searchLastManualKm.km || 0,
+        data: getDateToString(getStringToDate(searchLastManualKm.data)),
+      };
+    }
 
     return lastKm;
   };

@@ -1,4 +1,4 @@
-import Papa from 'papaparse';
+import Papa, { ParseResult } from 'papaparse';
 
 export class CsvService<T> {
   async importCsv(file: File, columnHeader: boolean = true): Promise<T[]> {
@@ -14,12 +14,12 @@ export class CsvService<T> {
         Papa.parse(text, {
           header: columnHeader,
           skipEmptyLines: true,
-          error: (error: any) => {
+          error: (error: Error) => {
             reject(new Error(`CSV parsing error: ${error.message}`));
           },
-          complete: (results: any) => {
+          complete: (results: ParseResult<T>) => {
             if (results.errors.length > 0) {
-              const msg = `Error parsing CSV: ${results.errors.map((err: any) => err.message).join(', ')}`;
+              const msg = `Error parsing CSV: ${results.errors.map((err) => err.message).join(', ')}`;
               reject(msg);
               return;
             }

@@ -13,7 +13,7 @@ import {
   IonLabel,
   IonButton,
 } from '@ionic/react';
-import { informationCircle, cloudUpload, create, list, speedometer, calculator, cafe, build, time, car } from 'ionicons/icons';
+import { cloudUpload, create, list, cafe, build, time, car } from 'ionicons/icons';
 
 const InfoPage: React.FC = () => {
   const openDonationLink = (platform: 'buymeacoffee' | 'paypal') => {
