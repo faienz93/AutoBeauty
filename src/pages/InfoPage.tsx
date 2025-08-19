@@ -80,7 +80,10 @@ const InfoPage: React.FC = () => {
               <IonIcon icon={build} slot="start" />
               <IonLabel className="ion-text-wrap">
                 <h2>Tagliando</h2>
-                <p>Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo tagliando supera 15.000 km</p>
+                <p>
+                  Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo tagliando supera 15.000 km o se è trascorso un periodo di tempo
+                  superiore ai 2 anni
+                </p>
               </IonLabel>
             </IonItem>
 
