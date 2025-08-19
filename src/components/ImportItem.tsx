@@ -1,18 +1,14 @@
 import React, { useRef, useState } from 'react';
 import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonToast } from '@ionic/react';
 import { addOutline, cloudUpload, informationCircle } from 'ionicons/icons';
-import { CsvService } from '../services/excel/csvParser';
+import { CsvService } from '../services/csv/csvParser';
 import { Maintenance, MaintenanceType } from '../types/MaintenanceType';
 import { getDateToString, getStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { getUUIDKey } from '../utils/utils';
-import { Capacitor } from '@capacitor/core';
-import { Filesystem, Directory } from '@capacitor/filesystem';
-import { convertBlobToBase64, downloadFile } from '../utils/csvUtils';
-import { FileTransfer } from '@capacitor/file-transfer';
-import { Device } from '@capacitor/device';
+import { exportOnShare } from '../utils/csvUtils';
 
-const data = [
+const data: Maintenance[] = [
   {
     data: '6 gen 2022',
     km: 83938,
@@ -87,57 +83,11 @@ const ImportItem = () => {
     }
   };
 
-  const handleTemplateDownload = async (event: React.MouseEvent) => {
+  const handleExport = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
-      const csvDataBlob = await csvService.exportCsvWithBlob(data as Maintenance[], ['data', 'km', 'tipo', 'costo', 'note']);
-      const filename = `template_manutenzioni.csv`;
-
-      if (Capacitor.isNativePlatform()) {
-        const base64Data = (await convertBlobToBase64(csvDataBlob)) as string;
-
-        const deviceInfo = await Device.getInfo();
-        const androidVersion = parseInt(deviceInfo.osVersion || '0', 10);
-
-        let targetDirectory: Directory = Directory.Documents;
-        if (deviceInfo.platform === 'android') {
-          if (androidVersion <= 9) {
-            targetDirectory = Directory.ExternalStorage;
-          } else {
-            targetDirectory = Directory.Documents;
-          }
-        }
-
-        const permissionResult = await Filesystem.checkPermissions();
-
-        if (permissionResult.publicStorage !== 'granted') {
-          const permissionRequest = await Filesystem.requestPermissions();
-          if (permissionRequest.publicStorage !== 'granted') {
-            console.error("Permesso di salvataggio non concesso dall'utente.");
-            setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
-            return;
-          }
-        }
-
-        // Scrittura file
-        const result = await Filesystem.writeFile({
-          path: filename,
-          data: base64Data,
-          directory: targetDirectory,
-        });
-
-        setToast({ message: `File salvato in: ${result.uri}`, color: 'success' });
-
-        // Progress events
-        FileTransfer.addListener('progress', (progress) => {
-          console.log(`Downloaded ${progress.bytes} of ${progress.contentLength}`);
-        });
-      } else {
-        // Web browser: download classico
-        downloadFile(filename, csvDataBlob).then(() => {
-          setToast({ message: `File salvato correttamente`, color: 'success' });
-        });
-      }
+      const exportResult = await exportOnShare(data, 'template.csv');
+      setToast(exportResult);
     } catch (error) {
       console.error('Errore durante il download del template:', error);
       setToast({ message: "Errore durante l'operazione.", color: 'danger' });
@@ -155,7 +105,7 @@ const ImportItem = () => {
           <p className="ion-padding-bottom">Seleziona un file per importare i tuoi dati preesistenti</p>
           <p className="ion-padding-bottom">
             <IonIcon icon={informationCircle} style={{ verticalAlign: 'middle' }} /> Non sai come formattare il file?{' '}
-            <a href="#" onClick={handleTemplateDownload} style={{ fontWeight: 'bold' }}>
+            <a href="#" onClick={handleExport} style={{ fontWeight: 'bold' }}>
               Scarica il template
             </a>
           </p>
