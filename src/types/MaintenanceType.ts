@@ -20,7 +20,6 @@ export const maintenanceTypes: MaintenanceType[] = ['Tagliando', 'Gomme', 'Revis
 // };
 
 export interface MaintenanceWithStatus extends Maintenance {
-  // maxKm: number;
   isNeeded: boolean;
 }
 

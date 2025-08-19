@@ -2,8 +2,8 @@ import { Maintenance, Stats } from '../types/MaintenanceType';
 import { getStringToDate } from './dateUtils';
 import { v4 as uuidv4 } from 'uuid';
 
-const MaintenanceLimit = 15000; // limite gomme
-const TyreLimit = 10000; // limite tagliando
+const MaintenanceLimit = 15000; // limite tagliando
+const TyreLimit = 10000; // limite gomme
 
 /**
  * Returns the static key prefix for maintenance documents.
@@ -96,7 +96,8 @@ export const getMaxKmBetween = (lastManualKm: number, maxMaintenanceKm: number) 
 export function isMaintenanceNeededFor(maintenanceType: string, diffKm: number, maintenanceDate: string) {
   let maintenanceNeeded = false;
   if (maintenanceType === 'Gomme') maintenanceNeeded = diffKm >= TyreLimit;
-  if (maintenanceType === 'Tagliando') maintenanceNeeded = diffKm >= MaintenanceLimit;
+  if (maintenanceType === 'Tagliando')
+    maintenanceNeeded = diffKm >= MaintenanceLimit || new Date().getFullYear() - getStringToDate(maintenanceDate).getFullYear() >= 2;
   if (maintenanceType === 'Revisione') {
     const dateLastRevision = getStringToDate(maintenanceDate);
     const today = new Date();
