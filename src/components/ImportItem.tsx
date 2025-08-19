@@ -1,20 +1,6 @@
 import React, { useRef, useState } from 'react';
-import {
-  IonButton,
-  IonCard,
-  IonCardContent,
-  IonCardHeader,
-  IonCardSubtitle,
-  IonCardTitle,
-  IonIcon,
-  IonInput,
-  IonItem,
-  IonLabel,
-  IonList,
-  IonText,
-  IonToast,
-} from '@ionic/react';
-import { addOutline, cloudUpload, downloadOutline, informationCircle } from 'ionicons/icons';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonToast } from '@ionic/react';
+import { addOutline, cloudUpload, informationCircle } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance, MaintenanceType } from '../models/MaintenanceType';
 import { getDateString, parseStringToDate, parseItalianNumber } from '../utils/dateUtils';
@@ -23,6 +9,14 @@ import { getUUIDKey } from '../utils/pouchDBUtils';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { convertBlobToBase64, downloadFile } from '../utils/csvUtils';
+import { FileTransfer } from '@capacitor/file-transfer';
+import { Device } from '@capacitor/device';
+
+const logDeviceInfo = async () => {
+  const info = await Device.getInfo();
+
+  console.log(info);
+};
 
 const data = [
   {
@@ -49,6 +43,8 @@ const ImportItem = () => {
   const [isSuccess, setIsSuccess] = useState(false);
   const [label, setLabel] = useState('Nessun File scelto');
   const csvService = new CsvService();
+  console.log('CIAOOOO');
+  logDeviceInfo();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0] || null;
@@ -107,6 +103,7 @@ const ImportItem = () => {
 
       if (Capacitor.isNativePlatform()) {
         const base64Data = (await convertBlobToBase64(csvDataBlob)) as string;
+
         const permissionResult = await Filesystem.checkPermissions();
 
         if (permissionResult.publicStorage !== 'granted') {
@@ -120,7 +117,12 @@ const ImportItem = () => {
         await Filesystem.writeFile({
           path: filename,
           data: base64Data,
-          directory: Directory.Downloads,
+          directory: Directory.Documents,
+        });
+
+        // Progress events
+        FileTransfer.addListener('progress', (progress) => {
+          console.log(`Downloaded ${progress.bytes} of ${progress.contentLength}`);
         });
       } else {
         await downloadFile(filename, csvDataBlob);
