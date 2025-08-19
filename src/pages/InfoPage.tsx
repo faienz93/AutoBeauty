@@ -72,7 +72,7 @@ const InfoPage: React.FC = () => {
               <IonIcon icon={car} slot="start" />
               <IonLabel className="ion-text-wrap">
                 <h2>Gomme</h2>
-                <p>Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo cambio supera 40.000 km</p>
+                <p>Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo cambio supera 10.000 km</p>
               </IonLabel>
             </IonItem>
 
