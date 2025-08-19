@@ -2,7 +2,6 @@ import StatCard from './StatCard';
 import { colors } from '../types/Color';
 import StatusIndicator from './StatusIndicator';
 import NoMainteinance from './NoMaintenance';
-import WaveBackround from './WaveBackground';
 import { WelcomeSection } from './WelcomeSection';
 import { icons } from '../types/Icon';
 import { IonCol, IonGrid, IonRow } from '@ionic/react';

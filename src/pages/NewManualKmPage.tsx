@@ -104,13 +104,7 @@ const NewManualKmPage: React.FC = () => {
             <IonItem lines="inset" slot="header">
               <Controller
                 render={({ field }) => (
-                  <DataPickerPopup
-                    name="data"
-                    title="Scegli data"
-                    currentDate={field.value}
-                    onChange={(date: Date) => field.onChange(getDateToString(date))}
-                    // onChange={(date: Date) => console.log(date)}
-                  />
+                  <DataPickerPopup name="data" title="Scegli data" currentDate={field.value} onChange={(date: Date) => field.onChange(getDateToString(date))} />
                 )}
                 control={control}
                 name="data"
@@ -120,7 +114,6 @@ const NewManualKmPage: React.FC = () => {
                     notFuture: (value) => {
                       const today = new Date();
                       today.setHours(23, 59, 59, 999);
-                      console.log(today);
                       return getStringToDate(value) < today || 'La data non può essere nel futuro';
                     },
                   },
@@ -140,15 +133,8 @@ const NewManualKmPage: React.FC = () => {
                     name="km"
                     value={field.value}
                     onIonChange={(e) => {
-                      const value = parseInt(e.detail.value!) || 0;
+                      const value = parseFloat(e.detail.value!) || 0;
                       field.onChange(value);
-                    }}
-                    onIonBlur={() => {
-                      field.onBlur();
-
-                      if (field.value > 1000) {
-                        field.onChange(field.value.toLocaleString('it-IT'));
-                      }
                     }}
                     helperText={field.value > 0 ? `${field.value.toLocaleString('it-IT')} km` : undefined}
                     className={errors.km ? 'ion-invalid ion-touched' : ''}

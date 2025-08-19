@@ -99,6 +99,7 @@ export const FormMaintenance = ({ editData, children, onChangeFormSumbission }: 
       costo: Number(formData.costo) || 0,
       note: formData.note || '',
     };
+
     onChangeFormSumbission(mnt);
   };
 
@@ -142,19 +143,12 @@ export const FormMaintenance = ({ editData, children, onChangeFormSumbission }: 
                 <IonInput
                   labelPlacement="floating"
                   label="KM"
-                  type="text"
+                  type="number"
                   name="km"
                   value={field.value}
                   onIonChange={(e) => {
-                    const value = parseInt(e.detail.value!) || 0;
+                    const value = parseFloat(e.detail.value!) || 0;
                     field.onChange(value);
-                  }}
-                  onIonBlur={() => {
-                    field.onBlur();
-
-                    if (field.value > 1000) {
-                      field.onChange(field.value.toLocaleString('it-IT'));
-                    }
                   }}
                   helperText={field.value > 0 ? `${field.value.toLocaleString('it-IT')} km` : undefined}
                   className={errors.km ? 'ion-invalid ion-touched' : ''}
@@ -276,9 +270,12 @@ export const FormMaintenance = ({ editData, children, onChangeFormSumbission }: 
                   rows={5}
                   value={field.value}
                   onIonChange={field.onChange}
+                  onIonInput={(e) => {
+                    field.onChange(e.target.value);
+                  }}
                   onIonBlur={field.onBlur}
                   placeholder="Inserisci eventuali note o commenti..."
-                  helperText={field.value ? `${field.value.length}/500 caratteri` : undefined}
+                  helperText={field.value ? `${field.value.length}/100 caratteri` : '0/100 caratteri'}
                   className={errors.note ? 'ion-invalid ion-touched' : ''}
                 />
               )}
@@ -286,8 +283,8 @@ export const FormMaintenance = ({ editData, children, onChangeFormSumbission }: 
               name="note"
               rules={{
                 maxLength: {
-                  value: 500,
-                  message: 'Le note non possono superare i 500 caratteri',
+                  value: 100,
+                  message: 'Le note non possono superare i 100 caratteri',
                 },
                 // validate: {
                 //   noSpecialChars: (value) => {
