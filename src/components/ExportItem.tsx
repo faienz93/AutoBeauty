@@ -9,6 +9,7 @@ import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { convertBlobToBase64, downloadFile } from '../utils/csvUtils';
 import { Device } from '@capacitor/device';
+import { Share } from '@capacitor/share';
 
 const ExportItem = () => {
   const [toast, setToast] = useState<{ message: string; color: 'success' | 'danger' | 'warning' } | null>(null);
@@ -70,6 +71,14 @@ const ExportItem = () => {
             path: filename,
             data: base64Data,
             directory: targetDirectory,
+          });
+
+          // Apriamo Share per dare all'utente possibilità di salvare/inviare
+          await Share.share({
+            title: 'Template manutenzioni',
+            text: 'Template pronto! Suggerimento: salva nella cartella "Download".',
+            url: result.uri,
+            dialogTitle: 'Condividi il file con…',
           });
 
           setToast({ message: `File salvato in: ${result.uri}`, color: 'success' });
