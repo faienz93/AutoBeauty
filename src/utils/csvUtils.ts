@@ -147,7 +147,7 @@ export const exportOnShare = async (
         dialogTitle: 'Condividi il file con…',
       });
 
-      return { message: `File salvato in: ${result.uri}`, color: 'success' };
+      return { message: `File salvato in correttamente!`, color: 'success' };
     } catch (error) {
       console.error('Errore durante il salvataggio del file:', error);
       return { message: 'Errore durante il salvataggio del file. Riprova.', color: 'warning' };

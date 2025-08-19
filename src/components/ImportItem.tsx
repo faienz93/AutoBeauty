@@ -6,7 +6,7 @@ import { Maintenance, MaintenanceType } from '../types/MaintenanceType';
 import { getDateToString, getStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { getUUIDKey } from '../utils/utils';
-import { exportOnShare } from '../utils/csvUtils';
+import { exportOnFileSystem, exportOnShare } from '../utils/csvUtils';
 
 const data: Maintenance[] = [
   {
@@ -86,7 +86,7 @@ const ImportItem = () => {
   const handleExport = async (event: React.MouseEvent) => {
     event.preventDefault();
     try {
-      const exportResult = await exportOnShare(data, 'template.csv');
+      const exportResult = await exportOnFileSystem(data, 'template.csv');
       setToast(exportResult);
     } catch (error) {
       console.error('Errore durante il download del template:', error);
