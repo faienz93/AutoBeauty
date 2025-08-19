@@ -5,8 +5,8 @@ export type MaintenanceType = 'Tagliando' | 'Revisione' | 'Gomme';
 export interface Maintenance extends PouchDbType {
   data: string;
   km: number;
-  tipo: MaintenanceType;
   costo: number;
+  tipo: MaintenanceType;
   note?: string;
 }
 
@@ -19,4 +19,8 @@ export const maintenanceTypes: MaintenanceType[] = ['Tagliando', 'Gomme', 'Revis
 //   Chilometraggio?: Maintenance;
 // };
 
-export type Stats = Partial<Record<MaintenanceType, Maintenance>>;
+export interface MaintenanceWithStatus extends Maintenance {
+  isNeeded: boolean;
+}
+
+export type Stats = Partial<Record<MaintenanceType, MaintenanceWithStatus>>;

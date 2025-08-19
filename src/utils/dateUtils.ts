@@ -7,7 +7,7 @@
  * @param date - Optional `Date` object to format. Defaults to the current date if not provided.
  * @returns The formatted date string in 'it-IT' locale.
  */
-export const getDateString = (date?: Date) => {
+export const getDateToString = (date?: Date) => {
   const d = date || new Date();
   return d.toLocaleDateString('it-IT', {
     year: 'numeric',
@@ -28,11 +28,11 @@ export const getDateString = (date?: Date) => {
  *
  * @example
  * ```typescript
- * parseStringToDate("10/05/25"); // May 10, 2025
- * parseStringToDate("10 mag 2025"); // May 10, 2025
+ * getStringToDate("10/05/25"); // May 10, 2025
+ * getStringToDate("10 mag 2025"); // May 10, 2025
  * ```
  */
-export const parseStringToDate = (dateStr: string): Date => {
+export const getStringToDate = (dateStr: string): Date => {
   // Prova prima il formato "DD/MM/YY"
   if (dateStr.includes('/')) {
     const [day, month, year] = dateStr.split('/').map(Number);
@@ -88,4 +88,9 @@ export const parseItalianNumber = (value: string | number): number => {
 
   // Restituisce 0 se la conversione fallisce
   return isNaN(result) ? 0 : result;
+};
+
+export const calculateDaysSinceLastMaintenance = (startStringDate: string): number => {
+  const maintenanceDate = getStringToDate(startStringDate);
+  return Math.floor((Date.now() - new Date(maintenanceDate).getTime()) / (1000 * 60 * 60 * 24));
 };

@@ -1,39 +1,45 @@
 import { useMemo } from 'react';
 import { useState } from 'react';
-import { Maintenance, Stats } from '../models/MaintenanceType';
-import { IonContent, IonText, IonPage, useIonViewWillEnter } from '@ionic/react';
+import { Maintenance, MaintenanceWithStatus, Stats } from '../types/MaintenanceType';
+import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Header } from '../components/Header';
 import { CardMaintenance } from '../components/CardMaintenance';
-import { Kilometers } from '../models/KilometersType';
-import { getDateString, parseStringToDate } from '../utils/dateUtils';
-import { LastKmFinded } from '../components/LastKmFinded';
+import { Kilometers } from '../types/KilometersType';
+import { calculateDaysSinceLastMaintenance, getDateToString, getStringToDate } from '../utils/dateUtils';
 import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
-import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/pouchDBUtils';
+import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/utils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
-import { Card } from '../ui/Card';
-import { calendar } from 'ionicons/icons';
+import PageHeader from '../ui/PageHeader';
 
 const HomePage = () => {
   const [lastManualKm, setLastManualKm] = useState<Kilometers>({
-    data: getDateString(),
+    data: getDateToString(),
     km: 0,
   });
+
   const fetchMaintenances = useFetchMaintenances();
   const fetchManualKm = useFetchManualKm();
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 
-  const maintenanceWithHigherKm = useMemo(() => {
+  const maxMaintenanceKm = useMemo(() => {
     return getMaintenanceWithHigherKm(maintenances);
-  }, [maintenances]) as Maintenance;
+  }, [maintenances]);
 
-  const groupedMaintenance = useMemo(() => {
-    return getGroupByMaintenanceByKm(maintenances);
-  }, [maintenances]) as Stats;
+  const groupByMaintenance = useMemo(() => {
+    const maxBetweenManualAndHighestKm = getMaxKmBetween(lastManualKm.km, maxMaintenanceKm);
+
+    return getGroupByMaintenanceByKm(maintenances, maxBetweenManualAndHighestKm);
+  }, [maintenances, lastManualKm.km, maxMaintenanceKm]) as Stats;
+
+  const isWrongKilometers = useMemo(() => lastManualKm.km < maxMaintenanceKm, [maxMaintenanceKm, lastManualKm.km]);
+
+  const isMaitenanceNeeded = useMemo(() => {
+    return Object.values(groupByMaintenance ?? {}).some((maintenance) => maintenance?.isNeeded);
+  }, [groupByMaintenance]);
 
   useIonViewWillEnter(() => {
     const loadData = async () => {
       try {
-        // Carica in parallelo per essere più veloce
         const [maintenancesData, manualKmData] = await Promise.all([fetchMaintenances(), fetchManualKm()]);
 
         setMaintenances(maintenancesData);
@@ -41,7 +47,7 @@ const HomePage = () => {
           _id: manualKmData._id || '',
           _rev: manualKmData._rev || '',
           km: manualKmData.km || 0,
-          data: getDateString(parseStringToDate(manualKmData.data)),
+          data: getDateToString(getStringToDate(manualKmData.data)),
         });
       } catch (error) {
         console.error('Error loading data:', error);
@@ -55,28 +61,19 @@ const HomePage = () => {
     <IonPage>
       <Header title="Home" showBackButton={false} />
       <IonContent>
-        {/* <IonCard style={{ flexGlow: 1, borderRadius: '0.5em', boxShadow: '0 4px 12px' }}>
-          <IonCardHeader>
-            <IonCardTitle>Data odierna</IonCardTitle>
-            <IonCardSubtitle>{getDateString()}</IonCardSubtitle>
-          </IonCardHeader>
-        </IonCard> */}
-        <Card title="Data Odierna" subtitle={getDateString()} layout={{ icon: { ionIcon: calendar } }} />
-        <LastKmFinded lastManualKm={lastManualKm} maintenanceWithHigherKm={maintenanceWithHigherKm} />
-        {groupedMaintenance && Object.keys(groupedMaintenance).length == 0 ? (
-          <IonText color="secondary">
-            <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
-          </IonText>
-        ) : (
-          Object.entries(groupedMaintenance ?? {}).map(([category, maintenance]) => (
-            <CardMaintenance
-              key={category}
-              category={category}
-              maintenance={maintenance}
-              maxKm={getMaxKmBetween(lastManualKm, maintenanceWithHigherKm as Maintenance).km}
-            />
-          ))
-        )}
+        <PageHeader
+          totalMaintenances={maintenances.length}
+          lastManualKm={lastManualKm.km}
+          maxMaintenanceKm={maxMaintenanceKm}
+          daysSinceLastMaintenance={maintenances.length > 0 ? calculateDaysSinceLastMaintenance(maintenances[0]?.data) : 0}
+          isMaitenanceNeeded={isMaitenanceNeeded}
+          hasMaintenances={maintenances.length > 0}
+          isWrongKilometers={isWrongKilometers}>
+          {maintenances.length > 0 &&
+            Object.entries(groupByMaintenance ?? {}).map(([category, maintenance]) => (
+              <CardMaintenance key={category} category={category} maintenance={maintenance as MaintenanceWithStatus} />
+            ))}
+        </PageHeader>
       </IonContent>
     </IonPage>
   );

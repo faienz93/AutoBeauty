@@ -1,7 +1,7 @@
 import { RouteComponentProps } from 'react-router-dom';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { useEffect, useState } from 'react';
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance } from '../types/MaintenanceType';
 import { IonToast, IonPage, useIonViewWillLeave } from '@ionic/react';
 import { Header } from '../components/Header';
 import { FormMaintenance } from '../components/FormMaintenance';
@@ -59,7 +59,7 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
     <IonPage>
       <Header title="Modifica Manutenzione" />
 
-      <FormMaintenance editData={item} onSubmit={handleSubmit}>
+      <FormMaintenance editData={item} onChangeFormSumbission={handleSubmit}>
         <IonToast
           isOpen={toastOpen && isSuccess}
           onDidDismiss={() => setToastOpen(false)}

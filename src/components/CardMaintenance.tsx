@@ -1,12 +1,11 @@
-import { Maintenance } from '../models/MaintenanceType';
+import { Maintenance, MaintenanceWithStatus } from '../types/MaintenanceType';
 import { useHistory } from 'react-router-dom';
 import { useMaintenanceCardIcon } from '../hooks/useMaitenanceCardIcon';
-import { isMaintenanceNeeded } from '../utils/carUtils';
-import { Card } from '../ui/Card';
+import { CardMaitenanceDetail } from '../ui/CardMaitenanceDetail';
 import { useMaintenanceCardBackground } from '../hooks/useMaintenanceCardBackground';
 import { ReactNode } from 'react';
 
-export const CardMaintenance = ({ category, maintenance, maxKm }: { category: string; maintenance: Maintenance; maxKm: number }) => {
+export const CardMaintenance = ({ category, maintenance }: { category: string; maintenance: MaintenanceWithStatus }) => {
   const history = useHistory();
   // https://stackoverflow.com/a/59464381/4700162
   const handleEdit = (item: Maintenance) => {
@@ -15,12 +14,12 @@ export const CardMaintenance = ({ category, maintenance, maxKm }: { category: st
     });
   };
 
-  const diffKm = maxKm - maintenance.km;
+  const km = typeof maintenance.km === 'number' && maintenance.km > 1000 ? maintenance.km.toLocaleString('it-IT') : maintenance.km;
 
   const content: ReactNode = (
     <>
       <span>
-        <b>KM:</b> {String(maintenance.km)}
+        <b>KM:</b> {String(km)}
       </span>
 
       <span>
@@ -30,10 +29,8 @@ export const CardMaintenance = ({ category, maintenance, maxKm }: { category: st
     </>
   );
 
-  const todo = isMaintenanceNeeded(category, diffKm, maintenance?.data);
-
   return (
-    <Card
+    <CardMaitenanceDetail
       key={maintenance._id}
       title={category}
       subtitle={maintenance?.data || 'N/A'}
@@ -42,7 +39,7 @@ export const CardMaintenance = ({ category, maintenance, maxKm }: { category: st
         icon: { iconImage: useMaintenanceCardIcon(maintenance.tipo) },
         backgroundImage: useMaintenanceCardBackground(maintenance.tipo),
       }}
-      status={todo ? 'urgent' : 'up-to-date'}
+      status={maintenance.isNeeded ? 'urgent' : 'up-to-date'}
       onEdit={() => handleEdit(maintenance)}
     />
   );

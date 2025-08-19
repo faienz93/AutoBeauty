@@ -1,8 +1,8 @@
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonIcon, IonThumbnail } from '@ionic/react';
-import './Card.css';
+import './CardMaitenanceDetail.css';
 import { checkmarkDoneCircle, closeCircle } from 'ionicons/icons';
 
-interface CardProps {
+interface CardMaitenanceDetailProps {
   title: string;
   subtitle: string;
   content?: string | React.ReactNode;
@@ -19,7 +19,7 @@ interface CardProps {
 }
 
 // https://forum.ionicframework.com/t/ion-card-design-weather-card/135329
-export const Card: React.FC<CardProps> = ({ title, subtitle, content, status, layout = {}, onEdit }) => {
+export const CardMaitenanceDetail: React.FC<CardMaitenanceDetailProps> = ({ title, subtitle, content, status, layout = {}, onEdit }) => {
   const { color, icon: { iconImage, ionIcon } = {}, backgroundImage } = layout;
 
   const isClickable = !!onEdit;
