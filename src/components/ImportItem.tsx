@@ -12,12 +12,6 @@ import { convertBlobToBase64, downloadFile } from '../utils/csvUtils';
 import { FileTransfer } from '@capacitor/file-transfer';
 import { Device } from '@capacitor/device';
 
-const logDeviceInfo = async () => {
-  const info = await Device.getInfo();
-
-  console.log(info);
-};
-
 const data = [
   {
     data: '6 gen 2022',
@@ -43,8 +37,6 @@ const ImportItem = () => {
   const [toast, setToast] = useState<{ message: string; color: 'success' | 'danger' | 'warning' } | null>(null);
   const [label, setLabel] = useState('Nessun File scelto');
   const csvService = new CsvService();
-  console.log('CIAOOOO');
-  logDeviceInfo();
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const selectedFile = event.target.files?.[0] || null;
@@ -128,13 +120,13 @@ const ImportItem = () => {
         }
 
         // Scrittura file
-        await Filesystem.writeFile({
+        const result = await Filesystem.writeFile({
           path: filename,
           data: base64Data,
           directory: targetDirectory,
         });
 
-        setToast({ message: 'File salvato con successo!', color: 'success' });
+        setToast({ message: `File salvato in: ${result.uri}`, color: 'success' });
 
         // Progress events
         FileTransfer.addListener('progress', (progress) => {
@@ -142,11 +134,13 @@ const ImportItem = () => {
         });
       } else {
         // Web browser: download classico
-        await downloadFile(filename, csvDataBlob);
+        downloadFile(filename, csvDataBlob).then(() => {
+          setToast({ message: `File salvato correttamente`, color: 'success' });
+        });
       }
     } catch (error) {
       console.error('Errore durante il download del template:', error);
-      setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
+      setToast({ message: "Errore durante l'operazione.", color: 'danger' });
     }
   };
 

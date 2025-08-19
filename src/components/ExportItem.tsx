@@ -8,9 +8,10 @@ import { getMaintenanceKey } from '../utils/pouchDBUtils';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
 import { convertBlobToBase64, downloadFile } from '../utils/csvUtils';
+import { Device } from '@capacitor/device';
 
 const ExportItem = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [toast, setToast] = useState<{ message: string; color: 'success' | 'danger' | 'warning' } | null>(null);
   const [noData, setNoData] = useState(false);
 
   const db = useMaintenanceDb();
@@ -44,30 +45,46 @@ const ExportItem = () => {
         const permissionResult = await Filesystem.checkPermissions();
 
         if (permissionResult.publicStorage !== 'granted') {
-          // Richiedi i permessi se non sono stati concessi
-          await Filesystem.requestPermissions();
+          const permissionRequest = await Filesystem.requestPermissions();
+          if (permissionRequest.publicStorage !== 'granted') {
+            console.error("Permesso di salvataggio non concesso dall'utente.");
+            setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
+            return;
+          }
+        }
+
+        const deviceInfo = await Device.getInfo();
+        const androidVersion = parseInt(deviceInfo.osVersion || '0', 10);
+
+        let targetDirectory: Directory = Directory.Documents;
+        if (deviceInfo.platform === 'android') {
+          if (androidVersion <= 9) {
+            targetDirectory = Directory.ExternalStorage;
+          } else {
+            targetDirectory = Directory.Documents;
+          }
         }
 
         try {
-          await Filesystem.writeFile({
+          const result = await Filesystem.writeFile({
             path: filename,
             data: base64Data,
-            directory: Directory.Data,
+            directory: targetDirectory,
           });
 
-          setIsSuccess((prevValue) => !prevValue);
+          setToast({ message: `File salvato in: ${result.uri}`, color: 'success' });
         } catch (error) {
           console.error('Errore durante il salvataggio del file:', error);
-          setIsSuccess(false);
+          setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
         }
       } else {
         downloadFile(filename, csvDataBlob).then(() => {
-          setIsSuccess((prevValue) => !prevValue);
+          setToast({ message: `File salvato correttamente`, color: 'success' });
         });
       }
     } catch (error) {
       console.error('Error fetching maintenances:', error);
-      setIsSuccess(false);
+      setToast({ message: "Errore durante l'operazione.", color: 'danger' });
     }
   };
 
@@ -91,13 +108,7 @@ const ExportItem = () => {
         onDidDismiss={() => setNoData((prevValue) => !prevValue)}
         message="Non ci sono dati da esportare."
         buttons={['Ok!']}></IonAlert>
-      <IonToast
-        isOpen={isSuccess}
-        onDidDismiss={() => setIsSuccess((prevValue) => !prevValue)}
-        message={isSuccess ? 'Esportazione avvenuto con successo' : "Errore durante l'esportazione"}
-        duration={3000}
-        color={isSuccess ? 'success' : 'danger'}
-      />
+      <IonToast isOpen={toast !== null} onDidDismiss={() => setToast(null)} message={toast?.message} duration={3000} color={toast?.color} />
     </>
   );
 };
