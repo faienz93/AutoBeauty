@@ -31,7 +31,12 @@ export const ListItem = memo(({ maintenance, onDelete }: ListItemProps) => {
 
   const handleDeleteMaintenance = async (maintenanceId: string) => {
     try {
-      const doc = await db.get(maintenanceId.toString());
+      const doc = await db.get<Maintenance>(maintenanceId.toString());
+
+      if (!doc._id || !doc._rev) {
+        throw new Error('Documento non valido, manca _id o _rev');
+      }
+
       await db.remove(doc);
 
       onDelete();

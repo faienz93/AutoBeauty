@@ -43,7 +43,7 @@ const NewManualKmPage: React.FC = () => {
 
   useEffect(() => {
     dbKm
-      .get(manualKmKey)
+      .get<Kilometers>(manualKmKey)
       .then((fetched) => {
         reset({
           _rev: fetched._rev ?? undefined,

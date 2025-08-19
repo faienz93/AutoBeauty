@@ -87,7 +87,7 @@ export abstract class PouchDbService {
     }
   }
 
-  async remove(doc: PouchDB.Core.RemoveDocument): Promise<PouchDB.Core.Response> {
+  async remove(doc: any): Promise<PouchDB.Core.Response> {
     try {
       return await this.db.remove(doc);
     } catch (error) {
