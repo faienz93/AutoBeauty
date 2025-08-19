@@ -7,24 +7,26 @@ export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
 
   const fetchManualKm = async (): Promise<Kilometers> => {
     // REF: https://pouchdb.com/api.html#create_document
-    let lastKm: Kilometers = {
-      _id: 'manual-km',
-      // _rev: '',
-      data: getDateToString(),
-      km: 0,
-    };
 
-    const searchLastManualKm = await dbKm.get<Kilometers>('manual-km');
-    if (searchLastManualKm) {
-      lastKm = {
-        _id: searchLastManualKm._id || '',
+    try {
+      const searchLastManualKm = await dbKm.get<Kilometers>('manual-km');
+
+      return {
+        _id: searchLastManualKm._id || 'manual-km',
         _rev: searchLastManualKm._rev || '',
         km: searchLastManualKm.km || 0,
         data: getDateToString(getStringToDate(searchLastManualKm.data)),
       };
-    }
+    } catch (err: any) {
+      console.error('No lastKm found, using default');
+      console.error(err);
 
-    return lastKm;
+      return {
+        _id: 'manual-km',
+        km: 0,
+        data: getDateToString(new Date()),
+      };
+    }
   };
 
   return fetchManualKm;

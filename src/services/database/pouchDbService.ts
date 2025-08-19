@@ -58,12 +58,7 @@ export abstract class PouchDbService {
   }
 
   async get<T extends object>(id: string): Promise<T> {
-    try {
-      return await this.db.get(id);
-    } catch (error) {
-      console.error(`Error getting document with id ${id}:`, error);
-      throw new Error(`Error getting document with id ${id}: ${error}`);
-    }
+    return await this.db.get(id);
   }
 
   async allDocs<T extends object>(options?: PouchDB.Core.AllDocsOptions): Promise<PouchDB.Core.AllDocsResponse<T>> {
