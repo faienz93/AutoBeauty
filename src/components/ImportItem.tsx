@@ -113,13 +113,7 @@ const ImportItem = () => {
             <IonIcon icon={cloudUpload} slot="start" />
           </IonButton>
           {/* REF: https://forum.ionicframework.com/t/ioninput-type-file/205203/2 */}
-          <input
-            style={{ display: 'none' }}
-            ref={inputRef}
-            type="file"
-            accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            onChange={handleFileChange}
-          />
+          <input style={{ display: 'none' }} ref={inputRef} type="file" accept=".csv,text/csv" onChange={handleFileChange} />
           <IonItem lines="none" className="ion-margin-bottom">
             <IonLabel>
               <strong>File Selezionato:</strong> {label}
