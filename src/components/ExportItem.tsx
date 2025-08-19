@@ -7,58 +7,16 @@ import { downloadOutline } from 'ionicons/icons';
 import { getMaintenanceKey } from '../utils/utils';
 import { Capacitor } from '@capacitor/core';
 import { Filesystem, Directory } from '@capacitor/filesystem';
+import { convertBlobToBase64, downloadFile } from '../utils/csvUtils';
+import { Device } from '@capacitor/device';
+import { Share } from '@capacitor/share';
 
 const ExportItem = () => {
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [toast, setToast] = useState<{ message: string; color: 'success' | 'danger' | 'warning' } | null>(null);
   const [noData, setNoData] = useState(false);
 
   const db = useMaintenanceDb();
   const csvService = new CsvService();
-
-  const convertBlobToBase64 = (blob: Blob) =>
-    new Promise((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onerror = reject;
-      reader.onload = () => {
-        resolve(reader.result);
-      };
-      reader.readAsDataURL(blob);
-    });
-
-  const downloadFile = (filename: string, data: Blob): Promise<boolean> => {
-    return new Promise((resolve, reject) => {
-      try {
-        // REF: https://dev.to/graciesharma/implementing-csv-data-export-in-react-without-external-libraries-3030
-        const url = window.URL.createObjectURL(data);
-        const link = document.createElement('a');
-
-        link.href = url;
-        link.setAttribute('download', filename);
-
-        // Add event listeners to track success/failure
-        link.addEventListener('click', () => {
-          setTimeout(() => {
-            // Cleanup
-            document.body.removeChild(link);
-            window.URL.revokeObjectURL(url);
-            resolve(true);
-          }, 100);
-        });
-
-        link.addEventListener('error', (error) => {
-          // Cleanup
-          document.body.removeChild(link);
-          window.URL.revokeObjectURL(url);
-          reject(error);
-        });
-
-        document.body.appendChild(link);
-        link.click();
-      } catch (error) {
-        reject(error);
-      }
-    });
-  };
 
   const handleExport = async () => {
     try {
@@ -88,30 +46,54 @@ const ExportItem = () => {
         const permissionResult = await Filesystem.checkPermissions();
 
         if (permissionResult.publicStorage !== 'granted') {
-          // Richiedi i permessi se non sono stati concessi
-          await Filesystem.requestPermissions();
+          const permissionRequest = await Filesystem.requestPermissions();
+          if (permissionRequest.publicStorage !== 'granted') {
+            console.error("Permesso di salvataggio non concesso dall'utente.");
+            setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
+            return;
+          }
+        }
+
+        const deviceInfo = await Device.getInfo();
+        const androidVersion = parseInt(deviceInfo.osVersion || '0', 10);
+
+        let targetDirectory: Directory = Directory.Documents;
+        if (deviceInfo.platform === 'android') {
+          if (androidVersion <= 9) {
+            targetDirectory = Directory.ExternalStorage;
+          } else {
+            targetDirectory = Directory.Documents;
+          }
         }
 
         try {
-          await Filesystem.writeFile({
+          const result = await Filesystem.writeFile({
             path: filename,
             data: base64Data,
-            directory: Directory.Data,
+            directory: targetDirectory,
           });
 
-          setIsSuccess((prevValue) => !prevValue);
+          // Apriamo Share per dare all'utente possibilità di salvare/inviare
+          await Share.share({
+            title: 'Template manutenzioni',
+            text: 'Template pronto! Suggerimento: salva nella cartella "Download".',
+            url: result.uri,
+            dialogTitle: 'Condividi il file con…',
+          });
+
+          setToast({ message: `File salvato in: ${result.uri}`, color: 'success' });
         } catch (error) {
           console.error('Errore durante il salvataggio del file:', error);
-          setIsSuccess(false);
+          setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
         }
       } else {
         downloadFile(filename, csvDataBlob).then(() => {
-          setIsSuccess((prevValue) => !prevValue);
+          setToast({ message: `File salvato correttamente`, color: 'success' });
         });
       }
     } catch (error) {
       console.error('Error fetching maintenances:', error);
-      setIsSuccess(false);
+      setToast({ message: "Errore durante l'operazione.", color: 'danger' });
     }
   };
 
@@ -135,13 +117,7 @@ const ExportItem = () => {
         onDidDismiss={() => setNoData((prevValue) => !prevValue)}
         message="Non ci sono dati da esportare."
         buttons={['Ok!']}></IonAlert>
-      <IonToast
-        isOpen={isSuccess}
-        onDidDismiss={() => setIsSuccess((prevValue) => !prevValue)}
-        message={isSuccess ? 'Esportazione avvenuto con successo' : "Errore durante l'esportazione"}
-        duration={3000}
-        color={isSuccess ? 'success' : 'danger'}
-      />
+      <IonToast isOpen={toast !== null} onDidDismiss={() => setToast(null)} message={toast?.message} duration={3000} color={toast?.color} />
     </>
   );
 };

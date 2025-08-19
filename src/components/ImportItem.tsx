@@ -1,18 +1,40 @@
 import React, { useRef, useState } from 'react';
-import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonInput, IonItem, IonLabel, IonList, IonToast } from '@ionic/react';
-import { addOutline, cloudUpload } from 'ionicons/icons';
+import { IonButton, IonCard, IonCardContent, IonCardHeader, IonCardTitle, IonIcon, IonItem, IonLabel, IonToast } from '@ionic/react';
+import { addOutline, cloudUpload, informationCircle } from 'ionicons/icons';
 import { CsvService } from '../services/excel/csvParser';
 import { Maintenance, MaintenanceType } from '../types/MaintenanceType';
 import { getDateToString, getStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { getUUIDKey } from '../utils/utils';
+import { Capacitor } from '@capacitor/core';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { convertBlobToBase64, downloadFile } from '../utils/csvUtils';
+import { FileTransfer } from '@capacitor/file-transfer';
+import { Device } from '@capacitor/device';
+
+const data = [
+  {
+    data: '6 gen 2022',
+    km: 83938,
+    tipo: 'Gomme',
+    costo: 30,
+    note: 'Esempio di nota',
+  },
+  {
+    data: '21 ago 2019',
+    km: 62000,
+    tipo: 'Tagliando',
+    costo: 50,
+    note: '',
+  },
+];
 
 const ImportItem = () => {
   const inputRef = useRef<HTMLInputElement>(null);
   const db = useMaintenanceDb();
 
   const [file, setFile] = useState<File | null>(null);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [toast, setToast] = useState<{ message: string; color: 'success' | 'danger' | 'warning' } | null>(null);
   const [label, setLabel] = useState('Nessun File scelto');
   const csvService = new CsvService();
 
@@ -50,7 +72,7 @@ const ImportItem = () => {
 
       const result = await db.bulkDocs(convertedItems);
       if (result) {
-        setIsSuccess((prevValue) => !prevValue);
+        setToast({ message: 'File salvato con successo!', color: 'success' });
         setFile(null);
         setLabel('Nessun File scelto');
         if (inputRef.current) {
@@ -59,9 +81,66 @@ const ImportItem = () => {
       }
     } catch (error) {
       console.error(error);
-      setIsSuccess(false);
+      setToast({ message: "Errore durante l'operazione.", color: 'danger' });
       setFile(null);
       setLabel('Nessun File scelto');
+    }
+  };
+
+  const handleTemplateDownload = async (event: React.MouseEvent) => {
+    event.preventDefault();
+    try {
+      const csvDataBlob = await csvService.exportCsvWithBlob(data as Maintenance[], ['data', 'km', 'tipo', 'costo', 'note']);
+      const filename = `template_manutenzioni.csv`;
+
+      if (Capacitor.isNativePlatform()) {
+        const base64Data = (await convertBlobToBase64(csvDataBlob)) as string;
+
+        const deviceInfo = await Device.getInfo();
+        const androidVersion = parseInt(deviceInfo.osVersion || '0', 10);
+
+        let targetDirectory: Directory = Directory.Documents;
+        if (deviceInfo.platform === 'android') {
+          if (androidVersion <= 9) {
+            targetDirectory = Directory.ExternalStorage;
+          } else {
+            targetDirectory = Directory.Documents;
+          }
+        }
+
+        const permissionResult = await Filesystem.checkPermissions();
+
+        if (permissionResult.publicStorage !== 'granted') {
+          const permissionRequest = await Filesystem.requestPermissions();
+          if (permissionRequest.publicStorage !== 'granted') {
+            console.error("Permesso di salvataggio non concesso dall'utente.");
+            setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
+            return;
+          }
+        }
+
+        // Scrittura file
+        const result = await Filesystem.writeFile({
+          path: filename,
+          data: base64Data,
+          directory: targetDirectory,
+        });
+
+        setToast({ message: `File salvato in: ${result.uri}`, color: 'success' });
+
+        // Progress events
+        FileTransfer.addListener('progress', (progress) => {
+          console.log(`Downloaded ${progress.bytes} of ${progress.contentLength}`);
+        });
+      } else {
+        // Web browser: download classico
+        downloadFile(filename, csvDataBlob).then(() => {
+          setToast({ message: `File salvato correttamente`, color: 'success' });
+        });
+      }
+    } catch (error) {
+      console.error('Errore durante il download del template:', error);
+      setToast({ message: "Errore durante l'operazione.", color: 'danger' });
     }
   };
 
@@ -71,8 +150,15 @@ const ImportItem = () => {
         <IonCardHeader>
           <IonCardTitle>Importa</IonCardTitle>
         </IonCardHeader>
+
         <IonCardContent>
           <p className="ion-padding-bottom">Seleziona un file per importare i tuoi dati preesistenti</p>
+          <p className="ion-padding-bottom">
+            <IonIcon icon={informationCircle} style={{ verticalAlign: 'middle' }} /> Non sai come formattare il file?{' '}
+            <a href="#" onClick={handleTemplateDownload} style={{ fontWeight: 'bold' }}>
+              Scarica il template
+            </a>
+          </p>
           <IonButton expand="block" color={'secondary'} onClick={() => openFileDialog()} className="ion-margin-bottom">
             <IonIcon icon={cloudUpload} slot="start" />
           </IonButton>
@@ -96,13 +182,7 @@ const ImportItem = () => {
           </IonButton>
         </IonCardContent>
       </IonCard>
-      <IonToast
-        isOpen={isSuccess}
-        onDidDismiss={() => setIsSuccess((prevValue) => !prevValue)}
-        message={isSuccess ? 'Caricamento avvenuto con successo' : 'Errore durante il caricamento'}
-        duration={3000}
-        color={isSuccess ? 'success' : 'danger'}
-      />
+      <IonToast isOpen={toast !== null} onDidDismiss={() => setToast(null)} message={toast?.message} duration={3000} color={toast?.color} />
     </>
   );
 };
