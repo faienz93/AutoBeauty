@@ -40,7 +40,7 @@ const ImportItem = () => {
   const db = useMaintenanceDb();
 
   const [file, setFile] = useState<File | null>(null);
-  const [isSuccess, setIsSuccess] = useState(false);
+  const [toast, setToast] = useState<{ message: string; color: 'success' | 'danger' | 'warning' } | null>(null);
   const [label, setLabel] = useState('Nessun File scelto');
   const csvService = new CsvService();
   console.log('CIAOOOO');
@@ -80,7 +80,7 @@ const ImportItem = () => {
 
       const result = await db.bulkDocs(convertedItems);
       if (result) {
-        setIsSuccess((prevValue) => !prevValue);
+        setToast({ message: 'File salvato con successo!', color: 'success' });
         setFile(null);
         setLabel('Nessun File scelto');
         if (inputRef.current) {
@@ -89,7 +89,7 @@ const ImportItem = () => {
       }
     } catch (error) {
       console.error(error);
-      setIsSuccess(false);
+      setToast({ message: "Errore durante l'operazione.", color: 'danger' });
       setFile(null);
       setLabel('Nessun File scelto');
     }
@@ -104,31 +104,49 @@ const ImportItem = () => {
       if (Capacitor.isNativePlatform()) {
         const base64Data = (await convertBlobToBase64(csvDataBlob)) as string;
 
+        const deviceInfo = await Device.getInfo();
+        const androidVersion = parseInt(deviceInfo.osVersion || '0', 10);
+
+        let targetDirectory: Directory = Directory.Documents;
+        if (deviceInfo.platform === 'android') {
+          if (androidVersion <= 9) {
+            targetDirectory = Directory.ExternalStorage;
+          } else {
+            targetDirectory = Directory.Documents;
+          }
+        }
+
         const permissionResult = await Filesystem.checkPermissions();
 
         if (permissionResult.publicStorage !== 'granted') {
           const permissionRequest = await Filesystem.requestPermissions();
           if (permissionRequest.publicStorage !== 'granted') {
             console.error("Permesso di salvataggio non concesso dall'utente.");
+            setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
             return;
           }
         }
 
+        // Scrittura file
         await Filesystem.writeFile({
           path: filename,
           data: base64Data,
-          directory: Directory.Documents,
+          directory: targetDirectory,
         });
+
+        setToast({ message: 'File salvato con successo!', color: 'success' });
 
         // Progress events
         FileTransfer.addListener('progress', (progress) => {
           console.log(`Downloaded ${progress.bytes} of ${progress.contentLength}`);
         });
       } else {
+        // Web browser: download classico
         await downloadFile(filename, csvDataBlob);
       }
     } catch (error) {
       console.error('Errore durante il download del template:', error);
+      setToast({ message: 'Permesso negato. Riprova.', color: 'warning' });
     }
   };
 
@@ -170,13 +188,7 @@ const ImportItem = () => {
           </IonButton>
         </IonCardContent>
       </IonCard>
-      <IonToast
-        isOpen={isSuccess}
-        onDidDismiss={() => setIsSuccess((prevValue) => !prevValue)}
-        message={isSuccess ? 'Caricamento avvenuto con successo' : 'Errore durante il caricamento'}
-        duration={3000}
-        color={isSuccess ? 'success' : 'danger'}
-      />
+      <IonToast isOpen={toast !== null} onDidDismiss={() => setToast(null)} message={toast?.message} duration={3000} color={toast?.color} />
     </>
   );
 };
