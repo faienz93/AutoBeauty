@@ -46,8 +46,8 @@ function ListCarMaintenance() {
         ) : (
           <Jumbotron>
             <IonList inset={true} style={{ backgroundColor: 'transparent' }}>
-              {maintenances.map((item, index) => (
-                <ListItem key={index} maintenance={item} onDelete={fetchMaintenances} />
+              {maintenances.map((item) => (
+                <ListItem key={item._id} maintenance={item} onDelete={fetchMaintenances} />
               ))}
             </IonList>
           </Jumbotron>
