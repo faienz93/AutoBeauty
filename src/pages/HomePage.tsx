@@ -1,159 +1,81 @@
-import { useContext, useEffect } from 'react';
+import { useMemo } from 'react';
 import { useState } from 'react';
-import { Maintenance, Stats } from '../models/MaintenanceType';
-import { IonContent, IonCard, IonText, IonButton, IonIcon } from '@ionic/react';
-import { IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
-import { Header } from './Header';
-import { KilometersDbCtx, MaintenanceDbCtx } from '../App';
-import { CardMaintenance } from './CardMaintenance';
-import { useHistory } from 'react-router-dom';
-import { pencil } from 'ionicons/icons';
-import { Kilometers } from '../models/KilometersType';
-import { getDateString, getMaintenanceKey } from '../services/utils';
-
-
+import { Maintenance, MaintenanceWithStatus, Stats } from '../types/MaintenanceType';
+import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
+import { Header } from '../components/Header';
+import { CardMaintenance } from '../components/CardMaintenance';
+import { Kilometers } from '../types/KilometersType';
+import { calculateDaysSinceLastMaintenance, getDateToString, getStringToDate } from '../utils/dateUtils';
+import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
+import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/utils';
+import { useFetchManualKm } from '../hooks/useFetchManualKm';
+import PageHeader from '../ui/PageHeader';
 
 const HomePage = () => {
-  const [countMaintenances, setCountMaintenances] = useState(0);
-  const [latestMaintenances, setLatestMaintenances] = useState({});
-  const [currentKm, setLastKm] = useState<Kilometers>({
-    data: getDateString(),
-    km: 0
+  const [lastManualKm, setLastManualKm] = useState<Kilometers>({
+    data: getDateToString(),
+    km: 0,
   });
-  const dbMaitenenance = useContext(MaintenanceDbCtx);
-  const dbKm = useContext(KilometersDbCtx);
-  const today = getDateString();
 
-  const history = useHistory();
+  const fetchMaintenances = useFetchMaintenances();
+  const fetchManualKm = useFetchManualKm();
+  const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 
-  // https://stackoverflow.com/a/59464381/4700162
-  const handleEdit = (lastKm: Kilometers) => {
-    history.push({
-      pathname: `/newkm/edit/${lastKm._id}`,
-      // search: '?update=true',  // query string
-      state: {  // location state
-        item: lastKm,
-      },
-    })
+  const maxMaintenanceKm = useMemo(() => {
+    return getMaintenanceWithHigherKm(maintenances);
+  }, [maintenances]);
 
-  };
-  const getLatestMaintenances = async () => {
+  const groupByMaintenance = useMemo(() => {
+    const maxBetweenManualAndHighestKm = getMaxKmBetween(lastManualKm.km, maxMaintenanceKm);
 
-    const searchMaintentenanceByKm = await dbMaitenenance.find<Maintenance>({
-      selector: {
-        km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-        _id: { $gt: null } // assicura che il documento esista
-      },
-      sort: [{ km: 'desc' }], // ordina per km decrescente
-      limit: 1, // prende solo il primo risultato
-      fields: ['km', 'data'] // opzionale: prende solo i campi necessari
-    });
+    return getGroupByMaintenanceByKm(maintenances, maxBetweenManualAndHighestKm);
+  }, [maintenances, lastManualKm.km, maxMaintenanceKm]) as Stats;
 
-    const searchLastKm = await dbKm.find<Kilometers>({
-      selector: {
-        km: { $gte: 0 }, // prende tutti i km maggiori o uguali a 0
-        _id: { $gt: null } // assicura che il documento esista
-      },
-      sort: [{ km: 'desc' }], // ordina per km decrescente
-      limit: 1, // prende solo il primo risultato
-      fields: ['km', 'data'] // opzionale: prende solo i campi necessari
-    });
+  const isWrongKilometers = useMemo(() => lastManualKm.km < maxMaintenanceKm, [maxMaintenanceKm, lastManualKm.km]);
 
-    // 1. Estraggo km e data con default a 0 / stringa odierna
-    const lastMaintenance = searchMaintentenanceByKm.docs[0] || {};
-    const lastKm = searchLastKm.docs[0] || {};
-    const kmMaint = lastMaintenance.km ?? 0;
-    const kmLast = lastKm.km ?? 0;
-    const dataMaint = lastMaintenance.data ?? getDateString();
-    const dataLast = lastKm.data ?? getDateString();
-    // 2. Calcolo il chilometraggio massimo
-    const maxKm = Math.max(kmMaint, kmLast);
-    // 3. Determino la data corrispondente al massimo
-    const maxData = (kmMaint >= kmLast) ? dataMaint : dataLast;
-    // 4. Imposto lo stato con il valore e la data massima
-    setLastKm({
-      km: maxKm,
-      data: maxData
-    });
-  };
+  const isMaitenanceNeeded = useMemo(() => {
+    return Object.values(groupByMaintenance ?? {}).some((maintenance) => maintenance?.isNeeded);
+  }, [groupByMaintenance]);
 
+  useIonViewWillEnter(() => {
+    const loadData = async () => {
+      try {
+        const [maintenancesData, manualKmData] = await Promise.all([fetchMaintenances(), fetchManualKm()]);
 
-
-  const countCarMaintenances = async () => {
-    const res = await dbMaitenenance.allDocs({ include_docs: true });
-    console.log('Fetched docs:', res);
-    const maintenance = res.rows.
-    filter((value) => {
-      // filtra solo i documenti che hanno une specifica chiave
-      let key = getMaintenanceKey()
-      return value.doc?._id.startsWith(key);
-    })
-    .map((row: any) => ({
-      id: row.doc._id,
-      ...row.doc
-    })) as Maintenance[];
-
-    const updatedMaintenances = maintenance.reduce((acc, result) => ({
-      ...acc,
-      [result.tipo]: result as Maintenance
-    }), {}) as Stats;
-
-    setLatestMaintenances(updatedMaintenances);
-    setCountMaintenances(maintenance.length);
-  };
-
-  useEffect(() => {
-    const fetchData = async () => {
-      await countCarMaintenances();
-      await getLatestMaintenances();
+        setMaintenances(maintenancesData);
+        setLastManualKm({
+          _id: manualKmData._id || '',
+          _rev: manualKmData._rev || '',
+          km: manualKmData.km || 0,
+          data: getDateToString(getStringToDate(manualKmData.data)),
+        });
+      } catch (error) {
+        console.error('Error loading data:', error);
+      }
     };
-    fetchData();
-  }, []);
 
-  useEffect(() => {
-    console.log("latestMaintenances updated:", latestMaintenances);
-  }, [latestMaintenances]);
-
+    loadData();
+  });
 
   return (
-    <>
+    <IonPage>
       <Header title="Home" showBackButton={false} />
       <IonContent>
-
-        <IonCard style={{ flexGrow: 1 }}>
-          <IonCardHeader>
-            <IonCardTitle>Data odierna</IonCardTitle>
-            <IonCardSubtitle>{today}</IonCardSubtitle>
-          </IonCardHeader>
-        </IonCard>
-
-        <IonCard color='tertiary'>
-          <IonCardHeader style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'start',
-            // justifyContent: 'space-between' 
-          }}>
-            <IonCardTitle>Ultimo Km</IonCardTitle>
-            <IonCardSubtitle>{currentKm.data}: <strong>{currentKm.km}</strong></IonCardSubtitle>
-            <IonButton style={{ color: 'white' }} fill="clear" onClick={() => handleEdit(currentKm)}>
-              <IonIcon icon={pencil} /> Modifica
-            </IonButton>
-          </IonCardHeader>
-        </IonCard>
-
-
-        {countMaintenances == 0 ? (
-          <IonText color="secondary">
-            <p style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>Non ci sono Manutenzioni. Aggiungine una 😉</p>
-          </IonText>
-        ) : (
-          Object.entries(latestMaintenances).map(([tipo, maintenance]) => (
-            <CardMaintenance key={tipo} tipo={tipo} maintenance={maintenance as Maintenance} currentKm={currentKm.km} />
-          ))
-        )}
+        <PageHeader
+          totalMaintenances={maintenances.length}
+          lastManualKm={lastManualKm.km}
+          maxMaintenanceKm={maxMaintenanceKm}
+          daysSinceLastMaintenance={maintenances.length > 0 ? calculateDaysSinceLastMaintenance(maintenances[0]?.data) : 0}
+          isMaitenanceNeeded={isMaitenanceNeeded}
+          hasMaintenances={maintenances.length > 0}
+          isWrongKilometers={isWrongKilometers}>
+          {maintenances.length > 0 &&
+            Object.entries(groupByMaintenance ?? {}).map(([category, maintenance]) => (
+              <CardMaintenance key={category} category={category} maintenance={maintenance as MaintenanceWithStatus} />
+            ))}
+        </PageHeader>
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 

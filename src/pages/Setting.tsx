@@ -1,23 +1,19 @@
-import { Header } from './Header';
-import { IonContent } from '@ionic/react';
-import ImportItem from './ImportItem';
-import ExportItem from './ExportItem';
-import DeleteAllItem from './DeleteAllItems';
-
-
+import { Header } from '../components/Header';
+import { IonContent, IonPage } from '@ionic/react';
+import ImportItem from '../components/ImportItem';
+import ExportItem from '../components/ExportItem';
+import DeleteAllItem from '../components/DeleteAllItems';
 
 const Setting = () => {
-  
-
   return (
-    <>
-      <Header title="Setting" />
+    <IonPage>
+      <Header title="Impostazioni" />
       <IonContent color="light">
         <ImportItem />
         <ExportItem />
         <DeleteAllItem />
       </IonContent>
-    </>
+    </IonPage>
   );
 };
 

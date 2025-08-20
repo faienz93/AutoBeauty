@@ -1,25 +1,12 @@
-const availableEnvironments = Object.keys(import.meta.env)
-  .filter((x) => x.startsWith("VITE_"))
-  .filter((x) => x.endsWith("_ENV_NAME"))
-  .map((x) => x.split("_")[1]);
-
 export const getEnv = () => {
-    const envName = availableEnvironments[0];
-    if (!envName) {
-        console.error(`Environment variable ${envName} is not defined`);
-        return;
-    }
-    
-    return {
-        apiKey: import.meta.env[`VITE_${envName}_API_KEY`],
-        authDomain: import.meta.env[`VITE_${envName}_AUTH_DOMAIN`],
-        projectId: import.meta.env[`VITE_${envName}_PROJECT_ID`],
-        storageBucket: import.meta.env[`VITE_${envName}_STORAGE_BUCKET`],
-        messagingSenderId: import.meta.env[`VITE_${envName}_MESSAGING_SENDER_ID`],
-        appId: import.meta.env[`VITE_${envName}_APP_ID`],
-        collection: import.meta.env[`VITE_${envName}_COLLECTION`],
-        sqlitedb: import.meta.env[`VITE_${envName}_SQLITE_DB`],
-        car_table: import.meta.env[`VITE_${envName}_CAR_TABLE`],
-        km_table: import.meta.env[`VITE_${envName}_CAR_TABLE`]
-    };
+  const envName = import.meta.env['VITE_ENV_NAME'];
+  if (!envName) {
+    console.error(`Environment variable ${envName} is not defined`);
+    return;
+  }
+
+  return {
+    car_table: import.meta.env[`VITE_${envName}_CAR_TABLE`],
+    km_table: import.meta.env[`VITE_${envName}_KM_TABLE`],
+  };
 };

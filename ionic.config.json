@@ -1,0 +1,7 @@
+{
+  "name": "AutoBeauty",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}

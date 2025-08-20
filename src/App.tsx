@@ -1,12 +1,11 @@
-import React from 'react';
-import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet } from '@ionic/react';
+import { IonTabs, IonTabBar, IonTabButton, IonIcon, IonLabel, IonRouterOutlet, IonApp } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 import '@ionic/react/css/core.css';
 
 import { setupIonicReact } from '@ionic/react';
 
 setupIonicReact();
-import { Route, Redirect } from 'react-router';
+import { Route, Redirect, useHistory } from 'react-router';
 
 /* Basic CSS for apps built with Ionic */
 import '@ionic/react/css/normalize.css';
@@ -36,80 +35,92 @@ import '@ionic/react/css/core.css';
 /* Theme variables */
 // import './theme/variables.css';
 
-import { homeOutline, addCircleOutline, listOutline, settingsOutline, speedometerOutline } from 'ionicons/icons';
+import { homeOutline, addCircleOutline, listOutline, settingsOutline, informationOutline, speedometerOutline } from 'ionicons/icons';
 import './tab.css';
 import ListCarMaintenance from './pages/ListCarMaintenance';
-import HomePage from './pages/HomePage';
-import ItemPage from './pages/ItemPage';
+
+import NewMaintenance from './pages/NewMaintenance';
 
 import { Capacitor } from '@capacitor/core';
 
-
-
 import Setting from './pages/Setting';
-import { getEnv } from './services/env';
-import KmPage from './pages/KmPage';
-import { MaintenanceDbService } from './services/database/MaintenanceDbService';
-import { KilometersDbService } from './services/database/LastKmDbService';
+import NewManualKmPage from './pages/NewManualKmPage';
 
+import HomePage from './pages/HomePage';
+import { DatabaseProvider } from './services/database/DatabaseProvider';
+import InfoPage from './pages/InfoPage';
+import UpdateMaitenance from './pages/UpdateMaitenance';
 
 setupIonicReact({ mode: 'md' });
-const envVar = getEnv();
-export const platform = Capacitor.getPlatform();
-export const MaintenanceDbCtx = React.createContext(new MaintenanceDbService(envVar?.car_table));
-export const KilometersDbCtx = React.createContext(new KilometersDbService(envVar?.km_table));
 
+export const platform = Capacitor.getPlatform();
+
+const MainTabs: React.FC = () => {
+  const history = useHistory();
+
+  return (
+    <IonTabs>
+      <IonRouterOutlet>
+        <Redirect exact path="/" to="/home" />
+        <Route path="/home" component={HomePage} exact={true} />
+        <Route path="/newItem" component={NewMaintenance} exact={true} />
+        <Route path="/newItem/edit/:id" component={UpdateMaitenance} exact={true} />
+        <Route path="/list" component={ListCarMaintenance} exact={true} />
+        <Route path="/newManualkm" component={NewManualKmPage} exact={true} />
+        <Route path="/settings" component={Setting} exact={true} />
+        <Route path="/info" component={InfoPage} exact={true} />
+      </IonRouterOutlet>
+
+      <IonTabBar slot="bottom">
+        <IonTabButton tab="home" href="/home">
+          <IonIcon icon={homeOutline} />
+          <IonLabel>Home</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab="list" href="/list">
+          <IonIcon icon={listOutline} />
+          <IonLabel>Lista</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton
+          tab="newItem"
+          onClick={() =>
+            history.push({
+              pathname: `/newItem`,
+            })
+          }>
+          <IonIcon icon={addCircleOutline} />
+          <IonLabel>Aggiungi</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab="newkm" href="/newManualkm">
+          <IonIcon icon={speedometerOutline} />
+          <IonLabel>KM</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab="settings" href="/settings">
+          <IonIcon icon={settingsOutline} />
+          <IonLabel>Impostazioni</IonLabel>
+        </IonTabButton>
+
+        <IonTabButton tab="info" href="/info">
+          <IonIcon icon={informationOutline} />
+          <IonLabel>Info</IonLabel>
+        </IonTabButton>
+      </IonTabBar>
+    </IonTabs>
+  );
+};
 
 function App() {
   return (
-
-    <MaintenanceDbCtx.Provider value={new MaintenanceDbService(envVar?.car_table)}>
-      <KilometersDbCtx.Provider value={new KilometersDbService(envVar?.km_table)}> 
-          <IonReactRouter>
-          <IonTabs>
-            <IonRouterOutlet>
-              <Redirect exact path="/" to="/home" />
-              <Route path="/home" render={() => <HomePage />} exact={true} />
-              <Route path="/newItem" render={() => <ItemPage />} exact={true} />
-              <Route path="/newItem/edit/:id" render={() => <ItemPage />} exact={true} />
-              <Route path="/list" render={() => <ListCarMaintenance />} exact={true} />
-              <Route path="/newkm" render={() => <KmPage />} exact={true} />
-              <Route path="/newkm/edit/:id" render={() => <KmPage />} exact={true} />
-              <Route path="/settings" render={() => <Setting />} exact={true} />
-            </IonRouterOutlet>
-
-            <IonTabBar slot="bottom">
-              <IonTabButton tab="home" href="/home">
-                <IonIcon icon={homeOutline} />
-                <IonLabel>Home</IonLabel>
-              </IonTabButton>
-
-              <IonTabButton tab="list" href="/list">
-                <IonIcon icon={listOutline} />
-                <IonLabel>List</IonLabel>
-              </IonTabButton>
-
-              <IonTabButton tab="newItem" href="/newItem">
-                <IonIcon icon={addCircleOutline} />
-                <IonLabel>Add</IonLabel>
-              </IonTabButton>
-
-              <IonTabButton tab="newkm" href="/newkm">
-                <IonIcon icon={speedometerOutline} />
-                <IonLabel>KM</IonLabel>
-              </IonTabButton>
-
-              <IonTabButton tab="settings" href="/settings">
-                <IonIcon icon={settingsOutline} />
-                <IonLabel>Setting</IonLabel>
-              </IonTabButton>
-            </IonTabBar>
-          </IonTabs>
+    <DatabaseProvider>
+      <IonApp>
+        <IonReactRouter>
+          <MainTabs />
         </IonReactRouter>
-      </KilometersDbCtx.Provider>
-    </MaintenanceDbCtx.Provider>
-
-
+      </IonApp>
+    </DatabaseProvider>
   );
 }
 
