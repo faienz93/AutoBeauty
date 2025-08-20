@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { MaintenanceType } from '../types/MaintenanceType';
 import carWorkshop from '../assets/car-workshop-unsplash.jpg';
 
@@ -8,16 +7,14 @@ import carMaintenance from '../assets/car-maintenance-unsplash.jpg';
 import tyreMaintenance from '../assets/tire-maintenance-unsplash.jpg';
 
 export const useMaintenanceCardBackground = (maintenanceType: MaintenanceType) => {
-  return useMemo(() => {
-    switch (maintenanceType) {
-      case 'Tagliando':
-        return carMaintenance;
-      case 'Gomme':
-        return tyreMaintenance;
-      case 'Revisione':
-        return carWorkshop;
-      default:
-        return carRevision;
-    }
-  }, [maintenanceType]);
+  switch (maintenanceType) {
+    case 'Tagliando':
+      return carMaintenance;
+    case 'Gomme':
+      return tyreMaintenance;
+    case 'Revisione':
+      return carWorkshop;
+    default:
+      return carRevision;
+  }
 };
