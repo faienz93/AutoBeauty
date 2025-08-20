@@ -103,6 +103,9 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 - [x] Fix Link of support
 - [ ] Add sentry for bug
 - [x] Added better icon for android
+- [ ] Fix loader when start the app for the first ime
+- [ ] Fix too heavy unsplash images
+- [ ] Fix Readme
 
 ---
 
