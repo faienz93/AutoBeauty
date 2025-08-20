@@ -1,3 +1,10 @@
+import { Capacitor } from '@capacitor/core';
+import { CsvService } from '../services/csv/csvParser';
+import { Maintenance } from '../types/MaintenanceType';
+import { Filesystem, Directory } from '@capacitor/filesystem';
+import { Device } from '@capacitor/device';
+import { Share } from '@capacitor/share';
+
 /**
  * Converts an array of objects into a CSV (Comma Separated Values) string.
  *
@@ -98,4 +105,111 @@ export const downloadFile = (filename: string, data: Blob): Promise<boolean> => 
       reject(error);
     }
   });
+};
+
+/**
+ * Generates a CSV file from maintenance data and returns it as a Blob and Base64 string.
+ * @param maintenance - An array of Maintenance objects to convert to CSV.
+ * @returns A Promise that resolves with an object containing the Blob and Base64 representation of the CSV.
+ */
+const generateCsvBase64 = async (maintenance: Maintenance[]): Promise<{ blob: Blob; base64: string }> => {
+  const csvService = new CsvService<Maintenance>();
+  const blob = await csvService.exportCsvWithBlob(maintenance, ['data', 'km', 'tipo', 'costo', 'note']);
+  const base64 = (await convertBlobToBase64(blob)) as string;
+  return { blob, base64 };
+};
+
+/**
+ * Exports maintenance data to a CSV file and allows sharing it on native platforms or downloading it in the browser.
+ * @param maintenance - An array of Maintenance objects to export.
+ * @param filename - The name of the CSV file (defaults to 'maintenance.csv').
+ * @returns A Promise that resolves with an object containing a message and a color indicating the outcome.
+ */
+
+export const exportOnShare = async (
+  maintenance: Maintenance[],
+  filename: string = 'template_manutenzioni.csv',
+): Promise<{ message: string; color: 'success' | 'warning' | 'danger' }> => {
+  const { blob, base64 } = await generateCsvBase64(maintenance);
+
+  if (Capacitor.isNativePlatform()) {
+    try {
+      const result = await Filesystem.writeFile({
+        path: filename,
+        data: base64,
+        directory: Directory.Cache,
+      });
+
+      await Share.share({
+        title: 'Template manutenzioni',
+        text: 'Template pronto! Suggerimento: salva nella cartella "Download".',
+        url: result.uri,
+        dialogTitle: 'Condividi il file con…',
+      });
+
+      return { message: `File salvato in correttamente!`, color: 'success' };
+    } catch (error) {
+      console.error('Errore durante il salvataggio del file:', error);
+      return { message: 'Errore durante il salvataggio del file. Riprova.', color: 'warning' };
+    }
+  } else {
+    await downloadFile(filename, blob);
+    return { message: `File salvato correttamente`, color: 'success' };
+  }
+};
+
+/**
+ * Exports maintenance data to a CSV file and saves it to the device's file system.
+ * On native platforms, it handles permission requests and platform-specific directory selection.
+ * In the browser, it triggers a download.
+ * @param maintenance - An array of Maintenance objects to export.
+ * @param filename - The name of the CSV file (defaults to 'maintenance.csv').
+ * @returns A Promise that resolves with an object containing a message and a color indicating the outcome.
+ */
+export const exportOnFileSystem = async (
+  maintenance: Maintenance[],
+  filename: string = 'template_manutenzioni.csv',
+): Promise<{ message: string; color: 'success' | 'warning' | 'danger' }> => {
+  const { blob: csvDataBlob, base64: base64Data } = await generateCsvBase64(maintenance);
+
+  if (Capacitor.isNativePlatform()) {
+    const permissionResult = await Filesystem.checkPermissions();
+
+    if (permissionResult.publicStorage !== 'granted') {
+      const permissionRequest = await Filesystem.requestPermissions();
+      if (permissionRequest.publicStorage !== 'granted') {
+        console.error("Permesso di salvataggio non concesso dall'utente.");
+
+        return { message: 'Permesso negato. Riprova.', color: 'warning' };
+      }
+    }
+
+    const deviceInfo = await Device.getInfo();
+    const androidVersion = parseInt(deviceInfo.osVersion || '0', 10);
+
+    let targetDirectory: Directory = Directory.Documents;
+    if (deviceInfo.platform === 'android') {
+      if (androidVersion <= 9) {
+        targetDirectory = Directory.ExternalStorage;
+      } else {
+        targetDirectory = Directory.Documents;
+      }
+    }
+
+    try {
+      const result = await Filesystem.writeFile({
+        path: filename,
+        data: base64Data,
+        directory: targetDirectory,
+      });
+
+      return { message: `File salvato in: ${result.uri}`, color: 'success' };
+    } catch (error) {
+      console.error('Errore durante il salvataggio del file:', error);
+      return { message: 'Permesso negato. Riprova.', color: 'warning' };
+    }
+  } else {
+    await downloadFile(filename, csvDataBlob);
+    return { message: `File salvato correttamente`, color: 'success' };
+  }
 };

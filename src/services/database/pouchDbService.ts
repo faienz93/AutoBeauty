@@ -1,4 +1,3 @@
-import { Capacitor } from '@capacitor/core';
 import PouchDB from 'pouchdb';
 import cordovaSqlitePlugin from 'pouchdb-adapter-cordova-sqlite';
 import PouchFind from 'pouchdb-find';
@@ -12,20 +11,7 @@ export interface PouchDbInfo extends PouchDB.Core.DatabaseInfo {
   update_seq: number | string;
 }
 
-export interface IPouchDbService {
-  getInfo(): Promise<PouchDbInfo>;
-  closeDatabase(): Promise<void>;
-  deleteDatabase(): Promise<void>;
-  put(doc: any): Promise<PouchDB.Core.Response>;
-  get(id: string): Promise<any>;
-  allDocs(options?: PouchDB.Core.AllDocsOptions): Promise<PouchDB.Core.AllDocsResponse<{}>>;
-  bulkDocs(docs: any[], options?: PouchDB.Core.BulkDocsOptions): Promise<(PouchDB.Core.Response | PouchDB.Core.Error)[]>;
-  remove(doc: any): Promise<PouchDB.Core.Response>;
-  find<T extends {}>(query: PouchDB.Find.FindRequest<T>): Promise<PouchDB.Find.FindResponse<T>>;
-}
-
-export abstract class PouchDbService implements IPouchDbService {
-  private platform = Capacitor.getPlatform();
+export abstract class PouchDbService {
   protected db!: PouchDB.Database;
   private dbName: string;
 
@@ -71,16 +57,11 @@ export abstract class PouchDbService implements IPouchDbService {
     }
   }
 
-  async get(id: string): Promise<any> {
-    try {
-      return await this.db.get(id);
-    } catch (error) {
-      // console.error(`Error getting document with id ${id}:`, error);
-      // throw new Error(`Error getting document with id ${id}: ${error}`);
-    }
+  async get<T extends object>(id: string): Promise<T> {
+    return await this.db.get(id);
   }
 
-  async allDocs(options?: PouchDB.Core.AllDocsOptions): Promise<PouchDB.Core.AllDocsResponse<{}>> {
+  async allDocs<T extends object>(options?: PouchDB.Core.AllDocsOptions): Promise<PouchDB.Core.AllDocsResponse<T>> {
     try {
       return await this.db.allDocs(options);
     } catch (error) {
@@ -89,7 +70,10 @@ export abstract class PouchDbService implements IPouchDbService {
     }
   }
 
-  async bulkDocs(docs: any[], options?: PouchDB.Core.BulkDocsOptions): Promise<(PouchDB.Core.Response | PouchDB.Core.Error)[]> {
+  async bulkDocs<T extends object>(
+    docs: PouchDB.Core.PutDocument<T>[],
+    options?: PouchDB.Core.BulkDocsOptions,
+  ): Promise<(PouchDB.Core.Response | PouchDB.Core.Error)[]> {
     try {
       return await this.db.bulkDocs(docs, options);
     } catch (error) {
@@ -127,7 +111,7 @@ export abstract class PouchDbService implements IPouchDbService {
     }
   }
 
-  async find<T extends {}>(query: PouchDB.Find.FindRequest<T>): Promise<PouchDB.Find.FindResponse<T>> {
+  async find<T extends object>(query: PouchDB.Find.FindRequest<T>): Promise<PouchDB.Find.FindResponse<T>> {
     try {
       if (!this.db.find) {
         throw new Error('PouchDB find plugin not initialized');

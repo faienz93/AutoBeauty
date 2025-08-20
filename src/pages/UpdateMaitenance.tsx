@@ -16,7 +16,7 @@ const UpdateMaintenance: React.FC<RouteComponentProps<{ id: string }>> = ({ matc
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    db.get(id)
+    db.get<Maintenance>(id)
       .then((fetched) => {
         setItem(fetched);
         setLoading(false);

@@ -8,23 +8,26 @@ export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
 
   const fetchMaintenances = async (): Promise<Maintenance[]> => {
     const res = await dbMaitenenance.allDocs({ include_docs: true });
-    const maintenance = res.rows
+    const maintenance: Maintenance[] = res.rows
       .filter((value) => {
         // filtra solo i documenti che hanno une specifica chiave
         const key = getMaintenanceKey();
         return value.doc?._id.startsWith(key);
       })
-      .map((row: any) => ({
-        id: row.doc._id,
-        ...row.doc,
-      }))
+      .map((row) => {
+        const doc = row.doc as Maintenance;
+        return {
+          ...doc,
+          id: doc._id,
+        };
+      })
       .sort((a: Maintenance, b: Maintenance) => {
         // Ordina per data decrescente
         return new Date(getStringToDate(b.data)).getTime() - new Date(getStringToDate(a.data)).getTime();
 
         // Oppure per km decrescente
         // return b.km - a.km;
-      }) as Maintenance[];
+      });
 
     return maintenance;
   };

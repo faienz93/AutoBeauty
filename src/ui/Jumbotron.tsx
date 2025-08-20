@@ -22,6 +22,7 @@ const Jumbotron = ({ children }: { children: React.ReactNode }) => {
           backgroundColor: 'rgba(255, 255, 255, 0.1)',
           borderRadius: '50%',
           zIndex: 1,
+          pointerEvents: 'none',
         }}
       />
       <div

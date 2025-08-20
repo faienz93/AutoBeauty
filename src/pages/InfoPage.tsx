@@ -13,7 +13,7 @@ import {
   IonLabel,
   IonButton,
 } from '@ionic/react';
-import { informationCircle, cloudUpload, create, list, speedometer, calculator, cafe, build, time, car } from 'ionicons/icons';
+import { cloudUpload, create, list, cafe, build, time, car } from 'ionicons/icons';
 
 const InfoPage: React.FC = () => {
   const openDonationLink = (platform: 'buymeacoffee' | 'paypal') => {
@@ -72,7 +72,7 @@ const InfoPage: React.FC = () => {
               <IonIcon icon={car} slot="start" />
               <IonLabel className="ion-text-wrap">
                 <h2>Gomme</h2>
-                <p>Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo cambio supera 40.000 km</p>
+                <p>Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo cambio supera 10.000 km</p>
               </IonLabel>
             </IonItem>
 
@@ -80,7 +80,10 @@ const InfoPage: React.FC = () => {
               <IonIcon icon={build} slot="start" />
               <IonLabel className="ion-text-wrap">
                 <h2>Tagliando</h2>
-                <p>Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo tagliando supera 15.000 km</p>
+                <p>
+                  Viene segnalato quando la differenza tra i km attuali e quelli dell'ultimo tagliando supera 15.000 km o se è trascorso un periodo di tempo
+                  superiore ai 2 anni
+                </p>
               </IonLabel>
             </IonItem>
 
