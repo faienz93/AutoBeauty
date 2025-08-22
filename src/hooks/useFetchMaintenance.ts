@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useMaintenanceDb } from './useDbContext';
 import { Maintenance } from '../types/MaintenanceType';
 import { getStringToDate } from '../utils/dateUtils';
@@ -6,7 +7,7 @@ import { getMaintenanceKey } from '../utils/utils';
 export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
   const dbMaitenenance = useMaintenanceDb();
 
-  const fetchMaintenances = async (): Promise<Maintenance[]> => {
+  const fetchMaintenances = useCallback(async (): Promise<Maintenance[]> => {
     const res = await dbMaitenenance.allDocs({ include_docs: true });
     const maintenance: Maintenance[] = res.rows
       .filter((value) => {
@@ -24,13 +25,10 @@ export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
       .sort((a: Maintenance, b: Maintenance) => {
         // Ordina per data decrescente
         return new Date(getStringToDate(b.data)).getTime() - new Date(getStringToDate(a.data)).getTime();
-
-        // Oppure per km decrescente
-        // return b.km - a.km;
       });
 
     return maintenance;
-  };
+  }, [dbMaitenenance]);
 
   return fetchMaintenances;
 };
