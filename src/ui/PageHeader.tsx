@@ -93,7 +93,7 @@ const PageHeader: React.FC<PageHeaderProp> = ({
           <StatusIndicator
             status={{
               text: `Il Km manuale (${lastKm} km) < del max (${maxMaintenanceKm} km).\nSi userà il maggiore.`,
-              color: colors.danger,
+              color: colors.secondary,
             }}
             textColor={colors.white}
           />
