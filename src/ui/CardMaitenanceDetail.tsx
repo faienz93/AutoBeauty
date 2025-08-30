@@ -29,7 +29,7 @@ export const CardMaitenanceDetail: React.FC<CardMaitenanceDetailProps> = ({ titl
       <IonCard color={color} className="my-ion-card" data-clickable={isClickable ? 'true' : 'false'} maintenance-state={status} onClick={onEdit}>
         {iconImage && (
           <IonThumbnail className="header-icon">
-            <img loading="lazy" src={iconImage as string} alt={iconImage || ''} />
+            <img loading="eager" src={iconImage as string} alt={iconImage || ''} />
           </IonThumbnail>
         )}
 
