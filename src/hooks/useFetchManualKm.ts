@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { Kilometers } from '../types/KilometersType';
 import { getDateToString, getStringToDate } from '../utils/dateUtils';
 import { useKilometersDb } from './useDbContext';
@@ -5,9 +6,7 @@ import { useKilometersDb } from './useDbContext';
 export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
   const dbKm = useKilometersDb();
 
-  const fetchManualKm = async (): Promise<Kilometers> => {
-    // REF: https://pouchdb.com/api.html#create_document
-
+  const fetchManualKm = useCallback(async (): Promise<Kilometers> => {
     try {
       const searchLastManualKm = await dbKm.get<Kilometers>('manual-km');
 
@@ -17,7 +16,7 @@ export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
         km: searchLastManualKm.km || 0,
         data: getDateToString(getStringToDate(searchLastManualKm.data)),
       };
-    } catch (err: any) {
+    } catch (err) {
       console.error('No lastKm found, using default');
       console.error(err);
 
@@ -27,7 +26,7 @@ export const useFetchManualKm = (): (() => Promise<Kilometers>) => {
         data: getDateToString(new Date()),
       };
     }
-  };
+  }, [dbKm]);
 
   return fetchManualKm;
 };

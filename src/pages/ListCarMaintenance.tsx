@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { IonContent, IonList, IonPage, useIonViewWillEnter } from '@ionic/react';
 import { Maintenance } from '../types/MaintenanceType';
 import { Header } from '../components/Header';
@@ -7,23 +7,33 @@ import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import NoMainteinance from '../ui/NoMaintenance';
 import { colors } from '../types/Color';
 import Jumbotron from '../ui/Jumbotron';
+import Loader from '../ui/Loader';
 
 function ListCarMaintenance() {
+  const [loading, setLoading] = useState(true);
   const fetchMaintenancesData = useFetchMaintenances();
   const [maintenances, setMaintenances] = useState<Maintenance[]>([]);
 
-  const fetchMaintenances = async () => {
+  const fetchMaintenances = useCallback(async () => {
     try {
       const data = await fetchMaintenancesData();
       setMaintenances(data);
     } catch (error) {
       console.error('Error fetching maintenances:', error);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [fetchMaintenancesData]);
+
+  useEffect(() => {
+    fetchMaintenances();
+  }, [fetchMaintenances]);
 
   useIonViewWillEnter(() => {
     fetchMaintenances();
   });
+
+  if (loading) return <Loader />;
 
   return (
     <IonPage>

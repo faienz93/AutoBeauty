@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">car-maintenance-app</string>
-    <string name="title_activity_main">car-maintenance-app</string>
-    <string name="package_name">car.maintenance.app</string>
-    <string name="custom_url_scheme">car.maintenance.app</string>
+    <string name="app_name">AutoBeauty</string>
+    <string name="title_activity_main">AutoBeauty</string>
+    <string name="package_name">auto.beauty.app</string>
+    <string name="custom_url_scheme">auto.beauty.app</string>
 </resources>
