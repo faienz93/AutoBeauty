@@ -1,4 +1,4 @@
-import { IonLoading } from '@ionic/react';
+import './Loader.css';
 
 const Loader = () => {
   return (
@@ -10,7 +10,8 @@ const Loader = () => {
         height: '100vh',
         fontSize: '18px',
       }}>
-      <IonLoading trigger="open-loading" message="Caricamento…" spinner="circles" />
+      {/* REF: https://codepen.io/mandelid/pen/kNBYLJ */}
+      <div id="loading"></div>
     </div>
   );
 };
