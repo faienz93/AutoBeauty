@@ -1,4 +1,4 @@
-package car.maintenance.app;
+package auto.beauty.app;
 
 import com.getcapacitor.BridgeActivity;
 
