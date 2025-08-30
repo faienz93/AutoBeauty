@@ -6,7 +6,7 @@ const Jumbotron = ({ children }: { children: React.ReactNode }) => {
       style={{
         // background: `linear-gradient(135deg, ${colors.gradientStart} 0%, ${colors.gradientEnd} 100%)`,
         background: `linear-gradient(to top, ${colors.gradient1}, ${colors.gradient2}, ${colors.gradient3}, ${colors.gradient4}, ${colors.gradient5})`,
-        minHeight: '420px',
+        minHeight: '100vh',
         position: 'relative',
         overflow: 'hidden',
         paddingBottom: '40px',

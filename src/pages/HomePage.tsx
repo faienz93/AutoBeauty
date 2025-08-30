@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useState } from 'react';
 import { Maintenance, MaintenanceWithStatus, Stats } from '../types/MaintenanceType';
 import { IonContent, IonPage, useIonViewWillEnter } from '@ionic/react';
@@ -10,8 +10,10 @@ import { useFetchMaintenances } from '../hooks/useFetchMaintenance';
 import { getMaintenanceWithHigherKm, getGroupByMaintenanceByKm, getMaxKmBetween } from '../utils/utils';
 import { useFetchManualKm } from '../hooks/useFetchManualKm';
 import PageHeader from '../ui/PageHeader';
+import Loader from '../ui/Loader';
 
 const HomePage = () => {
+  const [loading, setLoading] = useState(true);
   const [lastManualKm, setLastManualKm] = useState<Kilometers>({
     data: getDateToString(),
     km: 0,
@@ -37,25 +39,33 @@ const HomePage = () => {
     return Object.values(groupByMaintenance ?? {}).some((maintenance) => maintenance?.isNeeded);
   }, [groupByMaintenance]);
 
+  const loadData = useCallback(async () => {
+    try {
+      const [maintenancesData, manualKmData] = await Promise.all([fetchMaintenances(), fetchManualKm()]);
+
+      setMaintenances(maintenancesData);
+      setLastManualKm({
+        _id: manualKmData._id || '',
+        _rev: manualKmData._rev || '',
+        km: manualKmData.km || 0,
+        data: getDateToString(getStringToDate(manualKmData.data)),
+      });
+    } catch (error) {
+      console.error('Error loading data:', error);
+    } finally {
+      setLoading(false);
+    }
+  }, [fetchMaintenances, fetchManualKm]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
   useIonViewWillEnter(() => {
-    const loadData = async () => {
-      try {
-        const [maintenancesData, manualKmData] = await Promise.all([fetchMaintenances(), fetchManualKm()]);
-
-        setMaintenances(maintenancesData);
-        setLastManualKm({
-          _id: manualKmData._id || '',
-          _rev: manualKmData._rev || '',
-          km: manualKmData.km || 0,
-          data: getDateToString(getStringToDate(manualKmData.data)),
-        });
-      } catch (error) {
-        console.error('Error loading data:', error);
-      }
-    };
-
     loadData();
   });
+
+  if (loading) return <Loader />;
 
   return (
     <IonPage>
