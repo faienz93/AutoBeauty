@@ -129,7 +129,7 @@ L'applicazione sarà disponibile su [http://localhost:5173](http://localhost:517
 
 ---
 
-## 🌟 Altri Modi per Supportare / Other Ways to Support
+## 🌟 Altri Modi per Supportare
 
 - **Metti una stella al repository / Star the repository** ⭐
 - **Segnala bug e problemi / Report bugs and issues** 🐛
@@ -175,7 +175,8 @@ Le contribuzioni sono benvenute! Per favore:
 - [ ] Integrazione Sentry per bug tracking
 - [ ] Fix loader al primo avvio
 - [ ] Ottimizzazione immagini Unsplash
-- [ ] Miglioramenti README
+- [ ] Supporto Multilingua
+- [ ] Aggiungere altre automobili
 
 ---
 
@@ -317,7 +318,8 @@ Contributions are welcome! Please:
 - [ ] Sentry integration for bug tracking
 - [ ] Fix loader on first app startup
 - [ ] Optimize Unsplash images
-- [ ] README improvements
+- [ ] Multilingual support
+- [ ] Add more cars
 
 ---
 
