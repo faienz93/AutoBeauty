@@ -149,16 +149,6 @@ Questo progetto è rilasciato sotto licenza **MIT** - vedi il file [LICENSE](LIC
 - ✅ Uso privato consentito
 - ⚠️ Richiesta attribuzione dell'autore originale
 
-## 🤝 Contribuzioni
-
-Le contribuzioni sono benvenute! Per favore:
-
-1. Fai un **fork** del progetto
-2. Crea un **branch** per la tua feature (`git checkout -b feature/AmazingFeature`)
-3. **Committa** le tue modifiche (`git commit -m 'Add some AmazingFeature'`)
-4. **Pusha** sul branch (`git push origin feature/AmazingFeature`)
-5. Apri una **Pull Request**
-
 ## 🗺️ Roadmap
 
 ### ✅ Completato
@@ -294,13 +284,15 @@ This project is released under the **MIT License** - see the [LICENSE](LICENSE) 
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please:
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-1. **Fork** the project
-2. Create a **branch** for your feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. Open a **Pull Request**
+Please see CONTRIBUTING.md for details on our code of conduct, and the process for submitting pull requests to us.
+
+---
+
+## 🌟 Other Ways to Support
+
+...
 
 ## 🗺️ Roadmap
 
