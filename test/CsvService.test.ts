@@ -22,9 +22,14 @@ describe('CsvService', () => {
         { name: 'Jane', age: '25' }
       ];
 
-      const mockFile = new File(['name,age\nJohn,30\nJane,25'], 'test.csv', {
-        type: 'text/csv'
-      });
+      const csvContent = 'name,age\nJohn,30\nJane,25';
+
+      // Crea un mock del File con il metodo text()
+      const mockFile = {
+        name: 'test.csv',
+        type: 'text/csv',
+        text: vi.fn().mockResolvedValue(csvContent)
+      } as unknown as File;
 
       // Mock della funzione parse di Papa
       vi.mocked(Papa.parse).mockImplementation((input: any, config: any) => {
@@ -57,9 +62,14 @@ describe('CsvService', () => {
         ['Jane', '25']
       ];
 
-      const mockFile = new File(['John,30\nJane,25'], 'test.csv', {
-        type: 'text/csv'
-      });
+      const csvContent = 'name,age\nJohn,30\nJane,25';
+
+      // Crea un mock del File con il metodo text()
+      const mockFile = {
+        name: 'test.csv',
+        type: 'text/csv',
+        text: vi.fn().mockResolvedValue(csvContent)
+      } as unknown as File;
 
       vi.mocked(Papa.parse).mockImplementation((input: any, config: any) => {
         setTimeout(() => {
@@ -84,9 +94,14 @@ describe('CsvService', () => {
     });
 
     it('should reject when parsing errors occur', async () => {
-      const mockFile = new File(['invalid,csv'], 'test.csv', {
-        type: 'text/csv'
-      });
+      const csvContent = 'name,age\nJohn,30\nJane,25';
+
+      // Crea un mock del File con il metodo text()
+      const mockFile = {
+        name: 'test.csv',
+        type: 'text/csv',
+        text: vi.fn().mockResolvedValue(csvContent)
+      } as unknown as File;
 
       vi.mocked(Papa.parse).mockImplementation((input: any, config: any) => {
         setTimeout(() => {
@@ -111,9 +126,14 @@ describe('CsvService', () => {
     });
 
     it('should reject when Papa.parse calls error callback', async () => {
-      const mockFile = new File(['test'], 'test.csv', {
-        type: 'text/csv'
-      });
+      const csvContent = 'test';
+
+      // Crea un mock del File con il metodo text()
+      const mockFile = {
+        name: 'test.csv',
+        type: 'text/csv',
+        text: vi.fn().mockResolvedValue(csvContent)
+      } as unknown as File;
 
       vi.mocked(Papa.parse).mockImplementation((input: any, config: any) => {
         setTimeout(() => {
