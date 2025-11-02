@@ -31,7 +31,11 @@ describe('PageHeader', () => {
 
   it('renders NoMainteinance when hasMaintenances is false', () => {
     render(<PageHeader {...defaultProps} hasMaintenances={false} />);
-    expect(screen.getByText(/no maintenance/i)).toBeInTheDocument();
+    expect(
+      screen.getByText(
+        'Inizia a tracciare le manutenzioni del tuo veicolo per tenere tutto sotto controllo'
+      )
+    ).toBeInTheDocument();
   });
 
   it('shows "Manutenzione necessaria" status when isMaitenanceNeeded is true', () => {
@@ -46,11 +50,14 @@ describe('PageHeader', () => {
 
   it('shows warning StatusIndicator when isWrongKilometers is true', () => {
     render(<PageHeader {...defaultProps} isWrongKilometers={true} />);
+    console.log(screen);
     expect(
-      screen.getByText(
-        new RegExp(
-          `Il Km manuale \\(${defaultProps.lastManualKm} km\\) < del max \\(${defaultProps.maxMaintenanceKm} km\\)\\.\\nSi userà il maggiore\\.`
-        )
+      screen.getByText((content) =>
+        content
+          .replace(/\s+/g, ' ')
+          .includes(
+            `Il Km manuale (${defaultProps.lastManualKm} km) < del max (${defaultProps.maxMaintenanceKm} km). Si userà il maggiore.`
+          )
       )
     ).toBeInTheDocument();
   });
