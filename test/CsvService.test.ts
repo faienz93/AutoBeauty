@@ -93,6 +93,70 @@ describe('CsvService', () => {
       );
     });
 
+    it('should handle an empty CSV file', async () => {
+      const csvContent = '';
+      const mockFile = {
+        name: 'empty.csv',
+        type: 'text/csv',
+        text: vi.fn().mockResolvedValue(csvContent)
+      } as unknown as File;
+
+      vi.mocked(Papa.parse).mockImplementation((input: any, config: any) => {
+        setTimeout(() => {
+          config.complete({ data: [], errors: [], meta: {} });
+        }, 0);
+        return {} as any;
+      });
+
+      const result = await service.importCsv(mockFile, true);
+      expect(result).toEqual([]);
+    });
+
+    it('should handle a CSV file with only headers', async () => {
+      const csvContent = 'name,age';
+      const mockFile = {
+        name: 'header_only.csv',
+        type: 'text/csv',
+        text: vi.fn().mockResolvedValue(csvContent)
+      } as unknown as File;
+
+      vi.mocked(Papa.parse).mockImplementation((input: any, config: any) => {
+        setTimeout(() => {
+          config.complete({ data: [], errors: [], meta: {} });
+        }, 0);
+        return {} as any;
+      });
+
+      const result = await service.importCsv(mockFile, true);
+      expect(result).toEqual([]);
+    });
+
+    it('should skip empty lines in the CSV file', async () => {
+      const mockData = [{ name: 'John', age: '30' }];
+      const csvContent = 'name,age\nJohn,30\n\n'; // Contiene una riga vuota
+      const mockFile = {
+        name: 'with_empty_lines.csv',
+        type: 'text/csv',
+        text: vi.fn().mockResolvedValue(csvContent)
+      } as unknown as File;
+
+      vi.mocked(Papa.parse).mockImplementation((input: any, config: any) => {
+        setTimeout(() => {
+          config.complete({ data: mockData, errors: [], meta: {} });
+        }, 0);
+        return {} as any;
+      });
+
+      await service.importCsv(mockFile, true);
+
+      expect(Papa.parse).toHaveBeenCalledWith(
+        expect.any(String),
+        expect.objectContaining({
+          skipEmptyLines: true
+        })
+      );
+    });
+
     it('should reject when parsing errors occur', async () => {
       const csvContent = 'name,age\nJohn,30\nJane,25';
 
@@ -173,6 +237,23 @@ describe('CsvService', () => {
 
       expect(result).toBeInstanceOf(Blob);
       expect(result.type).toBe('text/csv;charset=utf-8;');
+      expect(Papa.unparse).toHaveBeenCalledWith(mockData, {
+        delimiter: '|',
+        header: true,
+        columns: headers
+      });
+    });
+
+    it('should handle empty data array for blob export', () => {
+      const mockData: any[] = [];
+      const headers = ['name', 'age'];
+      const mockCsvString = 'name|age';
+
+      vi.mocked(Papa.unparse).mockReturnValue(mockCsvString);
+
+      const result = service.exportCsvWithBlob(mockData, headers);
+
+      expect(result).toBeInstanceOf(Blob);
       expect(Papa.unparse).toHaveBeenCalledWith(mockData, {
         delimiter: '|',
         header: true,
