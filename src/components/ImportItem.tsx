@@ -6,7 +6,7 @@ import { Maintenance, MaintenanceType } from '../types/MaintenanceType';
 import { getDateToString, getStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
 import { getUUIDKey } from '../utils/utils';
-import { exportOnFileSystem, exportOnShare } from '../utils/csvUtils';
+import { exportOnFileSystem } from '../utils/csvUtils';
 
 const data: Maintenance[] = [
   {
