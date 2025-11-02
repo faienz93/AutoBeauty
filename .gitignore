@@ -29,3 +29,4 @@ resources/ios/**/*
 resources/android/**/*
 
 test-db/*
+coverage/*
