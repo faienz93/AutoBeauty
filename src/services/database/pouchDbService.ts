@@ -81,7 +81,7 @@ export abstract class PouchDbService {
       throw new Error(`Error performing bulk document operations: ${error}`);
     }
   }
-
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   async remove(doc: any): Promise<PouchDB.Core.Response> {
     try {
       return await this.db.remove(doc);

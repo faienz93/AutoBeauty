@@ -27,3 +27,6 @@ dist-ssr
 
 resources/ios/**/*
 resources/android/**/*
+
+test-db/*
+coverage/*

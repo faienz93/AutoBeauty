@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { useMaintenanceDb } from './useDbContext';
 import { Maintenance } from '../types/MaintenanceType';
 import { getStringToDate } from '../utils/dateUtils';
-import { getMaintenanceKey } from '../utils/utils';
+import { getMaintenanceKey } from '../utils/business';
 
 export const useFetchMaintenances = (): (() => Promise<Maintenance[]>) => {
   const dbMaitenenance = useMaintenanceDb();
