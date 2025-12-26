@@ -5,7 +5,7 @@ import { CsvService } from '../services/csv/csvParser';
 import { Maintenance, MaintenanceType } from '../types/MaintenanceType';
 import { getDateToString, getStringToDate, parseItalianNumber } from '../utils/dateUtils';
 import { useMaintenanceDb } from '../hooks/useDbContext';
-import { getUUIDKey } from '../utils/utils';
+import { getUUIDKey } from '../utils/business';
 import { exportOnFileSystem } from '../utils/csvUtils';
 
 const data: Maintenance[] = [
