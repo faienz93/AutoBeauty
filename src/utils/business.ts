@@ -1,4 +1,4 @@
-import { Maintenance, Stats } from '../types/MaintenanceType';
+import { Maintenance, MaintenanceWithStatus, Stats } from '../types/MaintenanceType';
 import { getStringToDate } from './dateUtils';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -47,6 +47,18 @@ export const getMaintenanceWithHigherKm = (maintenances: Maintenance[]): number 
   return maintenances.reduce((maxKm, m) => Math.max(maxKm, m.km), 0);
 };
 
+export const isMoreRecentOrEqual = (dateStr1: string, dateStr2: string): boolean => {
+  const date1 = new Date(getStringToDate(dateStr1)).getTime();
+  const date2 = new Date(getStringToDate(dateStr2)).getTime();
+  return date1 >= date2;
+};
+
+export const createMaintenanceWithStatus = (maintenance: Maintenance, maxKm: number): MaintenanceWithStatus => {
+  const diffKm = maxKm - maintenance.km;
+  const isNeeded = isMaintenanceNeededFor(maintenance.tipo, diffKm, maintenance.data);
+  return { ...maintenance, isNeeded };
+};
+
 /**
  * Groups maintenance records by type, keeping only the most recent one for each type.
  * The most recent record is determined by the maintenance date.
@@ -56,20 +68,18 @@ export const getMaintenanceWithHigherKm = (maintenances: Maintenance[]): number 
 export const getGroupByMaintenanceByKm = (maintenance: Maintenance[], maxBetweenManualAndHighestKm: number): Stats | null => {
   if (maintenance.length === 0) return {};
 
-  const maintenanceGrouped = maintenance.reduce((acc, current) => {
-    const existMaintenanceType = acc[current.tipo];
+  const groupedByType = maintenance.reduce((acc, currentMaintenance) => {
+    const previousMaintenance = acc[currentMaintenance.tipo];
 
     // if Exist more recent maintenance, replace maintenance
-    if (!existMaintenanceType || new Date(getStringToDate(current.data)).getTime() > new Date(getStringToDate(existMaintenanceType.data)).getTime()) {
-      const diffKmForNextMaintenance = maxBetweenManualAndHighestKm - current.km;
-      const isNeeded = isMaintenanceNeededFor(current.tipo, diffKmForNextMaintenance, current.data);
-      acc[current.tipo] = { ...current, isNeeded };
+    if (!previousMaintenance || isMoreRecentOrEqual(currentMaintenance.data, previousMaintenance.data)) {
+      acc[currentMaintenance.tipo] = createMaintenanceWithStatus(currentMaintenance, maxBetweenManualAndHighestKm);
     }
 
     return acc;
   }, {} as Stats);
 
-  return maintenanceGrouped;
+  return groupedByType;
 };
 
 /**
